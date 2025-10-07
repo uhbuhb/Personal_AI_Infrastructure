@@ -7,7 +7,6 @@
 </picture>
 
 # **PAI** - Personal AI Infrastructure
-**(Pronounced "pie" 🥧)**
 
 ### **Open-source personal AI infrastructure for orchestrating your life and work**
 
