@@ -48,46 +48,46 @@ Commands automatically executed by the PAI hook system:
 
 Commands loaded based on semantic analysis of user intent via the `load-dynamic-requirements` system.
 
-## 📝 Command Structure: Executable Markdown
+## 📝 Command Patterns
 
-PAI uses a powerful "executable markdown" pattern. A single `.md` file serves as **both** the documentation and the executable script. This keeps documentation and implementation tightly coupled.
+PAI supports two primary types of commands:
 
-An executable command file has three parts:
+### 1. Instructional Commands
+These are standard Markdown (`.md`) files that contain documentation, examples, and instructions for an AI to follow. They are not executable on their own. The AI reads the file and executes the described steps using its available tools.
 
-1.  **Shebang**: The file must start with `#!/usr/bin/env bun` to make it executable.
-2.  **Documentation**: Standard markdown explaining the command's purpose, usage, etc. This is what you read.
-3.  **Code Block**: A ` ```typescript ` block containing the TypeScript code that will be executed by `bun`.
+**Use Case**: Complex workflows that require AI reasoning, or documenting a series of shell commands.
 
-### Example Executable Markdown File (`your-command.md`)
+### 2. Executable Commands (Self-Contained Scripts)
+This is a powerful pattern where a single file with a `.md` extension is also a fully executable TypeScript script. This is the recommended pattern for creating automated tools.
+
+**The structure is critical:**
+1.  **Shebang**: The file **must** start with `#!/usr/bin/env bun`.
+2.  **JSDoc Comment Block**: All documentation (Purpose, Usage, etc.) **must** be placed inside a single JSDoc-style comment block (`/** ... */`) immediately following the shebang.
+3.  **Pure TypeScript Code**: The rest of the file is pure TypeScript code. `Bun` will execute this code, ignoring the shebang and the JSDoc block.
+
+**CRITICAL:** Do not include any standard Markdown syntax like `#` headings or `---` rules outside of the JSDoc block, as it will cause a syntax error.
+
+### Example Executable Command (`your-command.md`)
 
 ```markdown
 #!/usr/bin/env bun
+/**
+ * # Your Command Title
+ * 
+ * ## Purpose
+ * A clear description of what this command does.
+ * 
+ * ## Usage
+ * ```bash
+ * # Run the command directly
+ * bun /path/to/commands/your-command.md
+ * ```
+ */
 
-# Your Command Title
-
-## Purpose
-A clear description of what this command does.
-
-## Usage
-```bash
-# Run the command directly
-bun /path/to/commands/your-command.md
-
-# Run with arguments
-bun /path/to/commands/your-command.md --arg value
-```
-
----
-
-```typescript
-// All TypeScript code goes inside this block
+// TypeScript code starts here
 import { $ } from 'bun';
 
 console.log('This command is running!');
-
-// You can access command-line arguments
-const args = process.argv.slice(2);
-console.log('Arguments:', args);
 
 async function main() {
   await $`echo Hello from Bun!`;
@@ -96,32 +96,24 @@ async function main() {
 main().catch(console.error);
 ```
 
-## 🚀 Creating New Commands
+## 🚀 Creating New Executable Commands
 
-### Step 1: Create Your Executable Markdown File
-
+### Step 1: Create Your File
 Create a single new file: `${PAI_DIR}/commands/your-command.md`.
 
 ### Step 2: Add Content
-
-Build the file with the three required parts:
-
-1.  **Shebang**: Add `#!/usr/bin/env bun` to the very first line.
-2.  **Documentation**: Write clear markdown documentation, including `# Title`, `## Purpose`, and `## Usage` sections.
-3.  **Code**: Add a ` ```typescript ` block and write your command's logic inside it.
+1.  Add `#!/usr/bin/env bun` to the very first line.
+2.  Create a `/** ... */` block and write your documentation inside it.
+3.  Write your pure TypeScript code directly after the comment block.
 
 ### Step 3: Make it Executable
-
 Open a terminal and run `chmod +x` on your new file:
-
 ```bash
 chmod +x ${PAI_DIR}/commands/your-command.md
 ```
 
 ### Step 4: Test Your Command
-
 Execute your command directly to test it:
-
 ```bash
 bun ${PAI_DIR}/commands/your-command.md
 ```
@@ -169,23 +161,27 @@ To integrate with hooks, add command to `${PAI_DIR}/settings.json`:
 
 ## 📋 Existing Commands
 
-### capture-learning
+### Core Commands
+
+#### capture-learning
 Captures comprehensive problem-solving narratives from work sessions.
 
 **Usage**: `bun ${PAI_DIR}/commands/capture-learning.ts`
 **Output**: `${PAI_DIR}/context/learnings/YYYY-MM-DD-problem.md`
 
-### load-dynamic-requirements
+#### load-dynamic-requirements
 Dynamically loads context and agents based on user intent.
 
 **Usage**: Triggered automatically via UserPromptSubmit hook
 **Function**: Semantic analysis and context loading
 
-### web-research
+#### web-research
 Perplexity AI integration for web research queries.
 
 **Usage**: Via API calls with PERPLEXITY_API_KEY
 **Function**: External research and information gathering
+
+
 
 ## 🎯 Best Practices
 
