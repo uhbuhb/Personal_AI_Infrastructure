@@ -403,6 +403,7 @@ graph TD
 ${PAI_DIR}/skills/
 ├── prompting/           # Prompt engineering
 ├── create-skill/        # Skill creation guide
+├── ffuf/                # Web fuzzing for pentesting (by @rez0)
 ├── development/         # Software development
 ├── research/            # Multi-source research
 ├── web-scraping/        # Web data extraction
@@ -963,6 +964,12 @@ send-client-updates --weekly-digest
 </div>
 
 ---
+
+## 🙏 **Acknowledgments**
+
+Special thanks to contributors who have enhanced PAI with their expertise:
+
+- **[Joseph Thacker (@rez0)](https://twitter.com/rez0__)** - FFUF skill with comprehensive web fuzzing guidance and penetration testing expertise
 
 ## 📄 **License**
 
