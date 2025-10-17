@@ -21,10 +21,10 @@ PAI (Personal AI Infrastructure) is a modular, event-driven system that enhances
 └────────────────┬────────────────────────────────────────────┘
                  │
 ┌────────────────▼────────────────────────────────────────────┐
-│                    UFC Context System                        │
+│                      Skills System                           │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
-│  │ Dynamic      │  │ Semantic     │  │ Context      │     │
-│  │ Loading      │  │ Matching     │  │ Files        │     │
+│  │ Intent       │  │ Skill        │  │ Progressive  │     │
+│  │ Matching     │  │ Activation   │  │ Loading      │     │
 │  └──────────────┘  └──────────────┘  └──────────────┘     │
 └────────────────┬────────────────────────────────────────────┘
                  │
@@ -58,16 +58,17 @@ The hook system provides event-driven automation throughout the AI interaction l
 
 **Location:** `${PAI_DIR}/hooks/`
 
-### 2. UFC Context System
+### 2. Skills System
 
-Universal Flexible Context (UFC) is the intelligent context management system that dynamically loads relevant information based on semantic understanding.
+The Skills System provides modular, self-contained capability packages that extend AI functionality with specialized knowledge and workflows.
 
 **Key Features:**
-- **Semantic Matching**: Understands user intent, not just keywords
-- **Dynamic Loading**: Loads context files on-demand
-- **Project Awareness**: Maintains project-specific contexts
+- **Intent Matching**: Activates skills based on user request understanding
+- **Progressive Disclosure**: SKILL.md → CLAUDE.md → Resources
+- **Modular Design**: Self-contained with templates and components
+- **Global Inheritance**: All skills automatically access global context
 
-**Location:** `${PAI_DIR}/context/`
+**Location:** `${PAI_DIR}/skills/`
 
 ### 3. Agent System
 
@@ -129,19 +130,24 @@ Intent Analysis → Pattern Matching → Context Selection → Dynamic Loading
 
 ```
 ${PAI_DIR}/
-├── context/              # UFC context files
-│   ├── CLAUDE.md        # Main context
-│   ├── projects/        # Project-specific contexts
-│   ├── life/            # Personal contexts
-│   └── tools/           # Tool contexts
+├── skills/              # Modular capability packages
+│   ├── prompting/      # Prompt engineering guide
+│   ├── create-skill/   # Skill creation framework
+│   ├── development/    # Software development
+│   └── [custom]/       # Your custom skills
 ├── hooks/               # Event hooks
 │   ├── user-prompt-submit-hook
 │   ├── tool-use-hook
 │   └── post-execution-hook
-├── commands/            # Custom commands
-│   └── *.sh            # Command scripts
+├── commands/            # Custom slash commands
+│   └── *.md            # Command definitions
+├── agents/              # Specialized AI agents
+│   ├── engineer.md
+│   ├── researcher.md
+│   └── [others].md
 ├── voice-server/        # Voice notification service
 │   ├── server.ts       # Server implementation
+│   ├── voices.json     # Voice configuration
 │   └── menubar/        # Menu bar integration
 ├── documentation/       # System documentation
 └── statusline-command.sh
@@ -203,21 +209,24 @@ Hooks communicate through:
 
 ## Extensibility Points
 
-### 1. Adding Context
-Create new context files in:
-- `${PAI_DIR}/context/` - Global contexts
-- `${HOME}/Projects/*/CLAUDE.md` - Project contexts
+### 1. Adding Skills
+Create new skills in:
+- `${PAI_DIR}/skills/[skill-name]/` - Skill directory
+- `SKILL.md` - Quick reference (required)
+- `CLAUDE.md` - Comprehensive guide (optional)
+- Add to global context for discovery
 
 ### 2. Adding Hooks
 Create executable scripts in:
 - `${PAI_DIR}/hooks/` - Event hooks
 
 ### 3. Adding Agents
-Define new agents in UFC context system configuration.
+Define new agents in:
+- `${PAI_DIR}/agents/[name].md` - Agent configuration
 
 ### 4. Adding Commands
-Create command scripts in:
-- `${PAI_DIR}/commands/` - Custom commands
+Create slash commands in:
+- `${PAI_DIR}/commands/` - Custom slash commands
 
 ## Performance Considerations
 

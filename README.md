@@ -34,13 +34,74 @@
 
 ## 🚀 **Recent Updates**
 
-> [!TIP]
-> **[🎉 v0.2.4 Released!](https://github.com/danielmiessler/PAI/releases/tag/v0.2.4)** - README Cleanup & Organization
+> [!IMPORTANT]
+> **🎉 MAJOR UPGRADE: Skills System Migration (v0.3.0)**
+>
+> PAI has been upgraded to use [Anthropic's Skills architecture](https://www.anthropic.com/news/skills)! We've migrated from the legacy context system to modular, intent-activated skills with progressive disclosure. This is a breaking architectural change that brings PAI in line with modern AI assistant design patterns.
+>
+> **Key Changes:**
+> - 📚 **Context System → Skills System** - Modular capability packages
+> - 🎯 **Intent-Based Activation** - Skills load based on user intent matching
+> - 📄 **Progressive Disclosure** - SKILL.md → CLAUDE.md → Resources
+> - 🎙️ **Voice System Updates** - Paths updated to use `${PAI_DIR}`
+> - 📖 **Complete Documentation** - New comprehensive [Skills System Guide](./PAI_DIRECTORY/documentation/skills-system.md)
+> - 🎓 **Example Skills Included** - `prompting` and `create-skill` as safe examples
+>
+> [Read the Skills System Documentation →](./PAI_DIRECTORY/documentation/skills-system.md)
 
 <details>
 <summary><strong>Click to see all updates</strong></summary>
 
 <details open>
+<summary><strong>📅 October 17, 2025 - Skills System Migration (v0.3.0)</strong></summary>
+
+**🎯 Major Architectural Upgrade: Context → Skills**
+
+PAI has been completely migrated to use [Anthropic's Skills architecture](https://www.anthropic.com/news/skills), bringing modern modular design and progressive disclosure to the personal AI infrastructure.
+
+**✨ What Changed:**
+
+- 📚 **Skills System Implementation**
+  - Migrated from monolithic context files to modular skill packages
+  - Each skill is self-contained with SKILL.md (quick ref) and optional CLAUDE.md (deep dive)
+  - Intent-based activation through skill descriptions with "USE WHEN" triggers
+  - Progressive disclosure: load only what's needed, when it's needed
+
+- 📁 **New Directory Structure**
+  - Removed: `PAI_DIRECTORY/context/` (old system)
+  - Added: `PAI_DIRECTORY/skills/` (new system)
+  - Included example skills: `prompting/` and `create-skill/`
+
+- 📖 **Documentation Overhaul**
+  - Created comprehensive [Skills System Guide](./PAI_DIRECTORY/documentation/skills-system.md) (600+ lines)
+  - Updated [Architecture Documentation](./PAI_DIRECTORY/documentation/architecture.md)
+  - Updated [Documentation README](./PAI_DIRECTORY/documentation/README.md)
+  - Updated main README with Skills System section
+
+- 🎙️ **Voice System Path Updates**
+  - All `~/.claude` hardcoded paths replaced with `${PAI_DIR}` variables
+  - Improved portability across installations
+  - Updated [Voice System Documentation](./PAI_DIRECTORY/documentation/voice-system.md)
+
+- 🎓 **Example Skills Included**
+  - **prompting**: Prompt engineering standards (educational)
+  - **create-skill**: Complete framework for creating new skills with templates
+
+**🔗 Resources:**
+- [Anthropic Skills Announcement](https://www.anthropic.com/news/skills)
+- [PAI Skills System Documentation](./PAI_DIRECTORY/documentation/skills-system.md)
+- [Migration Guide](./PAI_DIRECTORY/documentation/skills-system.md#migration-from-context-system)
+
+**🎯 Benefits:**
+- Better modularity and reusability
+- Clearer activation patterns
+- Easier to create and share skills
+- Follows industry best practices
+- Template-driven quality
+
+</details>
+
+<details>
 <summary><strong>📅 October 6, 2025 - README Cleanup & Organization (v0.2.4)</strong></summary>
 
 - 📂 **Collapsed Updates**: Implemented two-level collapsing structure for updates section
@@ -307,62 +368,58 @@ PAI is part of the journey toward Human 3.0—where humans are augmented by AI t
 ```mermaid
 graph TD
     User[👤 You] --> Hooks[🪝 Dynamic Hooks]
-    
-    Hooks --> UFC[📁 UFC Context System]
+
+    Hooks --> Skills[📚 Skills System]
     Hooks --> Commands[⚡ Custom Commands]
-    
-    UFC --> Projects[🧠 Projects]
-    UFC --> Life[🏠 Life Context]
-    UFC --> Work[💼 Work Context]
-    
+
+    Skills --> Projects[🧠 Project Skills]
+    Skills --> Life[🏠 Life Skills]
+    Skills --> Work[💼 Work Skills]
+
     Commands --> MCPs[🔌 MCP Servers]
     Commands --> Agents[🤖 AI Agents]
     Commands --> APIs[🌐 API Integrations]
-    
-    MCPs --> Playwright[🎭 Browser Automation]
+
+    MCPs --> ChromeDevTools[🎭 Browser Automation]
     MCPs --> Stripe[💳 Payment Processing]
     MCPs --> Analytics[📊 Analytics]
-    
+
     Agents --> Output[✨ Augmented Actions]
     APIs --> Output
     MCPs --> Output
-    
+
     style User fill:#1f2937,stroke:#10b981,stroke-width:2px,color:#e5e7eb
     style Hooks fill:#111827,stroke:#8b5cf6,stroke-width:2px,color:#e5e7eb
     style Output fill:#111827,stroke:#ef4444,stroke-width:2px,color:#e5e7eb
 ```
 
-### 📁 **UFC Context System**
+### 📚 **Skills System**
 
 <table>
 <tr>
 <td width="50%">
 
 ```
-${PAI_DIR}/context/
-├── projects/
-│   ├── website/
-│   ├── Alma/
-│   └── PAI/
-├── life/
-│   ├── finances/
-│   ├── health/
-│   └── expenses/
-├── work/
-│   ├── consulting/
-│   └── business/
-└── benefits/
-    └── credit-cards/
+${PAI_DIR}/skills/
+├── prompting/           # Prompt engineering
+├── create-skill/        # Skill creation guide
+├── development/         # Software development
+├── research/            # Multi-source research
+├── web-scraping/        # Web data extraction
+├── chrome-devtools/     # Browser automation
+├── fabric-patterns/     # Content processing
+└── [your-custom-skills]/
 ```
 
 </td>
 <td width="50%">
 
 **Features:**
-- ✅ Persistent memory across sessions
-- 📄 Plain text files - human readable
-- ⚡ Dynamic loading based on context
-- 📂 Hierarchical organization
+- ✅ Modular capability packages
+- 📄 Progressive disclosure (SKILL.md → CLAUDE.md)
+- ⚡ Intent-based activation
+- 📂 Self-contained with templates
+- 🔌 Inherits global context
 
 </td>
 </tr>

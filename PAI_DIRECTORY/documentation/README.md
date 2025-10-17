@@ -11,7 +11,7 @@ Welcome to the Personal AI Infrastructure (PAI) documentation. PAI is a comprehe
 
 ### Core Concepts
 - [System Architecture](./architecture.md) - Overview of PAI components
-- [UFC Context System](./ufc-context-system.md) - Universal Flexible Context management
+- [Skills System](./skills-system.md) - Modular capability packages with progressive disclosure
 - [Hook System](./hook-system.md) - Event-driven automation
 - [Agent System](./agent-system.md) - Specialized AI agents
 
@@ -29,19 +29,19 @@ Welcome to the Personal AI Infrastructure (PAI) documentation. PAI is a comprehe
 
 PAI (Personal AI Infrastructure) is a powerful framework that enhances AI assistants with:
 
-- **Dynamic Context Loading**: Automatically loads relevant context based on conversation intent
-- **Universal Flexible Context (UFC)**: Intelligent context management system
+- **Skills System**: Modular capability packages activated by intent
+- **Progressive Disclosure**: Load information as needed (SKILL.md → CLAUDE.md → Resources)
 - **Hook System**: Event-driven automation for tool calls
-- **Voice Notifications**: AI-powered voice feedback
+- **Voice Notifications**: macOS native voice feedback with distinct agent voices
 - **Multi-Agent Architecture**: Specialized agents for different tasks
 - **Security First**: Built with security best practices
 
 ## 🎯 Key Features
 
-### 1. Context Intelligence
-- Semantic understanding of user intent
-- Automatic context loading
-- Project-specific knowledge bases
+### 1. Skills Intelligence
+- Intent-based skill activation
+- Progressive information disclosure
+- Modular capability packages
 - Dynamic agent selection
 
 ### 2. Automation
@@ -51,10 +51,10 @@ PAI (Personal AI Infrastructure) is a powerful framework that enhances AI assist
 - Event-driven responses
 
 ### 3. Voice Integration
-- ElevenLabs AI voices
-- macOS fallback support
-- Multiple voice personalities
-- Real-time notifications
+- macOS native Premium/Enhanced voices
+- Zero API costs (100% offline)
+- Distinct voices for Kai and each agent
+- Real-time completion notifications
 
 ### 4. Security
 - Input validation and sanitization
@@ -67,12 +67,13 @@ PAI (Personal AI Infrastructure) is a powerful framework that enhances AI assist
 ```
 PAI/
 ├── PAI_DIRECTORY/          # PAI system configuration
-│   ├── context/            # UFC context files
+│   ├── skills/             # Modular capability packages
 │   ├── hooks/              # Event hooks
-│   ├── commands/           # Custom commands
+│   ├── commands/           # Custom slash commands
+│   ├── agents/             # Specialized AI agents
 │   └── voice-server/       # Voice notification server
 ├── Documentation/          # System documentation
-├── Projects/               # Project-specific contexts
+├── Projects/               # User projects
 └── Library/               # System libraries and logs
 ```
 
@@ -80,9 +81,11 @@ PAI/
 
 PAI uses environment variables for configuration:
 
-- `PAI_DIR`: PAI configuration directory
-- `ELEVENLABS_API_KEY`: API key for voice synthesis
+- `PAI_DIR`: PAI configuration directory (points to PAI_DIRECTORY)
+- `PAI_HOME`: Your home directory
 - `PORT`: Voice server port (default: 8888)
+- `DA`: Digital Assistant name (optional)
+- `DA_COLOR`: Display color (optional)
 
 ## 📖 Quick Links
 
@@ -123,17 +126,19 @@ cp ${PAI_DIR}/env-example ${PAI_DIR}/.env
 
 PAI is configured through:
 1. Environment variables in `${PAI_DIR}/.env`
-2. Context files in `${PAI_DIR}/context/`
+2. Skills in `${PAI_DIR}/skills/`
 3. Hook scripts in `${PAI_DIR}/hooks/`
-4. Project-specific configurations
+4. Agent definitions in `${PAI_DIR}/agents/`
+5. Slash commands in `${PAI_DIR}/commands/`
 
 ## Usage Examples
 
-### Basic Context Loading
+### Skill Activation
 ```bash
-# Context automatically loads based on conversation
-"Help me with my website" → Loads website context
-"Research AI trends" → Loads research agent
+# Skills activate based on intent matching
+"Help me with prompt engineering" → Activates prompting skill
+"Create a new skill for X" → Activates create-skill
+"Do research on AI trends" → Activates research skill (launches agents)
 ```
 
 ### Voice Notifications
@@ -155,8 +160,8 @@ Common issues and solutions:
 
 | Issue | Solution |
 |-------|----------|
-| Context not loading | Check `${PAI_DIR}/context/` |
-| Voice not working | Verify ElevenLabs API key in `${PAI_DIR}/.env` |
+| Skill not activating | Check skill description in `<available_skills>` |
+| Voice not working | Verify voice server running: `curl http://localhost:8888/health` |
 | Hooks not triggering | Ensure hook scripts are executable |
 | Port conflicts | Change PORT in `${PAI_DIR}/.env` |
 
