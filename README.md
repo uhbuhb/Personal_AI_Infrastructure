@@ -406,9 +406,9 @@ ${PAI_DIR}/skills/
 ├── ffuf/                # Web fuzzing for pentesting (by @rez0)
 ├── alex-hormozi-pitch/  # $100M Offers pitch framework
 ├── research/            # Multi-source research (requires API keys)
+├── fabric/              # Intelligent Fabric pattern selection (242+ patterns)
 ├── web-scraping/        # Web data extraction
 ├── chrome-devtools/     # Browser automation
-├── fabric-patterns/     # Content processing
 ├── youtube-extraction/  # YouTube transcript extraction
 ├── ref-documentation/   # Technical docs search
 ├── webapp-testing/      # Playwright testing patterns
