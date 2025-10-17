@@ -34,12 +34,34 @@
 
 ## 🚀 **Recent Updates**
 
+> [!WARNING]
+> **🔥 BREAKING CHANGE: Repository Restructure (v0.4.0)**
+>
+> PAI has been restructured for better GitHub UX! All contents from `PAI_DIRECTORY/` are now at the repository root for immediate visibility.
+>
+> **⚠️ MIGRATION REQUIRED:**
+>
+> Update your `PAI_DIR` environment variable:
+> ```bash
+> # OLD (v0.3.x and earlier):
+> export PAI_DIR="/path/to/PAI/PAI_DIRECTORY"
+>
+> # NEW (v0.4.0+):
+> export PAI_DIR="/path/to/PAI"
+> ```
+>
+> Then reload your shell: `source ~/.zshrc` (or `~/.bashrc`)
+>
+> **What Changed:**
+> - ✅ All functional directories now visible at root (`agents/`, `skills/`, `commands/`, etc.)
+> - ✅ No more extra click to see actual content on GitHub
+> - ✅ Cleaner, more conventional repository structure
+> - ⚠️ Breaking: `PAI_DIR` must now point to repo root, not `PAI_DIRECTORY/`
+>
+> [Migration Guide →](#-quick-start)
+
 > [!IMPORTANT]
-> **🎉 LATEST: Fabric Skill with Intelligent Pattern Selection (v0.3.2)**
->
-> The Fabric skill now intelligently selects the right pattern from 242+ options based on your intent! Instead of manually searching patterns, just say "create a threat model" or "summarize this video" and the skill automatically selects and executes the correct Fabric pattern.
->
-> **Recent Updates:**
+> **Previous Updates:**
 > - 🎯 **v0.3.2** - Fabric skill with smart pattern selection (242+ patterns included)
 > - 🔍 **v0.3.1** - Research skills with parallel agent execution (Perplexity, Claude, Gemini)
 > - 📚 **v0.3.0** - Skills System Migration ([Anthropic's Skills architecture](https://www.anthropic.com/news/skills))
@@ -56,6 +78,67 @@
 <summary><strong>Click to see all updates</strong></summary>
 
 <details open>
+<summary><strong>📅 October 17, 2025 - Repository Restructure (v0.4.0) 🔥 BREAKING CHANGE</strong></summary>
+
+**🏗️ Flattened Repository Structure for Better GitHub UX**
+
+Moved all contents from `PAI_DIRECTORY/` to repository root for immediate visibility and cleaner navigation.
+
+**⚠️ BREAKING CHANGES:**
+
+- **PAI_DIR Environment Variable**
+  - **Old:** `export PAI_DIR="/path/to/PAI/PAI_DIRECTORY"`
+  - **New:** `export PAI_DIR="/path/to/PAI"`
+  - **Action Required:** Update your `.zshrc` or `.bashrc` and reload shell
+
+**✨ What Changed:**
+
+- 📁 **Flattened Structure**
+  - Moved `PAI_DIRECTORY/agents/` → `agents/`
+  - Moved `PAI_DIRECTORY/commands/` → `commands/`
+  - Moved `PAI_DIRECTORY/documentation/` → `documentation/`
+  - Moved `PAI_DIRECTORY/hooks/` → `hooks/`
+  - Moved `PAI_DIRECTORY/skills/` → `skills/`
+  - Moved `PAI_DIRECTORY/voice-server/` → `voice-server/`
+  - Moved all config files to root (`.env.example`, `.mcp.json`, `settings.json`, etc.)
+
+- 🎯 **Better GitHub Experience**
+  - Functional directories immediately visible on GitHub
+  - No extra click required to see actual content
+  - More conventional repository structure
+  - Cleaner navigation for new users
+
+- 📖 **Updated Documentation**
+  - All path references updated throughout README
+  - Installation instructions reflect new structure
+  - Migration guide for existing users
+
+**Migration Steps:**
+
+1. Update your `PAI_DIR` variable in shell config:
+   ```bash
+   # Edit ~/.zshrc or ~/.bashrc
+   export PAI_DIR="/path/to/PAI"  # Remove /PAI_DIRECTORY
+   ```
+
+2. Reload your shell:
+   ```bash
+   source ~/.zshrc  # or source ~/.bashrc
+   ```
+
+3. Pull latest changes:
+   ```bash
+   cd /path/to/PAI
+   git pull
+   ```
+
+**Why This Change:**
+
+The previous nested structure (`PAI_DIRECTORY/`) added an unnecessary layer that made the repository less intuitive on GitHub. Users had to click into `PAI_DIRECTORY/` to see the actual functional directories. This restructure brings PAI in line with conventional repository layouts where functional code is immediately visible at the root.
+
+</details>
+
+<details>
 <summary><strong>📅 October 17, 2025 - Fabric Skill with Intelligent Pattern Selection (v0.3.2)</strong></summary>
 
 **🎯 Intelligent Pattern Selection for 242+ Fabric Patterns**
@@ -136,20 +219,20 @@ PAI has been completely migrated to use [Anthropic's Skills architecture](https:
   - Progressive disclosure: load only what's needed, when it's needed
 
 - 📁 **New Directory Structure**
-  - Removed: `PAI_DIRECTORY/context/` (old system)
-  - Added: `PAI_DIRECTORY/skills/` (new system)
+  - Removed: `context/` (old system)
+  - Added: `skills/` (new system)
   - Included example skills: `prompting/` and `create-skill/`
 
 - 📖 **Documentation Overhaul**
-  - Created comprehensive [Skills System Guide](./PAI_DIRECTORY/documentation/skills-system.md) (600+ lines)
-  - Updated [Architecture Documentation](./PAI_DIRECTORY/documentation/architecture.md)
-  - Updated [Documentation README](./PAI_DIRECTORY/documentation/README.md)
+  - Created comprehensive [Skills System Guide](./documentation/skills-system.md) (600+ lines)
+  - Updated [Architecture Documentation](./documentation/architecture.md)
+  - Updated [Documentation README](./documentation/README.md)
   - Updated main README with Skills System section
 
 - 🎙️ **Voice System Path Updates**
   - All `~/.claude` hardcoded paths replaced with `${PAI_DIR}` variables
   - Improved portability across installations
-  - Updated [Voice System Documentation](./PAI_DIRECTORY/documentation/voice-system.md)
+  - Updated [Voice System Documentation](./documentation/voice-system.md)
 
 - 🎓 **Example Skills Included**
   - **prompting**: Prompt engineering standards (educational)
@@ -157,8 +240,8 @@ PAI has been completely migrated to use [Anthropic's Skills architecture](https:
 
 **🔗 Resources:**
 - [Anthropic Skills Announcement](https://www.anthropic.com/news/skills)
-- [PAI Skills System Documentation](./PAI_DIRECTORY/documentation/skills-system.md)
-- [Migration Guide](./PAI_DIRECTORY/documentation/skills-system.md#migration-from-context-system)
+- [PAI Skills System Documentation](./documentation/skills-system.md)
+- [Migration Guide](./documentation/skills-system.md#migration-from-context-system)
 
 **🎯 Benefits:**
 - Better modularity and reusability
@@ -195,7 +278,7 @@ PAI has been completely migrated to use [Anthropic's Skills architecture](https:
 <details>
 <summary><strong>📅 September 28, 2025 - Complete Visibility & Portability Update (v0.2.3)</strong></summary>
 
-- 📁 **Directory Renamed**: `.claude` → `PAI_DIRECTORY` for better visibility
+- 📁 **Directory Renamed**: `.claude` → `PAI_DIRECTORY` for better visibility (later moved to root in v0.4.0)
 - 🌍 **Vendor Agnostic**: Works with any AI vendor (Claude, GPT, Gemini, etc.)
 - 👁️ **No More Hidden Files**:
   - `.zshrc` → `zshrc-aliases`
@@ -644,8 +727,8 @@ brew install oven-sh/bun/bun
 git clone https://github.com/danielmiessler/PAI.git
 cd PAI
 
-# Note: PAI_DIRECTORY is now visible by default
-ls -la  # See all files including PAI_DIRECTORY
+# All functional directories are now visible at root
+ls -la  # See agents/, skills/, commands/, etc.
 ```
 
 #### **Step 3: Configure PAI Directory Variable** ⚠️ **IMPORTANT**
@@ -657,13 +740,13 @@ ls -la  # See all files including PAI_DIRECTORY
 ```bash
 # Add to your shell config (~/.zshrc or ~/.bashrc)
 # Replace /path/to/PAI with YOUR actual PAI installation path
-export PAI_DIR="/path/to/PAI/PAI_DIRECTORY"  # Point to the PAI_DIRECTORY in your PAI installation
+export PAI_DIR="/path/to/PAI"  # Point to the PAI repository root
 export PAI_HOME="$HOME"  # Your home directory
 
 # Example (adjust to YOUR installation path):
-# export PAI_DIR="$HOME/Projects/PAI/PAI_DIRECTORY"
-# export PAI_DIR="$HOME/Documents/PAI/PAI_DIRECTORY"
-# export PAI_DIR="/Users/yourname/PAI/PAI_DIRECTORY"
+# export PAI_DIR="$HOME/Projects/PAI"
+# export PAI_DIR="$HOME/Documents/PAI"
+# export PAI_DIR="/Users/yourname/PAI"
 
 # Reload your shell configuration
 source ~/.zshrc  # or source ~/.bashrc
@@ -672,7 +755,7 @@ source ~/.zshrc  # or source ~/.bashrc
 #### **Step 4: Configure Environment & API Keys**
 
 ```bash
-# Copy environment template to PAI_DIRECTORY
+# Copy environment template
 cp ${PAI_DIR}/.env.example ${PAI_DIR}/.env
 
 # Configure your API keys
@@ -714,7 +797,7 @@ cd voice-server && bun server.ts &
 
 ```bash
 # ============ REQUIRED CONFIGURATION ============
-PAI_DIR="/path/to/PAI/PAI_DIRECTORY"    # PAI's PAI_DIRECTORY (system agnostic)
+PAI_DIR="/path/to/PAI"                  # PAI repository root (system agnostic)
 PAI_HOME="$HOME"                        # Your home directory
 
 # ============ RESEARCH AGENTS (Skills-Specific) ============
@@ -735,7 +818,7 @@ DA_COLOR="purple"                       # Display color (purple, blue, green, cy
 ```
 
 > [!TIP]
-> **Why PAI_DIR is Important:** The PAI_DIR variable makes the entire PAI system portable and installation-agnostic. All commands, contexts, and hooks reference `${PAI_DIR}` instead of hardcoded paths. This means you can install PAI anywhere on your system, and as long as PAI_DIR points to your `PAI_DIRECTORY`, everything will work seamlessly.
+> **Why PAI_DIR is Important:** The PAI_DIR variable makes the entire PAI system portable and installation-agnostic. All commands, skills, and hooks reference `${PAI_DIR}` instead of hardcoded paths. This means you can install PAI anywhere on your system, and as long as PAI_DIR points to your PAI repository root, everything will work seamlessly.
 
 ---
 
@@ -748,8 +831,8 @@ DA_COLOR="purple"                       # Display color (purple, blue, green, cy
 | [Quick Start](#-quick-start) | Get up and running | 5 min |
 | [Architecture](#-architecture) | Understand the system | 10 min |
 | [SECURITY.md](./SECURITY.md) | Security guidelines | 5 min |
-| [Voice Server](./PAI_DIRECTORY/voice-server/README.md) | Enable voice interaction | 10 min |
-| [Commands Directory](./PAI_DIRECTORY/commands/) | Browse all commands | 15 min |
+| [Voice Server](./voice-server/README.md) | Enable voice interaction | 10 min |
+| [Commands Directory](./commands/) | Browse all commands | 15 min |
 
 </div>
 
