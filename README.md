@@ -18,13 +18,6 @@
 [![Claude Code](https://img.shields.io/badge/Powered%20by-Claude%20Code-blue)](https://claude.ai/code)
 [![PAI Video](https://img.shields.io/badge/🎥_Watch-PAI_Video-6B46C1)](https://youtu.be/iKwRWwabkEc)
 
-<br/>
-
-[![Stars](https://img.shields.io/github/stars/danielmiessler/Personal_AI_Infrastructure?style=for-the-badge&logo=starship&color=yellow&logoColor=white)](https://github.com/danielmiessler/Personal_AI_Infrastructure/stargazers)
-[![Forks](https://img.shields.io/github/forks/danielmiessler/Personal_AI_Infrastructure?style=for-the-badge&logo=git&color=blue&logoColor=white)](https://github.com/danielmiessler/Personal_AI_Infrastructure/network/members)
-[![Issues](https://img.shields.io/github/issues/danielmiessler/Personal_AI_Infrastructure?style=for-the-badge&logo=github&color=red&logoColor=white)](https://github.com/danielmiessler/Personal_AI_Infrastructure/issues)
-
-<br/>
 
 **[Features](#-key-features)** • **[Quick Start](#-quick-start)** • **[Documentation](#-documentation)** • **[Examples](#-examples)** • **[Community](#-community)**
 
@@ -35,335 +28,82 @@
 ## 🚀 **Recent Updates**
 
 > [!WARNING]
-> **🔥 BREAKING CHANGE: Repository Restructure (v0.4.0)**
->
-> PAI has been restructured for better GitHub UX! All contents from `PAI_DIRECTORY/` are now at the repository root for immediate visibility.
->
-> **⚠️ MIGRATION REQUIRED:**
->
-> Update your `PAI_DIR` environment variable:
+> **🔥 v0.4.0 BREAKING CHANGE:** Repository restructured - update `PAI_DIR` environment variable:
 > ```bash
-> # OLD (v0.3.x and earlier):
-> export PAI_DIR="/path/to/PAI/PAI_DIRECTORY"
->
-> # NEW (v0.4.0+):
-> export PAI_DIR="/path/to/PAI"
+> export PAI_DIR="/path/to/PAI"  # Remove /PAI_DIRECTORY suffix
 > ```
->
-> Then reload your shell: `source ~/.zshrc` (or `~/.bashrc`)
->
-> **What Changed:**
-> - ✅ All functional directories now visible at root (`agents/`, `skills/`, `commands/`, etc.)
-> - ✅ No more extra click to see actual content on GitHub
-> - ✅ Cleaner, more conventional repository structure
-> - ⚠️ Breaking: `PAI_DIR` must now point to repo root, not `PAI_DIRECTORY/`
->
-> [Migration Guide →](#-quick-start)
-
-> [!IMPORTANT]
-> **Previous Updates:**
-> - 🎯 **v0.3.2** - Fabric skill with smart pattern selection (242+ patterns included)
-> - 🔍 **v0.3.1** - Research skills with parallel agent execution (Perplexity, Claude, Gemini)
-> - 📚 **v0.3.0** - Skills System Migration ([Anthropic's Skills architecture](https://www.anthropic.com/news/skills))
->
-> **Key Features:**
-> - 🧠 **Intelligent Pattern Selection** - Intent-based matching for 242+ Fabric patterns
-> - 🔍 **Multi-Source Research** - Parallel research agents (up to 10 simultaneous)
-> - 📚 **Skills System** - Modular capability packages with progressive disclosure
-> - 🎙️ **Voice Integration** - macOS Premium voices with agent-specific notifications
->
-> [Read the Full Update History →](#-recent-updates)
+> [Full migration guide in changelog below →](#-recent-updates)
 
 <details>
 <summary><strong>Click to see all updates</strong></summary>
 
-<details open>
-<summary><strong>📅 October 17, 2025 - Repository Restructure (v0.4.0) 🔥 BREAKING CHANGE</strong></summary>
+<details>
+<summary><strong>📅 v0.4.0 - Repository Restructure 🔥 BREAKING CHANGE</strong></summary>
 
-**🏗️ Flattened Repository Structure for Better GitHub UX**
+**⚠️ Breaking Changes:**
+- PAI_DIR environment variable: Change from `/path/to/PAI/PAI_DIRECTORY` to `/path/to/PAI`
+- Repository renamed: `PAI` → `Personal_AI_Infrastructure`
 
-Moved all contents from `PAI_DIRECTORY/` to repository root for immediate visibility and cleaner navigation.
+**What Changed:**
+- Moved all `PAI_DIRECTORY/` contents to repository root (agents/, skills/, commands/, etc.)
+- Repository renamed for clarity and better SEO
+- All functional directories now immediately visible on GitHub
+- GitHub automatically redirects old URLs to new
 
-**⚠️ BREAKING CHANGES:**
-
-- **PAI_DIR Environment Variable**
-  - **Old:** `export PAI_DIR="/path/to/PAI/PAI_DIRECTORY"`
-  - **New:** `export PAI_DIR="/path/to/PAI"`
-  - **Action Required:** Update your `.zshrc` or `.bashrc` and reload shell
-
-**✨ What Changed:**
-
-- 📁 **Flattened Structure**
-  - Moved `PAI_DIRECTORY/agents/` → `agents/`
-  - Moved `PAI_DIRECTORY/commands/` → `commands/`
-  - Moved `PAI_DIRECTORY/documentation/` → `documentation/`
-  - Moved `PAI_DIRECTORY/hooks/` → `hooks/`
-  - Moved `PAI_DIRECTORY/skills/` → `skills/`
-  - Moved `PAI_DIRECTORY/voice-server/` → `voice-server/`
-  - Moved all config files to root (`.env.example`, `.mcp.json`, `settings.json`, etc.)
-
-- 🎯 **Better GitHub Experience**
-  - Functional directories immediately visible on GitHub
-  - No extra click required to see actual content
-  - More conventional repository structure
-  - Cleaner navigation for new users
-
-- 📖 **Updated Documentation**
-  - All path references updated throughout README
-  - Installation instructions reflect new structure
-  - Migration guide for existing users
-
-- 🏷️ **Repository Renamed**
-  - Repository renamed from `PAI` to `Personal_AI_Infrastructure`
-  - GitHub automatically redirects old URL to new URL
-  - All existing links and git operations continue to work
-  - New URL: `github.com/danielmiessler/Personal_AI_Infrastructure`
-
-**Migration Steps:**
-
-1. Update your `PAI_DIR` variable in shell config:
-   ```bash
-   # Edit ~/.zshrc or ~/.bashrc
-   export PAI_DIR="/path/to/PAI"  # Remove /PAI_DIRECTORY
-   ```
-
-2. Reload your shell:
-   ```bash
-   source ~/.zshrc  # or source ~/.bashrc
-   ```
-
-3. Pull latest changes:
-   ```bash
-   cd /path/to/PAI
-   git pull
-   ```
-
-4. Update your git remote URL (optional but recommended):
-   ```bash
-   git remote set-url origin git@github.com:danielmiessler/Personal_AI_Infrastructure.git
-   # Or for HTTPS: git remote set-url origin https://github.com/danielmiessler/Personal_AI_Infrastructure.git
-   ```
-
-**Why This Change:**
-
-The previous nested structure (`PAI_DIRECTORY/`) added an unnecessary layer that made the repository less intuitive on GitHub. Users had to click into `PAI_DIRECTORY/` to see the actual functional directories. This restructure brings PAI in line with conventional repository layouts where functional code is immediately visible at the root.
+**Migration:**
+1. Update PAI_DIR: `export PAI_DIR="/path/to/PAI"` (remove `/PAI_DIRECTORY`)
+2. Reload shell: `source ~/.zshrc`
+3. Pull latest: `git pull`
+4. Update remote: `git remote set-url origin git@github.com:danielmiessler/Personal_AI_Infrastructure.git`
 
 </details>
 
 <details>
-<summary><strong>📅 October 17, 2025 - Fabric Skill with Intelligent Pattern Selection (v0.3.2)</strong></summary>
+<summary><strong>📅 v0.3.2 - Fabric Skill with Intelligent Pattern Selection</strong></summary>
 
-**🎯 Intelligent Pattern Selection for 242+ Fabric Patterns**
-
-The Fabric skill now features intelligent pattern selection instead of just listing available patterns.
-
-**✨ What Changed:**
-
-- 🎯 **Smart Pattern Selection**
-  - Intent-based pattern matching for 242+ Fabric patterns
-  - Automatic pattern selection based on user requests
-  - Category-based organization: Security (15), Summarization (20), Extraction (30+), Analysis (35+), Creation (50+), Improvement (10), Rating (8)
-
-- 📚 **Complete Fabric Repository Included**
-  - Full Fabric repo bundled at `skills/fabric/fabric-repo/`
-  - All 242 pattern definitions included locally
-  - Self-updating: `cd fabric-repo && git pull`
-
-- 💡 **Usage Examples**
-  - "Create a threat model for our API" → Selects `create_threat_model` pattern
-  - "Summarize this video in 5 sentences" → Selects `create_5_sentence_summary` pattern
-  - "Extract wisdom from this content" → Selects `extract_wisdom` pattern
-
-**🔗 Pattern Categories:**
-- Threat Modeling & Security, Summarization, Extraction, Analysis, Creation, Improvement, Rating/Judgment
+Fabric skill now intelligently selects the right pattern from 242+ options based on user intent. Complete Fabric repository bundled locally. Categories: Security (15), Summarization (20), Extraction (30+), Analysis (35+), Creation (50+), Improvement (10), Rating (8).
 
 </details>
 
 <details>
-<summary><strong>📅 October 17, 2025 - Research Skills & API Key Infrastructure (v0.3.1)</strong></summary>
+<summary><strong>📅 v0.3.1 - Research Skills & API Key Infrastructure</strong></summary>
 
-**🔍 Multi-Source Research System**
-
-Added comprehensive research capabilities with parallel agent execution and API key infrastructure.
-
-**✨ What Changed:**
-
-- 🧠 **New Skills Added**
-  - `alex-hormozi-pitch` - $100M Offers pitch framework (value equation, guarantees, MAGIC naming)
-  - `research` - Multi-source research orchestration (up to 10 parallel agents)
-
-- 🤖 **Research Agents**
-  - `perplexity-researcher` - Fast web research via Perplexity API (requires API key)
-  - `claude-researcher` - Deep research using Claude WebSearch (built-in, no key needed)
-  - `gemini-researcher` - Multi-perspective research via Google Gemini (requires API key)
-
-- 🔑 **API Key Infrastructure**
-  - Created `.env.example` with all required API keys
-  - Comprehensive documentation for obtaining keys
-  - Clear security warnings about NEVER committing `.env`
-  - Links to get keys: [Perplexity](https://www.perplexity.ai/settings/api), [Google Gemini](https://aistudio.google.com/app/apikey)
-
-- ⚡ **New Commands**
-  - `/conduct-research` - Comprehensive research workflow
-  - `/create-hormozi-pitch` - Alex Hormozi pitch framework execution
-
-**📚 Research Features:**
-- Parallel execution (up to 10 agents)
-- Multi-source validation
-- Fast results (under 1 minute)
-- Confidence levels for findings
+Multi-source research with parallel agent execution. New skills: `alex-hormozi-pitch`, `research`. New agents: `perplexity-researcher`, `claude-researcher`, `gemini-researcher`. Added `.env.example` with API key documentation.
 
 </details>
 
 <details>
-<summary><strong>📅 October 17, 2025 - Skills System Migration (v0.3.0)</strong></summary>
+<summary><strong>📅 v0.3.0 - Skills System Migration</strong></summary>
 
-**🎯 Major Architectural Upgrade: Context → Skills**
-
-PAI has been completely migrated to use [Anthropic's Skills architecture](https://www.anthropic.com/news/skills), bringing modern modular design and progressive disclosure to the personal AI infrastructure.
-
-**✨ What Changed:**
-
-- 📚 **Skills System Implementation**
-  - Migrated from monolithic context files to modular skill packages
-  - Each skill is self-contained with SKILL.md (quick ref) and optional CLAUDE.md (deep dive)
-  - Intent-based activation through skill descriptions with "USE WHEN" triggers
-  - Progressive disclosure: load only what's needed, when it's needed
-
-- 📁 **New Directory Structure**
-  - Removed: `context/` (old system)
-  - Added: `skills/` (new system)
-  - Included example skills: `prompting/` and `create-skill/`
-
-- 📖 **Documentation Overhaul**
-  - Created comprehensive [Skills System Guide](./documentation/skills-system.md) (600+ lines)
-  - Updated [Architecture Documentation](./documentation/architecture.md)
-  - Updated [Documentation README](./documentation/README.md)
-  - Updated main README with Skills System section
-
-- 🎙️ **Voice System Path Updates**
-  - All `~/.claude` hardcoded paths replaced with `${PAI_DIR}` variables
-  - Improved portability across installations
-  - Updated [Voice System Documentation](./documentation/voice-system.md)
-
-- 🎓 **Example Skills Included**
-  - **prompting**: Prompt engineering standards (educational)
-  - **create-skill**: Complete framework for creating new skills with templates
-
-**🔗 Resources:**
-- [Anthropic Skills Announcement](https://www.anthropic.com/news/skills)
-- [PAI Skills System Documentation](./documentation/skills-system.md)
-- [Migration Guide](./documentation/skills-system.md#migration-from-context-system)
-
-**🎯 Benefits:**
-- Better modularity and reusability
-- Clearer activation patterns
-- Easier to create and share skills
-- Follows industry best practices
-- Template-driven quality
+Migrated to [Anthropic's Skills architecture](https://www.anthropic.com/news/skills). Modular skill packages with progressive disclosure. Context system → Skills system. See [documentation](./documentation/skills-system.md) for details.
 
 </details>
 
 <details>
-<summary><strong>📅 October 6, 2025 - README Cleanup & Organization (v0.2.4)</strong></summary>
+<summary><strong>📅 v0.2.4 - README Cleanup</strong></summary>
 
-- 📂 **Collapsed Updates**: Implemented two-level collapsing structure for updates section
-- 🎯 **Better Navigation**: Reduced visual clutter with nested `<details>` tags
-- 🧹 **Issue Management**: Closed PR #24 (voice system) after recent system changes
-- 📊 **Space Optimization**: Updates section now takes minimal vertical space
-- ✅ **Accessibility**: All information still accessible through intuitive collapse/expand
+Collapsed updates section, reduced visual clutter, optimized space.
 
 </details>
 
 <details>
-<summary><strong>📅 October 2, 2025 - Voice System Update</strong></summary>
+<summary><strong>📅 v0.2.3 - Visibility & Portability</strong></summary>
 
-- 🎙️ **Zero-Cost Voice System**: Migrated from ElevenLabs API to macOS native Premium/Enhanced voices
-- 💰 **No API Costs**: 100% offline voice synthesis using built-in macOS neural TTS
-- 🔊 **High-Quality Voices**: Uses Premium voices (Jamie, Ava, Serena, Isha) and Enhanced voices (Tom, Oliver, Samantha)
-- 🔒 **Complete Privacy**: All voice processing happens locally, no cloud services
-- ⚙️ **Centralized Config**: Voice settings managed via `voices.json` configuration file
-- 🚀 **Browser Tools Update**: Switched from Playwright to Chrome DevTools MCP for web automation
+`.claude` → `PAI_DIRECTORY`, vendor agnostic, dynamic paths with `${PAI_DIR}`, full portability.
 
 </details>
 
 <details>
-<summary><strong>📅 September 28, 2025 - Complete Visibility & Portability Update (v0.2.3)</strong></summary>
+<summary><strong>📅 v0.2.2 - Voice System</strong></summary>
 
-- 📁 **Directory Renamed**: `.claude` → `PAI_DIRECTORY` for better visibility (later moved to root in v0.4.0)
-- 🌍 **Vendor Agnostic**: Works with any AI vendor (Claude, GPT, Gemini, etc.)
-- 👁️ **No More Hidden Files**:
-  - `.zshrc` → `zshrc-aliases`
-  - `.env-example` → `env-example`
-- 🔧 **Dynamic Paths**: All hardcoded paths replaced with `${PAI_DIR}`
-- 📍 **Consistent Config**: `.env` now lives in `${PAI_DIR}/.env`
-- 🐛 **Issues Fixed**: #20 (env location) and #21 (hardcoded paths)
-- ✅ **Full Portability**: Install PAI anywhere, everything just works
+Migrated to macOS native Premium voices (zero cost, offline, private).
 
 </details>
 
 <details>
-<summary><strong>📅 September 26, 2025 - Hooks System Update</strong></summary>
+<summary><strong>📅 v0.2.0 - v0.1.0 - Initial Releases</strong></summary>
 
-- 🪝 **Hooks Sanitized**: Updated all hook files to be public-ready with no sensitive data
-- 🔧 **Path Portability**: All hooks now use `${PAI_DIR}` variable for installation-agnostic paths
-- 🎯 **Session Management**: Updated session-start-hook for proper initialization
-- 🎙️ **Voice Integration**: Enhanced stop-hook with intelligent voice responses and tab titles
-- 📝 **Subagent Support**: Improved subagent-stop-hook for agent-specific voice notifications
-- 🔌 **Dynamic Loading**: Updated load-dynamic-requirements wrapper for proper context loading
-- 🚀 **Ready for Distribution**: All hooks verified clean and ready for public PAI distribution
-
-</details>
-
-<details>
-<summary><strong>📅 September 25, 2025 - Voice Output Format & Bug Fix</strong></summary>
-
-- 🎯 **Mandatory Format**: Enforced structured response format for voice integration
-- 🔊 **Voice System**: Fixed voice notification system breaking due to inconsistent output
-- 🐛 **Field Name Fix**: Fixed stop-hook.ts sending wrong field names (`text`/`voiceId` → `message`/`voice_id`)
-- 📋 **Response Structure**: All responses now use mandatory emoji headers with COMPLETED line
-- 🪝 **Hook Integration**: COMPLETED line properly triggers voice notifications with correct field names
-- ⚡ **Consistency**: Format applies to all responses, even simple answers
-- 📝 **Documentation**: Added comprehensive voice-system.md documentation
-- 📝 **Context Updates**: Updated both local and PAI CLAUDE.md files with strict enforcement
-
-</details>
-
-<details>
-<summary><strong>📅 September 24, 2025 - DA Environment Variable</strong></summary>
-
-- 🤖 **DA Variable**: Separated Digital Assistant name and color configuration
-- 🎨 **DA_COLOR Variable**: Color now configurable via `DA_COLOR` environment variable
-- 📝 **Clean Separation**: `DA` handles the name, `DA_COLOR` handles the display color
-- 🎨 **Color Options**: purple (default), blue, green, cyan, magenta, yellow, red, orange
-- ⚙️ **Configuration**: Add to `.zshrc`:
-  ```bash
-  export DA="YourAssistantName"    # Defaults to "Assistant"
-  export DA_COLOR="purple"         # Choose your color
-  ```
-
-</details>
-
-<details>
-<summary><strong>📅 September 22, 2025 - v0.2 Release</strong></summary>
-
-- 🔗 **Human 3.0**: Added link to projects fit together blog post
-- 📊 **Badges**: Fixed purple color and stats display issues
-- 📝 **Documentation**: Improved table formatting and structure
-- ✨ **Polish**: Enhanced README readability and navigation
-- 🔧 **Fixes**: Minor formatting and display improvements
-
-</details>
-
-<details>
-<summary><strong>📅 September 21, 2025 - v0.1 Release</strong></summary>
-
-- 🎉 **Release**: Published v0.1 - Initial public release
-- 🔒 **Voice**: Hardened the voice server
-- 🏠 **Portability**: PAI_HOME support eliminates hardcoded paths
-- 📚 **Docs**: Comprehensive documentation under `${PAI_DIR}/documentation/`
-- 🔌 **Dynamic**: MCP detection via `settings.json`
-- 🏗️ **Architecture**: Complete system documentation with examples
+Public release with voice server, PAI_HOME support, comprehensive documentation, MCP detection, hooks system.
 
 </details>
 
