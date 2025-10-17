@@ -390,12 +390,11 @@ PAI has been completely migrated to use [Anthropic's Skills architecture](https:
 
 > **Core Mission:** Augment humans with AI capabilities so they can survive and thrive in a world full of AI.
 
-### 🌍 **The Problem**
+## 🌍 **The Problem**
 
 <div align="center">
 
-> [!WARNING]
-> ### **It doesn't matter how powerful AI becomes if it's not in the hands of everyone on Earth.**
+> ### It doesn't matter how powerful AI becomes if it's not in the hands of everyone on Earth.
 
 </div>
 
