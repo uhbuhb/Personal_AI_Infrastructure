@@ -274,31 +274,34 @@ PAI is part of the journey toward Human 3.0—where humans are augmented by AI t
 
 ```mermaid
 graph TD
-    User[👤 You] --> Hooks[🪝 Dynamic Hooks]
+    You[👤 You] --> PAI[🧠 PAI]
 
-    Hooks --> Skills[📚 Skills System]
-    Hooks --> Commands[⚡ Custom Commands]
+    PAI --> Skills[📚 Skills]
 
-    Skills --> Projects[🧠 Project Skills]
-    Skills --> Life[🏠 Life Skills]
-    Skills --> Work[💼 Work Skills]
+    Skills --> Research[🔍 Research]
+    Skills --> Development[💻 Development]
+    Skills --> Content[📝 Content]
+    Skills --> Life[🏠 Life Management]
+    Skills --> Custom[🎯 Your Custom Skills]
 
-    Commands --> MCPs[🔌 MCP Servers]
-    Commands --> Agents[🤖 AI Agents]
-    Commands --> APIs[🌐 API Integrations]
+    Research --> Agents1[Perplexity/Claude/Gemini Researchers]
+    Development --> Agents2[Engineer/Architect/Designer]
+    Content --> Agents3[Writer/Artist]
+    Life --> Tools[Finance/Health/Memory Tools]
 
-    MCPs --> ChromeDevTools[🎭 Browser Automation]
-    MCPs --> Stripe[💳 Payment Processing]
-    MCPs --> Analytics[📊 Analytics]
+    Agents1 --> MCPs[🔌 MCP Servers]
+    Agents2 --> MCPs
+    Agents3 --> MCPs
+    Tools --> MCPs
 
-    Agents --> Output[✨ Augmented Actions]
-    APIs --> Output
-    MCPs --> Output
+    MCPs --> Output[✨ Augmented Output]
 
-    style User fill:#1f2937,stroke:#10b981,stroke-width:2px,color:#e5e7eb
-    style Hooks fill:#111827,stroke:#8b5cf6,stroke-width:2px,color:#e5e7eb
+    style You fill:#1f2937,stroke:#10b981,stroke-width:2px,color:#e5e7eb
+    style Skills fill:#111827,stroke:#8b5cf6,stroke-width:3px,color:#e5e7eb
     style Output fill:#111827,stroke:#ef4444,stroke-width:2px,color:#e5e7eb
 ```
+
+**Skills are the core organizational unit.** Everything in PAI is built around modular skills that activate based on your intent.
 
 ### 📚 **Skills System**
 
@@ -336,125 +339,46 @@ ${PAI_DIR}/skills/
 </tr>
 </table>
 
-### ⚡ **Custom Commands**
+### 🎯 **How Skills Work**
 
-> [!NOTE]
-> **These are examples from my setup. Your PAI will have completely different commands based on YOUR unique needs. The possibilities are infinite!**
+**Skills activate automatically based on your intent:**
 
-<table>
-<tr>
-<td width="50%">
+- **Say:** "Research the latest AI developments"
+  **→** `research` skill loads → Launches parallel Perplexity/Claude/Gemini researchers
 
-**💼 Professional:**
-- `write-blog` - Content generation
-- `get-newsletter-stats` - Beehiiv metrics  
-- `design-review` - Code analysis
-- `create-consulting-document` - Client docs
-- `update-daemon` - API management
+- **Say:** "Build a task tracker app"
+  **→** `development` skill loads → Invokes architect and engineer agents
 
-</td>
-<td width="50%">
+- **Say:** "Create a threat model"
+  **→** `fabric` skill loads → Selects `create_threat_model` pattern from 242+ options
 
-**🏠 Personal:**
-- `answer-finance-question` - Financial insights
-- `get-life-log` - Limitless.ai integration
-- `send-text-alert` - SMS notifications
-- `track-health-metrics` - Wellness tracking
-- `capture-learning` - Knowledge capture
+**Each skill contains:**
+- 📄 Intent triggers ("USE WHEN...")
+- 🤖 Specialized agents (if needed)
+- 🔌 MCP integrations (if needed)
+- ⚡ Commands and tools (if needed)
+- 📖 Documentation and examples
 
-</td>
-</tr>
-</table>
+> [!TIP]
+> **You don't manage agents or commands directly.** Just tell PAI what you want to do, and the right skill activates with all necessary resources.
 
-**🚀 60+ commands** ready to use out of the box
+### 💡 **Example Skills (Included)**
 
-### 🤖 **Specialized Agents**
+| Skill | What It Does | Example Usage |
+|:------|:-------------|:--------------|
+| **🔍 research** | Multi-source research with parallel agents | "Research quantum computing trends" |
+| **🧵 fabric** | 242+ AI patterns (threat modeling, summarization, extraction) | "Create a threat model for our API" |
+| **💻 development** | Full-stack development with architect and engineer agents | "Build a meditation timer app" |
+| **🎨 design** | UX/UI design with shadcn/ui and Figma integration | "Design a dashboard for analytics" |
+| **🔒 ffuf** | Web fuzzing for penetration testing | "Test this API for vulnerabilities" |
+| **📊 alex-hormozi-pitch** | Create irresistible offers using $100M Offers framework | "Create a pitch for my SaaS product" |
+| **🌐 web-scraping** | Extract data from websites (BrightData + Apify) | "Scrape product listings from this site" |
+| **📖 ref-documentation** | Search technical docs (React, Next.js, 100+ frameworks) | "How do I use React hooks?" |
+| **▶️ youtube-extraction** | Extract transcripts and content from YouTube videos | "Summarize this YouTube video" |
+| **🎭 webapp-testing** | Browser automation and visual testing | "Test the login flow" |
 
-> [!IMPORTANT]
-> **These agents are examples. You'll create your own specialized agents for YOUR specific workflows - artists might have creative agents, doctors might have diagnostic agents, teachers might have curriculum agents. The system adapts to YOU.**
-
-| Agent | Purpose | Tools | Use Case |
-|:------|:--------|:------|:---------|
-| **🔍 Perplexity Researcher** | Fast web research | Perplexity API | Quick information gathering (requires API key) |
-| **🔍 Claude Researcher** | Deep web research | Claude WebSearch | Comprehensive research (built-in) |
-| **🔍 Gemini Researcher** | Multi-perspective research | Google Gemini | Parallel query investigation (requires API key) |
-| **⚙️ Engineer** | Production code | Testing, Debugging | Software development |
-| **🎨 Designer** | UX/UI design | Figma, shadcn/ui | Interface creation |
-| **🔒 Pentester** | Security testing | Nmap, Burp | Vulnerability assessment |
-| **🏗️ Architect** | System design | Diagrams, PRDs | Technical planning |
-
-**Enhanced with:**
-- 🎙️ ElevenLabs voice synthesis
-- ⚡ Task parallelization
-- 🔌 Deep tool integration
-
-### 🪝 **Dynamic Hook System**
-
-<table>
-<tr>
-<td width="50%">
-
-**📥 Context Loading Hooks:**
-- `submit-user-hook` - Loads context by intent
-- `load-dynamic-requirements` - Smart routing
-- Automatic agent selection
-- Domain-specific knowledge injection
-
-</td>
-<td width="50%">
-
-**🔧 Integration Hooks:**
-- Pre/post command execution
-- Error handling and recovery  
-- Rate limiting and validation
-- Security scanning
-
-</td>
-</tr>
-</table>
-
-### 🔌 **MCP Server Ecosystem**
-
-<table>
-<tr>
-<td>
-
-**🌐 Browser & Testing**
-- Playwright automation
-- Puppeteer control
-- Selenium testing
-- Visual regression
-
-</td>
-<td>
-
-**💳 Financial**  
-- Stripe API
-- Square payments
-- PayPal integration
-- Crypto wallets
-
-</td>
-<td>
-
-**📊 Analytics**
-- Google Analytics
-- Mixpanel tracking
-- Beehiiv stats
-- Site metrics
-
-</td>
-<td>
-
-**💬 Communication**
-- ElevenLabs TTS
-- OpenAI Voice
-- Discord bots
-- Email/SMS
-
-</td>
-</tr>
-</table>
+**Skills use MCP servers for integrations:**
+Chrome DevTools • Apify • BrightData • Stripe • Anthropic Content • Daemon (your data) • And more...
 
 ---
 
