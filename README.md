@@ -401,14 +401,17 @@ graph TD
 
 ```
 ${PAI_DIR}/skills/
-├── prompting/           # Prompt engineering
-├── create-skill/        # Skill creation guide
+├── prompting/           # Prompt engineering standards
+├── create-skill/        # Skill creation framework
 ├── ffuf/                # Web fuzzing for pentesting (by @rez0)
-├── development/         # Software development
-├── research/            # Multi-source research
+├── alex-hormozi-pitch/  # $100M Offers pitch framework
+├── research/            # Multi-source research (requires API keys)
 ├── web-scraping/        # Web data extraction
 ├── chrome-devtools/     # Browser automation
 ├── fabric-patterns/     # Content processing
+├── youtube-extraction/  # YouTube transcript extraction
+├── ref-documentation/   # Technical docs search
+├── webapp-testing/      # Playwright testing patterns
 └── [your-custom-skills]/
 ```
 
@@ -465,7 +468,9 @@ ${PAI_DIR}/skills/
 
 | Agent | Purpose | Tools | Use Case |
 |:------|:--------|:------|:---------|
-| **🔍 Researcher** | Deep web research | WebSearch, WebFetch | Information gathering |
+| **🔍 Perplexity Researcher** | Fast web research | Perplexity API | Quick information gathering (requires API key) |
+| **🔍 Claude Researcher** | Deep web research | Claude WebSearch | Comprehensive research (built-in) |
+| **🔍 Gemini Researcher** | Multi-perspective research | Google Gemini | Parallel query investigation (requires API key) |
 | **⚙️ Engineer** | Production code | Testing, Debugging | Software development |
 | **🎨 Designer** | UX/UI design | Figma, shadcn/ui | Interface creation |
 | **🔒 Pentester** | Security testing | Nmap, Burp | Vulnerability assessment |
@@ -596,16 +601,30 @@ export PAI_HOME="$HOME"  # Your home directory
 source ~/.zshrc  # or source ~/.bashrc
 ```
 
-#### **Step 4: Configure Environment**
+#### **Step 4: Configure Environment & API Keys**
 
 ```bash
 # Copy environment template to PAI_DIRECTORY
-cp ${PAI_DIR}/env-example ${PAI_DIR}/.env
+cp ${PAI_DIR}/.env.example ${PAI_DIR}/.env
 
-# Add your API keys (optional)
+# Configure your API keys
 vim ${PAI_DIR}/.env
-# Add: OPENAI_API_KEY="your_key_here" (if using GPT integration)
 ```
+
+> [!IMPORTANT]
+> **Some skills and agents require API keys to function:**
+>
+> **Required for Research Agents:**
+> - `PERPLEXITY_API_KEY` - For perplexity-researcher agent ([Get key](https://www.perplexity.ai/settings/api))
+> - `GOOGLE_API_KEY` - For gemini-researcher agent ([Get key](https://aistudio.google.com/app/apikey))
+> - Claude WebSearch is built-in (no key needed for claude-researcher)
+>
+> **Optional for AI Generation:**
+> - `REPLICATE_API_TOKEN` - For AI image/video generation ([Get key](https://replicate.com/account/api-tokens))
+> - `OPENAI_API_KEY` - For GPT integration and Sora billing ([Get key](https://platform.openai.com/api-keys))
+>
+> See `.env.example` for complete list and setup instructions.
+> **NEVER commit your `.env` file to version control!**
 
 #### **Step 5: Launch PAI**
 
@@ -626,17 +645,25 @@ cd voice-server && bun server.ts &
 ### **⚙️ Environment Variables**
 
 ```bash
-# Required - MUST be configured for PAI to work properly
+# ============ REQUIRED CONFIGURATION ============
 PAI_DIR="/path/to/PAI/PAI_DIRECTORY"    # PAI's PAI_DIRECTORY (system agnostic)
-PAI_HOME="$HOME"                  # Your home directory
+PAI_HOME="$HOME"                        # Your home directory
 
-# Optional API Keys
-OPENAI_API_KEY="your_key"         # GPT integration (optional)
-PORT="8888"                        # Voice server port (default: 8888)
+# ============ RESEARCH AGENTS (Skills-Specific) ============
+PERPLEXITY_API_KEY="your_key"          # For perplexity-researcher agent
+GOOGLE_API_KEY="your_key"              # For gemini-researcher agent
+# Claude WebSearch built-in - no key needed for claude-researcher
 
-# Digital Assistant Customization
-DA="YourAssistantName"            # Your AI assistant's name (default: "Assistant")
-DA_COLOR="purple"                 # Display color (purple, blue, green, cyan, etc.)
+# ============ AI GENERATION (Optional) ============
+REPLICATE_API_TOKEN="your_token"       # For Flux, Sora, etc.
+OPENAI_API_KEY="your_key"              # For GPT integration, Sora billing
+
+# ============ SYSTEM CONFIGURATION ============
+PORT="8888"                             # Voice server port (default: 8888)
+
+# ============ DIGITAL ASSISTANT CUSTOMIZATION ============
+DA="YourAssistantName"                  # Your AI assistant's name (default: "Assistant")
+DA_COLOR="purple"                       # Display color (purple, blue, green, cyan, etc.)
 ```
 
 > [!TIP]
