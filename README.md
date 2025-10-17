@@ -35,24 +35,92 @@
 ## 🚀 **Recent Updates**
 
 > [!IMPORTANT]
-> **🎉 MAJOR UPGRADE: Skills System Migration (v0.3.0)**
+> **🎉 LATEST: Fabric Skill with Intelligent Pattern Selection (v0.3.2)**
 >
-> PAI has been upgraded to use [Anthropic's Skills architecture](https://www.anthropic.com/news/skills)! We've migrated from the legacy context system to modular, intent-activated skills with progressive disclosure. This is a breaking architectural change that brings PAI in line with modern AI assistant design patterns.
+> The Fabric skill now intelligently selects the right pattern from 242+ options based on your intent! Instead of manually searching patterns, just say "create a threat model" or "summarize this video" and the skill automatically selects and executes the correct Fabric pattern.
 >
-> **Key Changes:**
-> - 📚 **Context System → Skills System** - Modular capability packages
-> - 🎯 **Intent-Based Activation** - Skills load based on user intent matching
-> - 📄 **Progressive Disclosure** - SKILL.md → CLAUDE.md → Resources
-> - 🎙️ **Voice System Updates** - Paths updated to use `${PAI_DIR}`
-> - 📖 **Complete Documentation** - New comprehensive [Skills System Guide](./PAI_DIRECTORY/documentation/skills-system.md)
-> - 🎓 **Example Skills Included** - `prompting` and `create-skill` as safe examples
+> **Recent Updates:**
+> - 🎯 **v0.3.2** - Fabric skill with smart pattern selection (242+ patterns included)
+> - 🔍 **v0.3.1** - Research skills with parallel agent execution (Perplexity, Claude, Gemini)
+> - 📚 **v0.3.0** - Skills System Migration ([Anthropic's Skills architecture](https://www.anthropic.com/news/skills))
 >
-> [Read the Skills System Documentation →](./PAI_DIRECTORY/documentation/skills-system.md)
+> **Key Features:**
+> - 🧠 **Intelligent Pattern Selection** - Intent-based matching for 242+ Fabric patterns
+> - 🔍 **Multi-Source Research** - Parallel research agents (up to 10 simultaneous)
+> - 📚 **Skills System** - Modular capability packages with progressive disclosure
+> - 🎙️ **Voice Integration** - macOS Premium voices with agent-specific notifications
+>
+> [Read the Full Update History →](#-recent-updates)
 
 <details>
 <summary><strong>Click to see all updates</strong></summary>
 
 <details open>
+<summary><strong>📅 October 17, 2025 - Fabric Skill with Intelligent Pattern Selection (v0.3.2)</strong></summary>
+
+**🎯 Intelligent Pattern Selection for 242+ Fabric Patterns**
+
+The Fabric skill now features intelligent pattern selection instead of just listing available patterns.
+
+**✨ What Changed:**
+
+- 🎯 **Smart Pattern Selection**
+  - Intent-based pattern matching for 242+ Fabric patterns
+  - Automatic pattern selection based on user requests
+  - Category-based organization: Security (15), Summarization (20), Extraction (30+), Analysis (35+), Creation (50+), Improvement (10), Rating (8)
+
+- 📚 **Complete Fabric Repository Included**
+  - Full Fabric repo bundled at `skills/fabric/fabric-repo/`
+  - All 242 pattern definitions included locally
+  - Self-updating: `cd fabric-repo && git pull`
+
+- 💡 **Usage Examples**
+  - "Create a threat model for our API" → Selects `create_threat_model` pattern
+  - "Summarize this video in 5 sentences" → Selects `create_5_sentence_summary` pattern
+  - "Extract wisdom from this content" → Selects `extract_wisdom` pattern
+
+**🔗 Pattern Categories:**
+- Threat Modeling & Security, Summarization, Extraction, Analysis, Creation, Improvement, Rating/Judgment
+
+</details>
+
+<details>
+<summary><strong>📅 October 17, 2025 - Research Skills & API Key Infrastructure (v0.3.1)</strong></summary>
+
+**🔍 Multi-Source Research System**
+
+Added comprehensive research capabilities with parallel agent execution and API key infrastructure.
+
+**✨ What Changed:**
+
+- 🧠 **New Skills Added**
+  - `alex-hormozi-pitch` - $100M Offers pitch framework (value equation, guarantees, MAGIC naming)
+  - `research` - Multi-source research orchestration (up to 10 parallel agents)
+
+- 🤖 **Research Agents**
+  - `perplexity-researcher` - Fast web research via Perplexity API (requires API key)
+  - `claude-researcher` - Deep research using Claude WebSearch (built-in, no key needed)
+  - `gemini-researcher` - Multi-perspective research via Google Gemini (requires API key)
+
+- 🔑 **API Key Infrastructure**
+  - Created `.env.example` with all required API keys
+  - Comprehensive documentation for obtaining keys
+  - Clear security warnings about NEVER committing `.env`
+  - Links to get keys: [Perplexity](https://www.perplexity.ai/settings/api), [Google Gemini](https://aistudio.google.com/app/apikey)
+
+- ⚡ **New Commands**
+  - `/conduct-research` - Comprehensive research workflow
+  - `/create-hormozi-pitch` - Alex Hormozi pitch framework execution
+
+**📚 Research Features:**
+- Parallel execution (up to 10 agents)
+- Multi-source validation
+- Fast results (under 1 minute)
+- Confidence levels for findings
+
+</details>
+
+<details>
 <summary><strong>📅 October 17, 2025 - Skills System Migration (v0.3.0)</strong></summary>
 
 **🎯 Major Architectural Upgrade: Context → Skills**
