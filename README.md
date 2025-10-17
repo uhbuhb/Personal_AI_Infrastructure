@@ -13,16 +13,16 @@
 <br/>
 
 ![Static Badge](https://img.shields.io/badge/mission-upgrade_humans_using_AI-8B5CF6)
-![GitHub last commit](https://img.shields.io/github/last-commit/danielmiessler/personal_ai_infrastructure)
+![GitHub last commit](https://img.shields.io/github/last-commit/danielmiessler/Personal_AI_Infrastructure)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Powered%20by-Claude%20Code-blue)](https://claude.ai/code)
 [![PAI Video](https://img.shields.io/badge/🎥_Watch-PAI_Video-6B46C1)](https://youtu.be/iKwRWwabkEc)
 
 <br/>
 
-[![Stars](https://img.shields.io/github/stars/danielmiessler/personal_ai_infrastructure?style=for-the-badge&logo=starship&color=yellow&logoColor=white)](https://github.com/danielmiessler/personal_ai_infrastructure/stargazers)
-[![Forks](https://img.shields.io/github/forks/danielmiessler/personal_ai_infrastructure?style=for-the-badge&logo=git&color=blue&logoColor=white)](https://github.com/danielmiessler/personal_ai_infrastructure/network/members)
-[![Issues](https://img.shields.io/github/issues/danielmiessler/personal_ai_infrastructure?style=for-the-badge&logo=github&color=red&logoColor=white)](https://github.com/danielmiessler/personal_ai_infrastructure/issues)
+[![Stars](https://img.shields.io/github/stars/danielmiessler/Personal_AI_Infrastructure?style=for-the-badge&logo=starship&color=yellow&logoColor=white)](https://github.com/danielmiessler/Personal_AI_Infrastructure/stargazers)
+[![Forks](https://img.shields.io/github/forks/danielmiessler/Personal_AI_Infrastructure?style=for-the-badge&logo=git&color=blue&logoColor=white)](https://github.com/danielmiessler/Personal_AI_Infrastructure/network/members)
+[![Issues](https://img.shields.io/github/issues/danielmiessler/Personal_AI_Infrastructure?style=for-the-badge&logo=github&color=red&logoColor=white)](https://github.com/danielmiessler/Personal_AI_Infrastructure/issues)
 
 <br/>
 
@@ -114,10 +114,10 @@ Moved all contents from `PAI_DIRECTORY/` to repository root for immediate visibi
   - Migration guide for existing users
 
 - 🏷️ **Repository Renamed**
-  - Repository renamed from `PAI` to `personal_ai_infrastructure`
+  - Repository renamed from `PAI` to `Personal_AI_Infrastructure`
   - GitHub automatically redirects old URL to new URL
   - All existing links and git operations continue to work
-  - New URL: `github.com/danielmiessler/personal_ai_infrastructure`
+  - New URL: `github.com/danielmiessler/Personal_AI_Infrastructure`
 
 **Migration Steps:**
 
@@ -140,8 +140,8 @@ Moved all contents from `PAI_DIRECTORY/` to repository root for immediate visibi
 
 4. Update your git remote URL (optional but recommended):
    ```bash
-   git remote set-url origin git@github.com:danielmiessler/personal_ai_infrastructure.git
-   # Or for HTTPS: git remote set-url origin https://github.com/danielmiessler/personal_ai_infrastructure.git
+   git remote set-url origin git@github.com:danielmiessler/Personal_AI_Infrastructure.git
+   # Or for HTTPS: git remote set-url origin https://github.com/danielmiessler/Personal_AI_Infrastructure.git
    ```
 
 **Why This Change:**
@@ -736,8 +736,8 @@ brew install oven-sh/bun/bun
 
 ```bash
 # Clone the PAI repository
-git clone https://github.com/danielmiessler/personal_ai_infrastructure.git
-cd personal_ai_infrastructure
+git clone https://github.com/danielmiessler/Personal_AI_Infrastructure.git
+cd Personal_AI_Infrastructure
 
 # All functional directories are now visible at root
 ls -la  # See agents/, skills/, commands/, etc.
@@ -1136,13 +1136,13 @@ send-client-updates --weekly-digest
 
 ### **Help Us Give AI to the World**
 
-<a href="https://github.com/danielmiessler/personal_ai_infrastructure/issues">
+<a href="https://github.com/danielmiessler/Personal_AI_Infrastructure/issues">
   <img src="https://img.shields.io/badge/Report%20Issues-red?style=for-the-badge&logo=github&logoColor=white" alt="Issues">
 </a>
-<a href="https://github.com/danielmiessler/personal_ai_infrastructure/discussions">
+<a href="https://github.com/danielmiessler/Personal_AI_Infrastructure/discussions">
   <img src="https://img.shields.io/badge/Discussions-blue?style=for-the-badge&logo=github&logoColor=white" alt="Discussions">
 </a>
-<a href="https://github.com/danielmiessler/personal_ai_infrastructure/pulls">
+<a href="https://github.com/danielmiessler/Personal_AI_Infrastructure/pulls">
   <img src="https://img.shields.io/badge/Pull%20Requests-green?style=for-the-badge&logo=github&logoColor=white" alt="PRs">
 </a>
 
