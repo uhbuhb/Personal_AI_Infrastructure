@@ -6,7 +6,7 @@
   <img alt="PAI Logo" src="./pai-logo.png" width="1200">
 </picture>
 
-# **PAI** - Personal AI Infrastructure
+# **Personal AI Infrastructure** (PAI)
 
 ### **Open-source personal AI infrastructure for orchestrating your life and work**
 
