@@ -13,16 +13,16 @@
 <br/>
 
 ![Static Badge](https://img.shields.io/badge/mission-upgrade_humans_using_AI-8B5CF6)
-![GitHub last commit](https://img.shields.io/github/last-commit/danielmiessler/PAI)
+![GitHub last commit](https://img.shields.io/github/last-commit/danielmiessler/personal_ai_infrastructure)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Powered%20by-Claude%20Code-blue)](https://claude.ai/code)
 [![PAI Video](https://img.shields.io/badge/🎥_Watch-PAI_Video-6B46C1)](https://youtu.be/iKwRWwabkEc)
 
 <br/>
 
-[![Stars](https://img.shields.io/github/stars/danielmiessler/PAI?style=for-the-badge&logo=starship&color=yellow&logoColor=white)](https://github.com/danielmiessler/PAI/stargazers)
-[![Forks](https://img.shields.io/github/forks/danielmiessler/PAI?style=for-the-badge&logo=git&color=blue&logoColor=white)](https://github.com/danielmiessler/PAI/network/members)
-[![Issues](https://img.shields.io/github/issues/danielmiessler/PAI?style=for-the-badge&logo=github&color=red&logoColor=white)](https://github.com/danielmiessler/PAI/issues)
+[![Stars](https://img.shields.io/github/stars/danielmiessler/personal_ai_infrastructure?style=for-the-badge&logo=starship&color=yellow&logoColor=white)](https://github.com/danielmiessler/personal_ai_infrastructure/stargazers)
+[![Forks](https://img.shields.io/github/forks/danielmiessler/personal_ai_infrastructure?style=for-the-badge&logo=git&color=blue&logoColor=white)](https://github.com/danielmiessler/personal_ai_infrastructure/network/members)
+[![Issues](https://img.shields.io/github/issues/danielmiessler/personal_ai_infrastructure?style=for-the-badge&logo=github&color=red&logoColor=white)](https://github.com/danielmiessler/personal_ai_infrastructure/issues)
 
 <br/>
 
@@ -113,6 +113,12 @@ Moved all contents from `PAI_DIRECTORY/` to repository root for immediate visibi
   - Installation instructions reflect new structure
   - Migration guide for existing users
 
+- 🏷️ **Repository Renamed**
+  - Repository renamed from `PAI` to `personal_ai_infrastructure`
+  - GitHub automatically redirects old URL to new URL
+  - All existing links and git operations continue to work
+  - New URL: `github.com/danielmiessler/personal_ai_infrastructure`
+
 **Migration Steps:**
 
 1. Update your `PAI_DIR` variable in shell config:
@@ -130,6 +136,12 @@ Moved all contents from `PAI_DIRECTORY/` to repository root for immediate visibi
    ```bash
    cd /path/to/PAI
    git pull
+   ```
+
+4. Update your git remote URL (optional but recommended):
+   ```bash
+   git remote set-url origin git@github.com:danielmiessler/personal_ai_infrastructure.git
+   # Or for HTTPS: git remote set-url origin https://github.com/danielmiessler/personal_ai_infrastructure.git
    ```
 
 **Why This Change:**
@@ -724,8 +736,8 @@ brew install oven-sh/bun/bun
 
 ```bash
 # Clone the PAI repository
-git clone https://github.com/danielmiessler/PAI.git
-cd PAI
+git clone https://github.com/danielmiessler/personal_ai_infrastructure.git
+cd personal_ai_infrastructure
 
 # All functional directories are now visible at root
 ls -la  # See agents/, skills/, commands/, etc.
@@ -1124,13 +1136,13 @@ send-client-updates --weekly-digest
 
 ### **Help Us Give AI to the World**
 
-<a href="https://github.com/danielmiessler/PAI/issues">
+<a href="https://github.com/danielmiessler/personal_ai_infrastructure/issues">
   <img src="https://img.shields.io/badge/Report%20Issues-red?style=for-the-badge&logo=github&logoColor=white" alt="Issues">
 </a>
-<a href="https://github.com/danielmiessler/PAI/discussions">
+<a href="https://github.com/danielmiessler/personal_ai_infrastructure/discussions">
   <img src="https://img.shields.io/badge/Discussions-blue?style=for-the-badge&logo=github&logoColor=white" alt="Discussions">
 </a>
-<a href="https://github.com/danielmiessler/PAI/pulls">
+<a href="https://github.com/danielmiessler/personal_ai_infrastructure/pulls">
   <img src="https://img.shields.io/badge/Pull%20Requests-green?style=for-the-badge&logo=github&logoColor=white" alt="PRs">
 </a>
 
