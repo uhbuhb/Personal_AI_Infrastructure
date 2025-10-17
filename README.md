@@ -394,7 +394,7 @@ PAI has been completely migrated to use [Anthropic's Skills architecture](https:
 
 <div align="center">
 
-> ### It doesn't matter how powerful AI becomes if it's not in the hands of everyone on Earth.
+> ### It doesn't matter how powerful AI becomes if it's not accessible to everyone
 
 </div>
 
