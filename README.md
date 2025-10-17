@@ -392,7 +392,12 @@ PAI has been completely migrated to use [Anthropic's Skills architecture](https:
 
 ### 🌍 **The Problem**
 
-**It doesn't matter how powerful AI becomes if it's not in the hands of everyone on Earth.**
+<div align="center">
+
+> [!WARNING]
+> ### **It doesn't matter how powerful AI becomes if it's not in the hands of everyone on Earth.**
+
+</div>
 
 Right now, AI is trapped behind corporate APIs, expensive subscriptions, and complex interfaces that only developers can use. Meanwhile, billions of people who could benefit from AI augmentation—artists, teachers, small business owners, researchers, parents—are left behind.
 
