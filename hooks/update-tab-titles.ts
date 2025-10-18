@@ -1,10 +1,9 @@
 #!/usr/bin/env bun
 /**
- * Global Context Loading Hook
- * 1. Loads MINIMAL.md (core identity + critical security)
- * 2. Updates tab title for current task
+ * Tab Title Update Hook
+ * Updates tab title based on user prompt
  *
- * Note: Full PAI context loaded on-demand via PAI skill system
+ * Note: All context loading handled by PAI skill system (core identity in skill description, full context in SKILL.md)
  */
 
 import { execSync } from 'child_process';
@@ -50,32 +49,7 @@ async function main() {
 
     const prompt = data.prompt || '';
 
-    // 1. LOAD MINIMAL GLOBAL CONTEXT (always-needed, non-routing)
-    const paiDir = process.env.PAI_DIR || `${process.env.HOME}/.claude`;
-    const globalContextPath = `${paiDir}/skills/PAI/MINIMAL.md`;
-
-    try {
-      const file = Bun.file(globalContextPath);
-
-      if (await file.exists()) {
-        const globalContext = await file.text();
-
-        if (globalContext && globalContext.trim().length > 0) {
-          // Output the global context with markers
-          console.log(`<user-prompt-submit-hook>\n${globalContext}\n</user-prompt-submit-hook>`);
-
-          // Success indicator (sent to stderr)
-          console.error(`✅ Global context loaded: ${globalContext.length} chars from ${globalContextPath}`);
-        }
-      } else {
-        console.error(`⚠️  Global context file not found: ${globalContextPath}`);
-      }
-    } catch (error) {
-      console.error(`⚠️  Failed to load global context: ${error}`);
-      // Don't exit - continue with tab title update
-    }
-
-    // 2. UPDATE TAB TITLE
+    // UPDATE TAB TITLE
     // Generate quick fallback tab title
     let tabTitle = 'Processing request...';
     if (prompt) {
@@ -105,10 +79,9 @@ async function main() {
 
     // Launch background process for better Haiku summary
     try {
-      const cleanMessage = prompt.split('<user-prompt-submit-hook>')[0].trim();
-      if (cleanMessage && cleanMessage.length > 3) {
+      if (prompt && prompt.length > 3) {
         const paiDir = process.env.PAI_DIR || `${process.env.HOME}/.claude`;
-        Bun.spawn(['bun', `${paiDir}/hooks/update-tab-title.ts`, cleanMessage], {
+        Bun.spawn(['bun', `${paiDir}/hooks/update-tab-title.ts`, prompt], {
           stdout: 'ignore',
           stderr: 'ignore',
           stdin: 'ignore'
@@ -121,7 +94,7 @@ async function main() {
     process.exit(0);
   } catch (error) {
     // Silently fail to not interrupt Claude's flow
-    console.error('Context loader error:', error);
+    console.error('Tab title update error:', error);
     process.exit(0);
   }
 }
