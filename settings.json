@@ -114,14 +114,34 @@
   },
   "hooks": {
     "PreToolUse": [],
-    "PostToolUse": [],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/capture-tool-output.ts"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/capture-session-summary.ts"
+          }
+        ]
+      }
+    ],
     "Notification": [],
     "UserPromptSubmit": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "bun ${PAI_DIR}/hooks/load-dynamic-requirements.ts"
+            "command": "${PAI_DIR}/hooks/update-tab-titles.ts"
           }
         ]
       }
@@ -131,7 +151,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bun ${PAI_DIR}/hooks/session-start-hook.ts"
+            "command": "${PAI_DIR}/hooks/session-start-hook.ts"
           }
         ]
       }
@@ -141,7 +161,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bun ${PAI_DIR}/hooks/stop-hook.ts"
+            "command": "${PAI_DIR}/hooks/stop-hook.ts"
           }
         ]
       }
@@ -151,7 +171,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bun ${PAI_DIR}/hooks/subagent-stop-hook.ts"
+            "command": "${PAI_DIR}/hooks/subagent-stop-hook.ts"
           }
         ]
       }
@@ -162,7 +182,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bun ${PAI_DIR}/hooks/context-compression-hook.ts"
+            "command": "${PAI_DIR}/hooks/context-compression-hook.ts"
           }
         ]
       }
