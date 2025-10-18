@@ -1,9 +1,10 @@
 #!/usr/bin/env bun
 /**
- * Pre-commit Documentation Updater
+ * Pre-commit Documentation Updater - Enhanced Version
  *
  * Analyzes staged git changes and automatically updates relevant documentation
- * files including README.md and documentation/*.md
+ * files including README.md and documentation/*.md with ACTUAL CONTENT UPDATES,
+ * not just timestamps.
  *
  * This runs as part of the pre-commit hook to ensure documentation stays
  * in sync with code changes.
@@ -20,17 +21,72 @@ const colors = {
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
   cyan: '\x1b[36m',
+  red: '\x1b[31m',
 };
+
+interface FileChange {
+  path: string;
+  type: 'added' | 'modified' | 'deleted';
+  linesAdded: number;
+  linesDeleted: number;
+}
 
 interface ChangeAnalysis {
   changedFiles: string[];
-  affectedAreas: Set<string>;
+  fileChanges: FileChange[];
+  affectedAreas: Map<string, FileChange[]>;  // area -> files that changed
   needsReadmeUpdate: boolean;
   needsDocUpdate: Map<string, boolean>;
+  changeSummary: string;
 }
 
 /**
- * Get list of staged files in the git repository
+ * Get list of staged files with their change types
+ */
+function getStagedFilesDetailed(): FileChange[] {
+  try {
+    // Get diff stats for staged files
+    const output = execSync('git diff --cached --numstat', {
+      encoding: 'utf-8',
+    });
+
+    const changes: FileChange[] = [];
+
+    for (const line of output.trim().split('\n')) {
+      if (!line) continue;
+
+      const parts = line.split('\t');
+      if (parts.length !== 3) continue;
+
+      const linesAdded = parts[0] === '-' ? 0 : parseInt(parts[0]);
+      const linesDeleted = parts[1] === '-' ? 0 : parseInt(parts[1]);
+      const path = parts[2];
+
+      // Determine type
+      let type: 'added' | 'modified' | 'deleted' = 'modified';
+      if (linesAdded > 0 && linesDeleted === 0) {
+        type = 'added';
+      } else if (linesAdded === 0 && linesDeleted > 0) {
+        type = 'deleted';
+      }
+
+      changes.push({
+        path,
+        type,
+        linesAdded,
+        linesDeleted,
+      });
+    }
+
+    return changes;
+  } catch (error) {
+    console.error('Error getting staged files:', error);
+    return [];
+  }
+}
+
+/**
+ * Get simple list of staged file paths
  */
 function getStagedFiles(): string[] {
   try {
@@ -45,57 +101,88 @@ function getStagedFiles(): string[] {
 }
 
 /**
+ * Generate a human-readable summary of changes
+ */
+function generateChangeSummary(fileChanges: FileChange[]): string {
+  const added = fileChanges.filter(f => f.type === 'added').length;
+  const modified = fileChanges.filter(f => f.type === 'modified').length;
+  const deleted = fileChanges.filter(f => f.type === 'deleted').length;
+
+  const parts: string[] = [];
+  if (added > 0) parts.push(`${added} added`);
+  if (modified > 0) parts.push(`${modified} modified`);
+  if (deleted > 0) parts.push(`${deleted} deleted`);
+
+  return parts.join(', ');
+}
+
+/**
  * Analyze changed files to determine what documentation needs updating
  */
-function analyzeChanges(files: string[]): ChangeAnalysis {
-  const affectedAreas = new Set<string>();
+function analyzeChanges(fileChanges: FileChange[]): ChangeAnalysis {
+  const affectedAreas = new Map<string, FileChange[]>();
   const needsDocUpdate = new Map<string, boolean>();
 
-  // Map file paths to documentation areas
-  for (const file of files) {
+  // Group files by area
+  for (const change of fileChanges) {
+    const { path } = change;
+
     // Skip if this IS a documentation file being changed
-    if (file.startsWith('documentation/') || file === 'README.md') {
+    if (path.startsWith('documentation/') || path === 'README.md' ||
+        path === 'hooks/update-documentation.ts') {
       continue;
     }
 
-    // Map files to affected areas
-    if (file.startsWith('skills/')) {
-      affectedAreas.add('skills');
+    // Map files to affected areas and group by area
+    if (path.startsWith('skills/')) {
+      if (!affectedAreas.has('skills')) affectedAreas.set('skills', []);
+      affectedAreas.get('skills')!.push(change);
       needsDocUpdate.set('documentation/skills-system.md', true);
-    } else if (file.startsWith('commands/')) {
-      affectedAreas.add('commands');
+    } else if (path.startsWith('commands/')) {
+      if (!affectedAreas.has('commands')) affectedAreas.set('commands', []);
+      affectedAreas.get('commands')!.push(change);
       needsDocUpdate.set('documentation/command-system.md', true);
-    } else if (file.startsWith('hooks/')) {
-      affectedAreas.add('hooks');
+    } else if (path.startsWith('hooks/')) {
+      if (!affectedAreas.has('hooks')) affectedAreas.set('hooks', []);
+      affectedAreas.get('hooks')!.push(change);
       needsDocUpdate.set('documentation/hook-system.md', true);
-    } else if (file.startsWith('agents/')) {
-      affectedAreas.add('agents');
+    } else if (path.startsWith('agents/')) {
+      if (!affectedAreas.has('agents')) affectedAreas.set('agents', []);
+      affectedAreas.get('agents')!.push(change);
       needsDocUpdate.set('documentation/agent-system.md', true);
-    } else if (file.startsWith('voice-server/')) {
-      affectedAreas.add('voice');
+    } else if (path.startsWith('voice-server/')) {
+      if (!affectedAreas.has('voice')) affectedAreas.set('voice', []);
+      affectedAreas.get('voice')!.push(change);
       needsDocUpdate.set('documentation/voice-system.md', true);
-    } else if (file === 'package.json' || file === 'bun.lockb') {
-      affectedAreas.add('dependencies');
-    } else if (file === '.mcp.json') {
-      affectedAreas.add('mcp-servers');
-    } else if (file === 'settings.json') {
-      affectedAreas.add('settings');
+    } else if (path === 'package.json' || path === 'bun.lockb') {
+      if (!affectedAreas.has('dependencies')) affectedAreas.set('dependencies', []);
+      affectedAreas.get('dependencies')!.push(change);
+    } else if (path === '.mcp.json') {
+      if (!affectedAreas.has('mcp-servers')) affectedAreas.set('mcp-servers', []);
+      affectedAreas.get('mcp-servers')!.push(change);
+    } else if (path === 'settings.json') {
+      if (!affectedAreas.has('settings')) affectedAreas.set('settings', []);
+      affectedAreas.get('settings')!.push(change);
     }
   }
 
-  // Always update README if there are changes (to update last commit info)
-  const needsReadmeUpdate = files.length > 0;
+  // Always update README if there are changes (to add update entry)
+  const needsReadmeUpdate = fileChanges.length > 0;
+
+  const changeSummary = generateChangeSummary(fileChanges);
 
   return {
-    changedFiles: files,
+    changedFiles: fileChanges.map(f => f.path),
+    fileChanges,
     affectedAreas,
     needsReadmeUpdate,
     needsDocUpdate,
+    changeSummary,
   };
 }
 
 /**
- * Update README.md with information about latest changes
+ * Update README.md Recent Updates section with new entry
  */
 function updateReadme(analysis: ChangeAnalysis): boolean {
   const readmePath = join(process.cwd(), 'README.md');
@@ -112,25 +199,71 @@ function updateReadme(analysis: ChangeAnalysis): boolean {
     const now = new Date();
     const dateStr = now.toISOString().split('T')[0];
 
-    // Build a summary of changes
-    const areas = Array.from(analysis.affectedAreas);
-    const changesSummary = areas.length > 0
-      ? `Updated: ${areas.join(', ')}`
-      : 'Documentation and maintenance updates';
+    // Build a description of what changed
+    const areaNames = Array.from(analysis.affectedAreas.keys());
 
-    // Update the "Recent Updates" section if it exists
-    // Look for the version number pattern and update the date
-    const versionPattern = /(\*\*📅 v\d+\.\d+\.\d+ - )(.*?)(\(.*?\)\*\*)/;
-    if (versionPattern.test(content)) {
-      // Update existing version with new date
-      content = content.replace(
-        versionPattern,
-        `$1${changesSummary} (${dateStr})**`
-      );
+    let updateDescription = '';
+
+    if (areaNames.length === 0) {
+      updateDescription = `Documentation and maintenance updates (${analysis.changeSummary})`;
+    } else {
+      // Create bullet points for each area
+      const bullets: string[] = [];
+
+      for (const [area, changes] of analysis.affectedAreas) {
+        const added = changes.filter(c => c.type === 'added').length;
+        const modified = changes.filter(c => c.type === 'modified').length;
+        const deleted = changes.filter(c => c.type === 'deleted').length;
+
+        let desc = `**${area.charAt(0).toUpperCase() + area.slice(1)}:** `;
+        const parts: string[] = [];
+        if (added > 0) parts.push(`${added} new`);
+        if (modified > 0) parts.push(`${modified} updated`);
+        if (deleted > 0) parts.push(`${deleted} removed`);
+        desc += parts.join(', ');
+
+        bullets.push(`- ${desc}`);
+      }
+
+      updateDescription = bullets.join('\n');
+    }
+
+    // Create the new update entry
+    const newEntry = `
+<details>
+<summary><strong>📅 ${dateStr} - Automated Documentation Update</strong></summary>
+
+${updateDescription}
+
+*Updated by pre-commit hook: ${analysis.changeSummary}*
+
+</details>
+`;
+
+    // Find the insertion point - after the TIP box and before first <details>
+    const tipEndPattern = /> \*\*✨ v\d+\.\d+\.\d+ NEW:.*?\n\n/s;
+    const detailsStartPattern = /<details>\s*<summary><strong>📅/;
+
+    // Find where to insert (right after the tip box, before first details)
+    const tipMatch = content.match(tipEndPattern);
+    if (tipMatch) {
+      const insertPos = tipMatch.index! + tipMatch[0].length;
+      content = content.slice(0, insertPos) + newEntry + '\n' + content.slice(insertPos);
+    } else {
+      // Fallback: insert after "Recent Updates" heading
+      const headingPattern = /## 🚀 \*\*Recent Updates\*\*\n\n/;
+      const headingMatch = content.match(headingPattern);
+      if (headingMatch) {
+        const insertPos = headingMatch.index! + headingMatch[0].length;
+        content = content.slice(0, insertPos) + newEntry + '\n' + content.slice(insertPos);
+      } else {
+        console.log(`${colors.yellow}⚠️  Could not find insertion point in README${colors.reset}`);
+        return false;
+      }
     }
 
     writeFileSync(readmePath, content, 'utf-8');
-    console.log(`${colors.green}✅ Updated README.md${colors.reset}`);
+    console.log(`${colors.green}✅ Updated README.md with new entry${colors.reset}`);
     return true;
   } catch (error) {
     console.error(`${colors.yellow}⚠️  Error updating README:${colors.reset}`, error);
@@ -139,7 +272,7 @@ function updateReadme(analysis: ChangeAnalysis): boolean {
 }
 
 /**
- * Update documentation files based on what changed
+ * Update documentation files with content about what changed
  */
 function updateDocumentation(analysis: ChangeAnalysis): string[] {
   const updatedFiles: string[] = [];
@@ -161,20 +294,58 @@ function updateDocumentation(analysis: ChangeAnalysis): string[] {
       const now = new Date();
       const dateStr = now.toISOString().split('T')[0];
 
-      // Add or update "Last Updated" footer in the doc
-      const lastUpdatedPattern = /<!-- Last Updated: .*? -->/;
-      const lastUpdatedLine = `<!-- Last Updated: ${dateStr} -->`;
+      // Determine which area this doc covers
+      const area = docFile.includes('skills') ? 'skills' :
+                   docFile.includes('command') ? 'commands' :
+                   docFile.includes('hook') ? 'hooks' :
+                   docFile.includes('agent') ? 'agents' :
+                   docFile.includes('voice') ? 'voice' : null;
 
-      if (lastUpdatedPattern.test(content)) {
-        content = content.replace(lastUpdatedPattern, lastUpdatedLine);
+      if (area && analysis.affectedAreas.has(area)) {
+        const changes = analysis.affectedAreas.get(area)!;
+
+        // Build update section content
+        const changeLines: string[] = [];
+        changeLines.push(`\n## Recent Changes (${dateStr})\n`);
+
+        for (const change of changes) {
+          const emoji = change.type === 'added' ? '➕' :
+                       change.type === 'modified' ? '✏️' : '🗑️';
+          changeLines.push(`- ${emoji} \`${change.path}\` (${change.type})`);
+          if (change.linesAdded > 0 || change.linesDeleted > 0) {
+            changeLines.push(`  - +${change.linesAdded} / -${change.linesDeleted} lines`);
+          }
+        }
+
+        const updateContent = changeLines.join('\n');
+
+        // Add the updates section before the final "Last Updated" comment
+        const lastUpdatedPattern = /\n---\n<!-- Last Updated: .*? -->\n$/;
+        if (lastUpdatedPattern.test(content)) {
+          // Insert before the last updated section
+          content = content.replace(
+            lastUpdatedPattern,
+            `\n${updateContent}\n\n---\n<!-- Last Updated: ${dateStr} -->\n`
+          );
+        } else {
+          // Append at the end
+          content = content.trimEnd() + `\n${updateContent}\n\n---\n<!-- Last Updated: ${dateStr} -->\n`;
+        }
       } else {
-        // Add at the end of the file
-        content = content.trimEnd() + `\n\n---\n${lastUpdatedLine}\n`;
+        // Just update the timestamp
+        const lastUpdatedPattern = /<!-- Last Updated: .*? -->/;
+        const lastUpdatedLine = `<!-- Last Updated: ${dateStr} -->`;
+
+        if (lastUpdatedPattern.test(content)) {
+          content = content.replace(lastUpdatedPattern, lastUpdatedLine);
+        } else {
+          content = content.trimEnd() + `\n\n---\n${lastUpdatedLine}\n`;
+        }
       }
 
       writeFileSync(docPath, content, 'utf-8');
       updatedFiles.push(docFile);
-      console.log(`${colors.green}✅ Updated ${docFile}${colors.reset}`);
+      console.log(`${colors.green}✅ Updated ${docFile} with change details${colors.reset}`);
     } catch (error) {
       console.error(`${colors.yellow}⚠️  Error updating ${docFile}:${colors.reset}`, error);
     }
@@ -204,37 +375,39 @@ function stageFiles(files: string[]): void {
 function main(): number {
   console.log(`\n${colors.blue}📚 Checking for documentation updates...${colors.reset}`);
 
-  // Get staged files
-  const stagedFiles = getStagedFiles();
+  // Get staged files with details
+  const fileChanges = getStagedFilesDetailed();
 
-  if (stagedFiles.length === 0) {
+  if (fileChanges.length === 0) {
     console.log(`${colors.green}✅ No staged files to process${colors.reset}`);
     return 0;
   }
 
   // Filter out documentation files to avoid circular updates
-  const nonDocFiles = stagedFiles.filter(f =>
-    !f.startsWith('documentation/') &&
-    f !== 'README.md' &&
-    !f.startsWith('hooks/update-documentation.ts')
+  const nonDocChanges = fileChanges.filter(f =>
+    !f.path.startsWith('documentation/') &&
+    f.path !== 'README.md' &&
+    f.path !== 'hooks/update-documentation.ts'
   );
 
-  if (nonDocFiles.length === 0) {
+  if (nonDocChanges.length === 0) {
     console.log(`${colors.green}✅ Only documentation files changed, no updates needed${colors.reset}`);
     return 0;
   }
 
-  console.log(`${colors.cyan}📋 Analyzing ${nonDocFiles.length} changed files...${colors.reset}`);
+  console.log(`${colors.cyan}📋 Analyzing ${nonDocChanges.length} changed files...${colors.reset}`);
 
   // Analyze what changed
-  const analysis = analyzeChanges(nonDocFiles);
+  const analysis = analyzeChanges(fileChanges);
 
-  if (analysis.affectedAreas.size === 0) {
+  if (analysis.affectedAreas.size === 0 && !analysis.needsReadmeUpdate) {
     console.log(`${colors.green}✅ No documentation areas affected${colors.reset}`);
     return 0;
   }
 
-  console.log(`${colors.cyan}🔍 Affected areas: ${Array.from(analysis.affectedAreas).join(', ')}${colors.reset}`);
+  if (analysis.affectedAreas.size > 0) {
+    console.log(`${colors.cyan}🔍 Affected areas: ${Array.from(analysis.affectedAreas.keys()).join(', ')}${colors.reset}`);
+  }
 
   const updatedFiles: string[] = [];
 
