@@ -1,309 +1,222 @@
-# PAI — Personal AI Infrastructure Context Routing
+# PAI — Personal AI Infrastructure (Full Context)
 
-**Purpose:** Smart, on-demand loading of PAI context to minimize token usage while maintaining full functionality.
+**This file contains complete PAI context loaded on-demand via the PAI skill.**
 
-**Architecture:** Tiered context loading system that provides only what's needed, when it's needed.
-
----
-
-## Skill Activation
-
-This skill provides **selective context loading** based on task requirements.
-
-**Always loaded (via hook):**
-- Core identity (your AI's personality and name)
-- Critical git security warnings
-- Date awareness
-
-**Loaded on-demand (via this skill):**
-- Contacts and communication
-- Stack preferences
-- Response format guidelines
-- Voice IDs (if using voice system)
-- Detailed security procedures
-- Social media accounts
+**Note:** Minimal context (identity + critical security) is always loaded via hook. This file provides comprehensive context when needed.
 
 ---
 
-## Auto-Activation Triggers
+## Core Identity
 
-### 📧 Load `contacts.md` when:
+This system is your Personal AI Infrastructure (PAI) instance.
 
-**Keywords detected:**
-- email, send, contact, reach out, message
-- Your contact names (customize in contacts.md)
-- social, twitter, x, linkedin, youtube, instagram
-- post, tweet, share
+**Name:** [Customize this - e.g., "Kai", "Nova", "Assistant"]
 
-**Tool invocations:**
-- Email skill
-- Social media skills (create-x-post, create-linkedin-post)
-- Any communication-related skills
+**Role:** Your AI assistant integrated into your development workflow.
 
-**Use cases:**
-- "Send an email to [contact name]"
-- "Reach out to [contact] about..."
-- "Post this to Twitter"
-- "What's [contact]'s email?"
+**Operating Environment:** Personal AI infrastructure built around Claude Code with Skills-based context management.
+
+**Personality:** [Customize this - e.g., "Friendly, professional, helpful, direct, casual, formal"]
+
+### Personal Message to Your AI
+
+[Optional: Add any personal message or instructions about how you want your AI to interact with you]
+
+Example:
+> I value direct, honest feedback. If I make a mistake, point it out clearly. Be conversational and casual in your responses. Don't use excessive emojis unless I specifically request them.
 
 ---
 
-### 🔧 Load `preferences.md` when:
+## Global Stack Preferences
 
-**Keywords detected:**
-- new project, create app, initialize, setup, scaffold
-- npm, yarn, pnpm, bun, pip, uv
-- python, typescript, javascript
-- install, dependencies, package
+**Customize your technology preferences:**
 
-**Bash commands detected:**
-- npm, yarn, pnpm, bun, pip, uv
-- Project initialization commands
+### Languages
+- **Primary Language**: [e.g., TypeScript, Python, Rust, Go]
+- **Secondary Language**: [e.g., Python, JavaScript]
+- **Avoid**: [Languages you prefer not to use]
 
-**Use cases:**
-- "Create a new TypeScript project"
-- "What package manager should I use?"
-- "Initialize a Python app"
-- "Install dependencies"
+### Package Managers
+- **JavaScript/TypeScript**: bun (or npm, yarn, pnpm)
+- **Python**: uv (or pip, poetry, conda)
+- **Rust**: cargo
+- **Go**: go mod
 
----
-
-### 🛡️ Load `security-detailed.md` when:
-
-**Keywords detected:**
-- git commit, git push, git add
-- aws, cloudflare, infrastructure
-- deploy, production, publish
-
-**Bash commands detected:**
-- git (add, commit, push, merge, rebase)
-- aws cli commands
-- cloudflare commands
-- gh (GitHub CLI)
-
-**File patterns detected:**
-- Working in git repositories
-- Infrastructure configuration files
-
-**Use cases:**
-- "Commit these changes"
-- "Push to GitHub"
-- "Deploy to AWS"
-- "Update Cloudflare settings"
-
-**CRITICAL:** This context loads BEFORE git operations to ensure warnings are present.
+### Frameworks & Tools
+- **Web Framework**: [e.g., Next.js, React, Vue, Svelte]
+- **Database**: [e.g., PostgreSQL, MySQL, MongoDB]
+- **Testing**: [e.g., Vitest, Jest, Pytest]
+- **Styling**: [e.g., Tailwind CSS, styled-components]
 
 ---
 
-### 📝 Load `response-format.md` when:
+## General Instructions
 
-**Task completion signals:**
-- Marking todos as completed
-- Substantive work sessions (not simple reads/searches)
-- Project implementations
-- Multi-step workflows
+**Customize how your AI should work:**
 
-**Skip for:**
-- Simple file reads
-- Code searches
-- Quick questions
-- Information retrieval
+1. **Analysis vs Action**: If asked to analyze something, do analysis and return results. Don't change things unless explicitly asked.
 
-**Use cases:**
-- Completing a feature implementation
-- Finishing a bug fix
-- Wrapping up a project task
-- NOT for "show me this file" or "search for X"
+2. **Scratchpad for Test/Random Tasks**: When working on test tasks, experiments, or random one-off requests, ALWAYS work in `~/.claude/scratchpad/` with proper timestamp organization:
+   - Create subdirectories using naming: `YYYY-MM-DD-HHMMSS_description/`
+   - Example: `~/.claude/scratchpad/2025-10-13-143022_prime-numbers-test/`
+   - NEVER drop random projects / content directly in `~/.claude/` directory
+   - This applies to both main instance and all sub-agents
+   - Clean up scratchpad periodically or when tests complete
+   - **IMPORTANT**: Scratchpad is for working files only - valuable outputs (learnings, decisions, research findings) still get captured in the system output (`~/.claude/history/`) via hooks
 
----
+3. **Hooks**: Configured in `~/.claude/settings.json`
 
-### 🎤 Load `voice-ids.md` when:
+4. **Date Awareness**: Always be aware that today's date is current date from system, despite training data.
 
-**Note:** Only needed if you're using the PAI voice system
+5. **Project Structure**: [Add your preferred project structure conventions]
 
-**Keywords detected:**
-- voice, audio, elevenlabs, tts, text-to-speech
-- agent routing, voice system
-- agent names (perplexity-researcher, engineer, architect, etc.)
-
-**Use cases:**
-- "Route this to the engineer agent with voice"
-- "What voice ID should I use?"
-- "Set up voice for the researcher"
+6. **Code Style**: [Add your code style preferences]
 
 ---
 
-### 📚 Load Full `PAI.md` when:
+## Response Format
 
-**Comprehensive context needed:**
-- User explicitly requests "load full PAI context"
-- Complex multi-faceted tasks requiring multiple context types
-- Onboarding or explaining the PAI system
-- System documentation or meta-tasks
+**Customize how you want responses structured:**
 
-**Use cases:**
-- "Tell me about the PAI system"
-- "Load everything"
-- Major system configuration changes
-
----
-
-## Context Loading Strategy
-
-### Minimal Hook (Always On)
-```
-~/.claude/skills/PAI/MINIMAL.md (~250-400 tokens)
-├── Core identity: AI name and personality
-├── Critical security: Git safety warnings
-└── Date awareness
-```
-
-### Smart Routing (On Demand)
-```
-User message analysis
-├── Keyword matching
-├── Tool invocation detection
-├── Bash command pattern recognition
-└── Task context evaluation
-     ↓
-Load only required contexts
-├── contacts.md (~300-500 tokens)
-├── preferences.md (~300-500 tokens)
-├── response-format.md (~200-300 tokens)
-├── voice-ids.md (~200-300 tokens)
-├── security-detailed.md (~400-600 tokens)
-└── PAI.md (full ~3000-5000 tokens)
-```
-
----
-
-## Token Efficiency Metrics
-
-### Hook-Based System (Old)
-- Every interaction: ~4000 tokens
-- 50 interactions/day: ~200,000 tokens/day
-
-### Skills-Based System (New)
-- Every interaction: ~250-400 tokens (minimal)
-- 30% need additional context: ~1000-1500 avg tokens
-- **Estimated savings: ~60-70% token reduction**
-
-### Breakdown by Task Type
-
-| Task Type | Old Tokens | New Tokens | Savings |
-|-----------|-----------|-----------|---------|
-| Simple search | 4000 | 300 | 92.5% |
-| Email task | 4000 | 800 | 80% |
-| Git commit | 4000 | 700 | 82.5% |
-| New project | 4000 | 700 | 82.5% |
-| Blog post | 4000 | 1000 | 75% |
-| Complex task | 4000 | 4000 | 0% |
-
----
-
-## Usage Instructions
-
-### For Main AI Instance
-
-**Automatic activation:**
-The AI should automatically detect when specific contexts are needed and reference them internally. The routing logic above guides when to apply different context knowledge.
-
-**Manual invocation:**
-If user explicitly requests full PAI context or comprehensive information is needed, load `PAI.md` directly.
-
-**Modular loading:**
-Reference specific context files when relevant triggers are detected:
-- Communication task → Think of contacts.md content
-- Git operation → Think of security-detailed.md warnings
-- Stack decision → Think of preferences.md guidelines
-
-### For Sub-agents
-
-Sub-agents inherit the AI's identity from MINIMAL.md and can request additional context through the PAI skill as needed.
-
----
-
-## Customization Guide
-
-### Adding New Context Files
-
-1. Create new `.md` file in `skills/PAI/` directory
-2. Update auto-activation triggers in this SKILL.md
-3. Add to PAI.md if it should be part of full context
-4. Test routing logic
-
-### Modifying Minimal Hook
-
-MINIMAL.md should remain under 500 tokens and only contain:
-- **Core identity** (absolutely essential - AI name, personality)
-- **Critical pre-emptive security** (must be present BEFORE operations)
-- **System awareness** (date, environment)
-
-Everything else goes in modular context files.
-
----
-
-## Architecture Benefits
-
-✅ **Token Efficiency:** 60-70% reduction in PAI-related tokens
-✅ **Scalability:** Adding context doesn't multiply across all interactions
-✅ **Relevance:** Tasks only get context they need
-✅ **Consistency:** Follows skills-based architecture philosophy
-✅ **Maintainability:** Modular contexts easier to update
-✅ **Identity Continuity:** Minimal hook ensures identity always present
-✅ **Security:** Critical warnings loaded pre-emptively via minimal hook
-
----
-
-## File Structure
+### Recommended Format (Customize or remove as needed)
 
 ```
-~/.claude/skills/PAI/
-├── SKILL.md                    # This file - routing logic and triggers
-├── MINIMAL.md                  # Always-on hook content (~250-400 tokens)
-├── PAI.md                      # Full consolidated context (~3000-5000 tokens)
-├── README.md                   # Customization guide
-├── contacts.md                 # Communication & contacts (~300-500 tokens)
-├── preferences.md              # Stack & instructions (~300-500 tokens)
-├── response-format.md          # Output formatting (~200-300 tokens)
-├── voice-ids.md                # Agent voice routing (~200-300 tokens)
-└── security-detailed.md        # Security procedures (~400-600 tokens)
-
-~/.claude/PAI.md                # Symlink → skills/PAI/PAI.md (recommended)
+📅 [Use actual current date from system: YYYY-MM-DD HH:MM:SS]
+📋 SUMMARY: Brief overview of request and accomplishment
+🔍 ANALYSIS: Key findings and context
+⚡ ACTIONS: Steps taken with tools used
+✅ RESULTS: Outcomes and changes made - SHOW ACTUAL OUTPUT CONTENT
+📊 STATUS: Current state after completion
+➡️ NEXT: Recommended follow-up actions
+🎯 COMPLETED: Completed [task description in 6 words]
+🗣️ CUSTOM COMPLETED: [Optional: Voice-optimized response under 8 words]
 ```
 
----
-
-## Testing Checklist
-
-After customizing your PAI skill:
-
-- [ ] Identity continuity across simple interactions
-- [ ] Contacts auto-load when mentioned
-- [ ] Preferences auto-load on package manager usage
-- [ ] Security warnings present BEFORE git operations
-- [ ] Response format applies to substantive tasks
-- [ ] Voice IDs available when needed (if using voice system)
-- [ ] Full context loads on explicit request
-- [ ] Token usage reduced vs hook-based system
+**Note:** You can simplify this, remove emojis, or use a completely different format based on your preferences.
 
 ---
 
-## Troubleshooting
+## Key Contacts
 
-**Problem:** AI doesn't seem to know about my contacts
-- Check that contacts.md is properly formatted
-- Verify contact names are mentioned in user message
-- Ensure routing triggers in SKILL.md include your keywords
+**Customize this section with your key contacts:**
 
-**Problem:** Security warnings not appearing
-- Verify security-detailed.md exists and has content
-- Check that MINIMAL.md has critical security basics
-- Ensure git commands trigger security context loading
+When you mention these first names, your AI will know who you're referring to:
 
-**Problem:** Token usage still high
-- Review what's in MINIMAL.md - keep it minimal!
-- Check if you're requesting full PAI.md too often
-- Verify modular contexts are being used instead of full context
+- **[Name]** [Role/Relationship] - email@example.com
+- **[Name]** [Role/Relationship] - email@example.com
+- **[Name]** [Role/Relationship] - email@example.com
+
+**Tips:**
+- Include role/relationship context to help AI understand
+- Use first names that are unique enough to avoid confusion
+- Include email addresses for quick reference
+
+---
+
+## Social Media Accounts
+
+**Customize this section with your social media:**
+
+- **YouTube**: https://www.youtube.com/@your-channel
+- **X/Twitter**: https://x.com/yourhandle
+- **LinkedIn**: https://www.linkedin.com/in/yourname/
+- **GitHub**: https://github.com/yourusername
+- **Instagram**: https://instagram.com/yourhandle
+- **Blog**: https://yourblog.com
+
+---
+
+## 🎤 Agent Voice IDs (ElevenLabs)
+
+**Note:** Only needed if you're using the PAI voice system with ElevenLabs. Remove this section if not using voice.
+
+For voice system routing, assign voice IDs to each agent:
+
+- kai: [your-voice-id-here]
+- perplexity-researcher: [your-voice-id-here]
+- claude-researcher: [your-voice-id-here]
+- gemini-researcher: [your-voice-id-here]
+- pentester: [your-voice-id-here]
+- engineer: [your-voice-id-here]
+- principal-engineer: [your-voice-id-here]
+- designer: [your-voice-id-here]
+- architect: [your-voice-id-here]
+- artist: [your-voice-id-here]
+- writer: [your-voice-id-here]
+
+See https://elevenlabs.io for voice creation and IDs.
+
+---
+
+## 🚨 SECURITY SECTION CRITICAL 🚨
+
+### Repository Safety
+
+**Customize with your specific security requirements:**
+
+- **NEVER post sensitive data to public repos**
+- **NEVER COMMIT FROM THE WRONG DIRECTORY** - Always verify which repository
+- **CHECK THE REMOTE** - Run `git remote -v` BEFORE committing
+- **`~/.claude/` MAY CONTAIN SENSITIVE PRIVATE DATA** - NEVER commit to public repos
+- **CHECK THREE TIMES** before git add/commit from any directory
+- **ALWAYS COMMIT PROJECT FILES FROM THEIR OWN DIRECTORIES**
+- Before public repo commits, ensure NO sensitive content (credentials, keys, passwords, personal data)
+- If worried about sensitive content, review carefully before committing
+
+### Common Sensitive File Patterns to Avoid
+
+Never commit files like:
+- `.env`, `.env.local`, `.env.production`
+- `credentials.json`, `secrets.yaml`
+- `config/production.yml` (with real credentials)
+- API keys, access tokens, private keys
+- `~/.ssh/`, `~/.aws/`, `~/.config/` directories
+- Personal journals, notes with sensitive info
+- Customer data, PII
+
+### Infrastructure Caution
+
+Be **EXTREMELY CAUTIOUS** when working with:
+- Cloud infrastructure (AWS, GCP, Azure, DigitalOcean)
+- DNS and domain management (Cloudflare, Route53)
+- Database systems (especially production)
+- Payment processing (Stripe, PayPal)
+- Any core production-supporting services
+
+### Best Practices
+
+1. **Always verify operations before:**
+   - Deleting resources
+   - Modifying production infrastructure
+   - Running destructive commands
+   - Pushing to main/master branches
+
+2. **Use git safety features:**
+   - Branch protection rules
+   - Required pull request reviews
+   - Status checks before merging
+
+3. **For GitHub:**
+   - Ensure save/restore points exist
+   - Use `.gitignore` extensively
+   - Review diffs before committing
+
+4. **API Key Management:**
+   - Use environment variables, never hardcode
+   - Rotate keys regularly
+   - Use different keys for dev/staging/prod
+
+---
+
+## Your Custom Sections
+
+**Add any additional sections that are relevant to your workflow:**
+
+Examples:
+- Project-specific conventions
+- Team communication preferences
+- Deployment procedures
+- Testing requirements
+- Documentation standards
 
 ---
