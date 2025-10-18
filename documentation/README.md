@@ -6,16 +6,15 @@ Welcome to the Personal AI Infrastructure (PAI) documentation. PAI is a comprehe
 
 ### 🚀 New to PAI? Start Here!
 
-> **👉 [Complete Getting Started Guide](./how-to-start.md)** - Comprehensive, friendly guide with automated setup option
+> **👉 [Getting Started Guide](./how-to-start.md)** - Complete setup guide with automated option
 >
-> **👉 [Quick Reference Card](./QUICK-REFERENCE.md)** - Bookmark this! Common commands and troubleshooting
+> **👉 [Quick Reference](./QUICK-REFERENCE.md)** - Bookmark this for daily commands
 
 ### Getting Started
-- **[How to Start Guide](./how-to-start.md) 🆕** - Step-by-step setup with friendly explanations (RECOMMENDED)
-- [Quick Start Guide](./quick-start.md) - Fast technical setup for developers
-- [Quick Reference](./QUICK-REFERENCE.md) 🆕 - Common commands and one-liners
-- [Installation Guide](./installation.md) - Detailed installation instructions
-- [Configuration Guide](./configuration.md) - System configuration options
+- **[How to Start Guide](./how-to-start.md)** - Complete setup with step-by-step instructions
+- [Quick Reference](./QUICK-REFERENCE.md) - Common commands and troubleshooting
+- [Installation Guide](./installation.md) - Detailed installation instructions (optional)
+- [Configuration Guide](./configuration.md) - System configuration options (optional)
 
 ### Core Concepts
 - [System Architecture](./architecture.md) - Overview of PAI components

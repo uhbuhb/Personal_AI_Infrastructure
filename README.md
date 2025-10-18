@@ -418,11 +418,18 @@ Chrome DevTools • Apify • BrightData • Stripe • Anthropic Content • Da
 
 ## 🚀 **Quick Start**
 
+**Automated Setup:**
+```bash
+./setup.sh  # Interactive setup script (recommended)
+```
+
+**Or read:** [Getting Started Guide](./documentation/how-to-start.md) | [Quick Reference](./documentation/QUICK-REFERENCE.md)
+
 > [!NOTE]
 > PAI was originally built with [Claude Code](https://claude.ai/code), but the architecture supports any AI platform (GPT, Gemini, etc.)
 > Requires [Bun](https://bun.sh) JavaScript runtime for the current implementation.
 
-### **Installation**
+### **Manual Installation**
 
 #### **Step 1: Install Prerequisites**
 
