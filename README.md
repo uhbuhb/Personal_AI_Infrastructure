@@ -27,15 +27,49 @@
 
 ## 🚀 **Recent Updates**
 
-> [!WARNING]
-> **🔥 v0.4.0 BREAKING CHANGE:** Repository restructured - update `PAI_DIR` environment variable:
-> ```bash
-> export PAI_DIR="/path/to/PAI"  # Remove /PAI_DIRECTORY suffix
-> ```
-> [Full migration guide in changelog below →](#-recent-updates)
+> [!TIP]
+> **✨ v0.5.0 NEW:** Skills-based PAI architecture with 92.5% token reduction! Core identity now in skill description, zero hook overhead. [See details below →](#-recent-updates)
 
 <details>
 <summary><strong>Click to see all updates</strong></summary>
+
+<details>
+<summary><strong>📅 v0.5.0 - Skills-Based PAI Architecture (92.5% Token Reduction)</strong></summary>
+
+**Major Architectural Improvement:**
+- **Zero hook overhead** - Eliminated all context loading from UserPromptSubmit hook
+- **92.5% token reduction** - From 4000 tokens/interaction to 300 tokens
+- **Pure skills architecture** - Core identity in skill description (always in system prompt)
+- **On-demand context** - Full context loaded only when explicitly needed
+
+**What Changed:**
+- Added YAML frontmatter to `skills/PAI/SKILL.md` with comprehensive system description
+- Core identity + critical security now in skill description (always present)
+- Removed `MINIMAL.md` entirely (no longer needed)
+- Hook renamed to `update-tab-titles.ts` (only handles tab titles, zero context)
+- Flat file structure in `skills/PAI/` (no `/contexts` subdirectory)
+
+**Architecture:**
+- **Tier 1 (Always On):** Skill description in system prompt (~300 tokens) - identity, critical security, architecture explanation
+- **Tier 2 (On Demand):** `SKILL.md` body loaded when PAI skill invoked (~4000 tokens) - contacts, preferences, voice IDs, detailed security
+- **Hook:** Only updates tab titles (0 tokens context overhead)
+
+**Benefits:**
+- Cleanest possible architecture - fully embraces Claude Code skills system
+- Context always relevant - skill description always present, full context on-demand
+- Easy to customize - clear YAML frontmatter with `[CUSTOMIZE:]` markers
+- Scales efficiently - adding content doesn't multiply token costs
+
+**Files:**
+- `skills/PAI/SKILL.md` - Full context with YAML frontmatter
+- `skills/PAI/contacts.md` - Contact templates
+- `skills/PAI/preferences.md` - Stack preferences templates
+- `skills/PAI/response-format.md` - Response format templates
+- `skills/PAI/security-detailed.md` - Security procedures
+- `skills/PAI/voice-ids.md` - Voice system configuration (optional)
+- `hooks/update-tab-titles.ts` - Tab title updates only
+
+</details>
 
 <details>
 <summary><strong>📅 v0.4.0 - Repository Restructure 🔥 BREAKING CHANGE</strong></summary>
