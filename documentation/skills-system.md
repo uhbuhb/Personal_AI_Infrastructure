@@ -631,5 +631,11 @@ ${PAI_DIR}/skills/
 - ➕ `skills/fabric/SKILL.md` (added)
   - +18 / -0 lines
 
+
+## Recent Changes (2025-10-19)
+
+- ➕ `skills/always-init/SKILL.md` (added)
+  - +98 / -0 lines
+
 ---
 <!-- Last Updated: 2025-10-19 -->
