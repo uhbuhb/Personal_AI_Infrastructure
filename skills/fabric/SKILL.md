@@ -5,6 +5,24 @@ description: Intelligent pattern selection for Fabric CLI. Automatically selects
 
 # Fabric Skill
 
+## Setup Check - Fabric Repository
+
+**IMPORTANT: Before using this skill, verify the Fabric repository is available:**
+
+```bash
+# Check if Fabric repo exists
+if [ ! -d "$HOME/.claude/skills/fabric/fabric-repo" ]; then
+  echo "Fabric repository not found. Cloning..."
+  cd "$HOME/.claude/skills/fabric"
+  git clone https://github.com/danielmiessler/fabric.git fabric-repo
+  echo "Fabric repository cloned successfully."
+else
+  echo "Fabric repository found at $HOME/.claude/skills/fabric/fabric-repo"
+fi
+```
+
+**If the repo doesn't exist, clone it immediately before proceeding with any pattern selection.**
+
 ## When to Activate This Skill
 
 **Primary Use Cases:**

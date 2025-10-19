@@ -625,3 +625,11 @@ ${PAI_DIR}/skills/
 
 *Skills System Version 2.0.0*
 *Migrated from UFC Context System October 2025*
+
+## Recent Changes (2025-10-19)
+
+- ➕ `skills/fabric/SKILL.md` (added)
+  - +18 / -0 lines
+
+---
+<!-- Last Updated: 2025-10-19 -->
