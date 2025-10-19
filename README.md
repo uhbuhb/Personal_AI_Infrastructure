@@ -29,7 +29,9 @@
 
 > [!TIP]
 > **✨ October 19** Now using the session-start hook to load our PAI skill on system load! Great bootloader for the overall Skills system! This is a better version of what we were doing before with UFC but now utilizing the skills system.
+
 > **✨ October 18** Overall just massive updates to the PAI repo. Fixed tons of missing files, hooks, settings, etc. Thank you all for submitting issues and PRs!
+
 > **✨ v0.5.0 NEW:** Skills-based PAI architecture with 92.5% token reduction! Core identity now in skill description, zero hook overhead. [See details below →](#-recent-updates)
 
 
