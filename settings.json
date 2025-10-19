@@ -173,7 +173,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${PAI_DIR}/hooks/session-start-hook.ts"
+            "command": "${PAI_DIR}/hooks/load-core-context.ts"
+          },
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/initialize-pai-session.ts"
           }
         ]
       }
