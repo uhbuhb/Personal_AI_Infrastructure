@@ -17,11 +17,11 @@
       "type": "Premium"
     },
     "engineer": {
-      "voice_name": "Tom (Enhanced)",
+      "voice_name": "Zoe (Premium)",
       "rate_multiplier": 1.35,
       "rate_wpm": 236,
-      "description": "US Male - Steady, professional",
-      "type": "Enhanced"
+      "description": "US Female - Steady, professional",
+      "type": "Premium"
     },
     "architect": {
       "voice_name": "Serena (Premium)",
@@ -37,6 +37,13 @@
       "description": "Indian Female - Creative, distinct",
       "type": "Premium"
     },
+    "artist": {
+      "voice_name": "Isha (Premium)",
+      "rate_multiplier": 1.35,
+      "rate_wpm": 236,
+      "description": "Indian Female - Creative, artistic",
+      "type": "Premium"
+    },
     "pentester": {
       "voice_name": "Oliver (Enhanced)",
       "rate_multiplier": 1.35,
@@ -45,11 +52,11 @@
       "type": "Enhanced"
     },
     "writer": {
-      "voice_name": "Samantha (Enhanced)",
+      "voice_name": "Serena (Premium)",
       "rate_multiplier": 1.35,
       "rate_wpm": 236,
-      "description": "US Female - Articulate, warm",
-      "type": "Enhanced"
+      "description": "UK Female - Articulate, warm",
+      "type": "Premium"
     }
   }
 }

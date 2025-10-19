@@ -1,7 +1,7 @@
 # PAI Voice System Documentation
 
 ## Overview
-The PAI Voice System provides text-to-speech capabilities for Kai and all agents using macOS native Premium and Enhanced voices. The system uses a unified stop-hook approach where completion messages are read aloud with distinct voices for Kai and each specialized agent, providing voice differentiation through character-matched, high-quality neural TTS voices.
+The PAI Voice System provides text-to-speech capabilities for Kai and all agents using ElevenLabs TTS API. The system uses a unified stop-hook approach where completion messages are read aloud with distinct voices for Kai and each specialized agent, providing voice differentiation through character-matched, high-quality ElevenLabs voices.
 
 ## Architecture Overview
 
@@ -9,10 +9,10 @@ The PAI Voice System provides text-to-speech capabilities for Kai and all agents
 
 1. **Voice Server** (`${PAI_DIR}/voice-server/server.ts`)
    - Bun-based HTTP server running on port 8888
-   - Uses macOS native `say` command with Premium/Enhanced voices
-   - Supports both voice name and speech rate control
+   - Uses ElevenLabs API for high-quality TTS generation
+   - Plays audio using macOS afplay command
    - Provides notification display alongside voice output
-   - Zero API costs (no cloud services required)
+   - Requires ELEVENLABS_API_KEY in ~/.env
 
 2. **Stop Hook** (`${PAI_DIR}/hooks/stop-hook.ts`)
    - Triggers after every Claude Code response
@@ -23,8 +23,8 @@ The PAI Voice System provides text-to-speech capabilities for Kai and all agents
 
 3. **Agent Configurations** (`${PAI_DIR}/agents/*.md`)
    - Each agent has a unique voice matching their personality
-   - Voice names defined in agent frontmatter (`voiceId:`)
-   - Voice mappings centralized in stop-hook.ts
+   - Voice IDs defined in hooks (ElevenLabs voice IDs)
+   - Voice mappings centralized in stop-hook.ts and subagent-stop-hook.ts
 
 ## How It Works
 
@@ -46,46 +46,45 @@ The PAI Voice System provides text-to-speech capabilities for Kai and all agents
    - Determines if it was Kai or an agent who completed the task
 
 4. **Voice Selection**
-   - For Kai's completions: Uses Jamie (Premium) - UK Male
-   - For agent completions: Uses the agent's specific voice
+   - For Kai's completions: Uses ElevenLabs voice ID s3TPKV1kjDlVtZbl4Ksh
+   - For agent completions: Uses the agent's specific ElevenLabs voice ID
 
 5. **Voice Generation**
    - Stop hook sends POST request to voice server at localhost:8888
-   - Request includes the completion message and voice name
-   - Server uses macOS `say` command with specified Premium/Enhanced voice
-   - Audio plays through system speakers
+   - Request includes the completion message and ElevenLabs voice_id
+   - Server calls ElevenLabs API to generate audio
+   - Audio is saved to /tmp and played using afplay
+   - Temp files are cleaned up after playback
 
-## Voice Mappings
+## Voice Mappings (ElevenLabs)
 
-All entities use high-quality macOS Premium or Enhanced neural voices for natural, realistic speech. Voices are selected to match each entity's personality and role.
+All entities use ElevenLabs TTS voices for high-quality, natural speech. Voices are selected to match each entity's personality and role.
 
-| Entity | Voice | Type | Accent | Gender | Personality Match |
-|--------|-------|------|--------|--------|-------------------|
-| Kai | Jamie (Premium) | Premium | UK | Male | Professional, conversational |
-| Researcher | Ava (Premium) | Premium | US | Female | Analytical, highest quality |
-| Engineer | Tom (Enhanced) | Enhanced | US | Male | Steady, professional |
-| Architect | Serena (Premium) | Premium | UK | Female | Strategic, sophisticated |
-| Designer | Isha (Premium) | Premium | Indian | Female | Creative, distinct |
-| Pentester | Oliver (Enhanced) | Enhanced | UK | Male | Technical, sharp |
-| Writer | Samantha (Enhanced) | Enhanced | US | Female | Articulate, warm |
+| Entity | ElevenLabs Voice ID | Personality Match |
+|--------|---------------------|-------------------|
+| Kai | s3TPKV1kjDlVtZbl4Ksh | Professional, conversational |
+| Perplexity-Researcher | AXdMgz6evoL7OPd7eU12 | Analytical, clear |
+| Claude-Researcher | AXdMgz6evoL7OPd7eU12 | Strategic, sophisticated |
+| Gemini-Researcher | iLVmqjzCGGvqtMCk6vVQ | Multi-perspective, thorough |
+| Engineer | fATgBRI8wg5KkDFg8vBd | Steady, professional |
+| Principal-Engineer | iLVmqjzCGGvqtMCk6vVQ | Strategic, senior leadership |
+| Architect | muZKMsIDGYtIkjjiUS82 | Strategic, sophisticated |
+| Designer | ZF6FPAbjXT4488VcRRnw | Creative, distinct |
+| Artist | ZF6FPAbjXT4488VcRRnw | Creative, artistic |
+| Pentester | xvHLFjaUEpx4BOf7EiDd | Technical, sharp |
+| Writer | gfRt6Z3Z8aTbpLfexQ7N | Articulate, warm |
 
-### Voice Quality Levels
+### Voice Configuration
 
-- **Premium voices**: Highest quality neural TTS (marked with "Premium")
-  - Ava, Jamie, Serena, Isha
-  - Larger model files (94MB - 457MB)
-  - Best audio quality available in macOS
-
-- **Enhanced voices**: High-quality neural TTS (marked with "Enhanced")
-  - Tom, Oliver, Samantha
-  - Excellent quality, slightly smaller models
-  - Still far superior to legacy voices
+ElevenLabs voices provide consistent, high-quality neural TTS with natural-sounding speech across all agents. Voice IDs are stored in:
+- Server default: `${PAI_DIR}/voice-server/server.ts`
+- Stop hooks: `${PAI_DIR}/hooks/stop-hook.ts` and `${PAI_DIR}/hooks/subagent-stop-hook.ts`
 
 ## Server Configuration
 
 ### Voice Configuration (voices.json)
 
-The voice system uses a centralized JSON configuration file for all voice and speed settings:
+The voice system uses a centralized JSON configuration file for voice naming and metadata (primarily for reference):
 
 **Location:** `${PAI_DIR}/voice-server/voices.json`
 
@@ -112,28 +111,22 @@ The voice system uses a centralized JSON configuration file for all voice and sp
 }
 ```
 
-**Configuration Fields:**
-- `voice_name`: macOS voice name (e.g., "Jamie (Premium)", "Ava (Premium)")
-- `rate_multiplier`: Speed multiplier (1.0 = normal, 1.3 = 30% faster)
-- `rate_wpm`: Words per minute (calculated as default_rate × rate_multiplier)
-- `description`: Human-readable description of the voice
-- `type`: Voice quality level (Premium or Enhanced)
+**Note:** The `voices.json` file is primarily for reference and naming conventions. The actual voice IDs used by ElevenLabs are hardcoded in the hook files (stop-hook.ts and subagent-stop-hook.ts).
 
-**Customizing Voice Speeds:**
-To change speech rates, edit the `rate_multiplier` or `rate_wpm` values in voices.json:
-- Kai (default): 1.3x = 228 wpm
-- Agents (default): 1.35x = 236 wpm
-- Normal speed: 1.0x = 175 wpm
-- Fast speed: 1.5x = 263 wpm
+### Environment Variables (in ~/.env)
 
-Changes take effect immediately (no server restart required for hook-initiated voices).
-
-### Environment Variables (in ${PAI_DIR}/.env)
+**Required:**
 ```bash
-PORT="8888"  # Optional, defaults to 8888
+ELEVENLABS_API_KEY=your_api_key_here
 ```
 
-No API keys required - uses native macOS voices.
+**Optional:**
+```bash
+PORT="8888"  # Optional, defaults to 8888
+ELEVENLABS_VOICE_ID="s3TPKV1kjDlVtZbl4Ksh"  # Optional, Kai's default voice
+```
+
+Get your free API key at [elevenlabs.io](https://elevenlabs.io) (10,000 characters/month free tier available).
 
 ### Server API
 
@@ -144,7 +137,7 @@ Main endpoint for voice notifications.
 ```json
 {
   "message": "Text to speak",
-  "voice_name": "Ava (Premium)",
+  "voice_id": "s3TPKV1kjDlVtZbl4Ksh",
   "title": "Optional notification title",
   "voice_enabled": true
 }
@@ -152,8 +145,7 @@ Main endpoint for voice notifications.
 
 **Field Requirements:**
 - `message` (required): The text to be spoken
-- `voice_name` (optional): macOS voice name (e.g., "Ava (Premium)", "Tom (Enhanced)")
-- `rate` (optional, alternative): Speech rate in words per minute (100-500) if not using voice_name
+- `voice_id` (optional): ElevenLabs voice ID (defaults to Kai's voice if not specified)
 - `title` (optional): Visual notification title
 - `voice_enabled` (optional): Set to false to skip voice output
 
@@ -176,7 +168,7 @@ Simplified endpoint for PAI system messages.
 }
 ```
 
-Uses Kai's default voice (Jamie Premium).
+Uses Kai's default voice (s3TPKV1kjDlVtZbl4Ksh).
 
 #### GET /health
 Health check endpoint.
@@ -186,78 +178,45 @@ Health check endpoint.
 {
   "status": "healthy",
   "port": 8888,
-  "voice_system": "macOS Native",
-  "default_voice": "Jamie (Premium)"
+  "voice_system": "ElevenLabs",
+  "default_voice_id": "s3TPKV1kjDlVtZbl4Ksh",
+  "api_key_configured": true
 }
 ```
 
 ## Agent Voice Configuration
 
-### Agent Frontmatter
-Each agent file (`${PAI_DIR}/agents/*.md`) includes voice configuration:
+### Hook Configuration
+Voice mappings are defined in the stop hook files:
 
-```yaml
----
-name: researcher
-description: Research specialist
-model: sonnet
-color: cyan
-voiceId: Ava (Premium)
----
+**Main Agent (Kai):** `${PAI_DIR}/hooks/stop-hook.ts`
+```typescript
+voice_id: 's3TPKV1kjDlVtZbl4Ksh'  // Kai's ElevenLabs voice ID
 ```
 
-The `voiceId` field specifies which macOS voice the agent uses.
+**Subagents:** `${PAI_DIR}/hooks/subagent-stop-hook.ts`
+```typescript
+const ELEVENLABS_VOICE_IDS: Record<string, string> = {
+  'kai': 's3TPKV1kjDlVtZbl4Ksh',
+  'writer': 'gfRt6Z3Z8aTbpLfexQ7N',
+  'engineer': 'fATgBRI8wg5KkDFg8vBd',
+  'principal-engineer': 'iLVmqjzCGGvqtMCk6vVQ',
+  'designer': 'ZF6FPAbjXT4488VcRRnw',
+  'artist': 'ZF6FPAbjXT4488VcRRnw',
+  'perplexity-researcher': 'AXdMgz6evoL7OPd7eU12',
+  'claude-researcher': 'AXdMgz6evoL7OPd7eU12',
+  'researcher': 'AXdMgz6evoL7OPd7eU12',
+  'pentester': 'xvHLFjaUEpx4BOf7EiDd',
+  'architect': 'muZKMsIDGYtIkjjiUS82',
+};
+```
 
 ### Voice Selection Criteria
 
 Voices are selected based on:
 1. **Personality Match**: Voice characteristics match agent role
-2. **Accent Variety**: Mix of US, UK, and Indian accents for distinction
-3. **Gender Balance**: Mix of male and female voices
-4. **Quality Level**: Premium voices for frequently-used agents
-
-## Downloading Additional Voices
-
-### How to Add More Premium/Enhanced Voices
-
-1. Open **System Settings**
-2. Navigate to **Voice (Live Speech)**
-3. Click **System Voice** dropdown
-4. Select **Manage Voices...**
-5. Download desired Premium or Enhanced voices
-
-### Available Premium Voices (as of macOS 15.x)
-
-**English (US):**
-- Ava (Premium) - Female, 457MB ⭐
-- Allison (Enhanced) - Female, 94MB
-- Tom (Enhanced) - Male, 392MB
-- Nathan (Enhanced) - Male
-- Samantha (Enhanced) - Female
-- Joelle (Enhanced) - Female
-- Nicky (Enhanced) - Female
-- Noelle (Enhanced) - Female
-
-**English (UK):**
-- Jamie (Premium) - Male ⭐
-- Serena (Premium) - Female, 195MB ⭐
-- Daniel (Enhanced) - Male
-- Kate (Enhanced) - Female
-- Oliver (Enhanced) - Male
-
-**English (India):**
-- Isha (Premium) - Female ⭐
-- Rishi (Enhanced) - Male
-- Sangeeta (Enhanced) - Female
-- Veena (Enhanced) - Female
-
-**English (Ireland):**
-- Moira (Enhanced) - Female
-
-**English (South Africa):**
-- Tessa (Enhanced) - Female
-
-⭐ = Currently in use by the PAI system
+2. **Voice Variety**: Different ElevenLabs voices for distinction
+3. **Consistency**: Same voice ID for similar agent types
 
 ## COMPLETED Line Formatting
 
@@ -297,14 +256,16 @@ The CUSTOM COMPLETED line is used if:
    curl http://localhost:8888/health
    ```
 
-2. Verify voice is downloaded:
+2. Verify ElevenLabs API key is configured:
    ```bash
-   say -v '?' | grep "Premium\|Enhanced"
+   grep ELEVENLABS_API_KEY ~/.env
    ```
 
 3. Test voice directly:
    ```bash
-   say -v "Ava (Premium)" "Testing voice quality"
+   curl -X POST http://localhost:8888/notify \
+     -H "Content-Type: application/json" \
+     -d '{"message":"Testing voice","voice_id":"s3TPKV1kjDlVtZbl4Ksh"}'
    ```
 
 ### Voice Server Not Running
@@ -324,12 +285,12 @@ bun server.ts &
 ### Wrong Voice Playing
 1. Check stop-hook voice mappings:
    ```bash
-   grep "const VOICES" ${PAI_DIR}/hooks/stop-hook.ts
+   grep "ELEVENLABS_VOICE_IDS" ${PAI_DIR}/hooks/subagent-stop-hook.ts
    ```
 
-2. Verify agent voiceId in frontmatter:
+2. Verify voice_id in hook file:
    ```bash
-   grep "voiceId:" ${PAI_DIR}/agents/*.md
+   grep "voice_id.*s3TPKV1kjDlVtZbl4Ksh" ${PAI_DIR}/hooks/stop-hook.ts
    ```
 
 ### No COMPLETED Line in Output
@@ -338,6 +299,11 @@ The voice system requires the `🎯 COMPLETED:` line. Ensure:
 - Exact format: `🎯 COMPLETED: [description]`
 - No typos in emoji or text
 
+### ElevenLabs API Errors
+1. **401 Unauthorized**: Invalid API key - check ~/.env
+2. **429 Too Many Requests**: Rate limit exceeded - wait or upgrade plan
+3. **Quota Exceeded**: Monthly character limit reached - upgrade plan or wait for reset
+
 ## Development
 
 ### Testing Individual Voices
@@ -345,28 +311,36 @@ The voice system requires the `🎯 COMPLETED:` line. Ensure:
 # Test Kai's voice
 curl -X POST http://localhost:8888/notify \
   -H "Content-Type: application/json" \
-  -d '{"message":"Testing Kai voice","voice_name":"Jamie (Premium)"}'
+  -d '{"message":"Testing Kai voice","voice_id":"s3TPKV1kjDlVtZbl4Ksh"}'
 
-# Test Researcher voice
+# Test Perplexity-Researcher voice
 curl -X POST http://localhost:8888/notify \
   -H "Content-Type: application/json" \
-  -d '{"message":"Testing Researcher voice","voice_name":"Ava (Premium)"}'
+  -d '{"message":"Testing Perplexity-Researcher voice","voice_id":"AXdMgz6evoL7OPd7eU12"}'
 
 # Test Engineer voice
 curl -X POST http://localhost:8888/notify \
   -H "Content-Type: application/json" \
-  -d '{"message":"Testing Engineer voice","voice_name":"Tom (Enhanced)"}'
+  -d '{"message":"Testing Engineer voice","voice_id":"fATgBRI8wg5KkDFg8vBd"}'
 ```
 
 ### Adding New Voices
 
-1. Download voice via System Settings → Voice (Live Speech) → Manage Voices
-2. Update voices.json configuration:
+1. Get an ElevenLabs voice ID from [elevenlabs.io](https://elevenlabs.io)
+2. Update subagent-stop-hook.ts:
+   ```typescript
+   const ELEVENLABS_VOICE_IDS: Record<string, string> = {
+     // ... existing voices ...
+     'newagent': 'your_elevenlabs_voice_id_here',
+   };
+   ```
+
+3. Optionally update voices.json for reference:
    ```json
    {
      "voices": {
        "newagent": {
-         "voice_name": "NewVoice (Premium)",
+         "voice_name": "NewVoice Name",
          "rate_multiplier": 1.35,
          "rate_wpm": 236,
          "description": "Description of voice",
@@ -376,86 +350,53 @@ curl -X POST http://localhost:8888/notify \
    }
    ```
 
-3. Update agent frontmatter:
-   ```yaml
-   voiceId: NewVoice (Premium)
-   ```
-
 4. Test the new voice configuration
-
-## Voice Quality Comparison
-
-### Premium vs Enhanced vs Legacy
-
-- **Premium**: Best quality, largest files, most natural
-- **Enhanced**: Excellent quality, good balance of size/quality
-- **Legacy/Compact**: Old robotic voices (DO NOT USE)
-
-### How to Identify Voice Quality
-
-```bash
-say -v '?' | grep "Premium"   # Premium voices only
-say -v '?' | grep "Enhanced"  # Enhanced voices only
-say -v '?' | head -50         # All voices (Premium/Enhanced at top)
-```
-
-Premium and Enhanced voices are clearly labeled in the output.
-
-## Migration from Speech Rate System
-
-### Previous System (Deprecated)
-- Used single system default voice
-- Differentiated by speech rate (220-310 wpm)
-- All voices sounded the same, just faster/slower
-
-### Current System (Active)
-- Uses multiple Premium/Enhanced voices
-- Each entity has distinct voice character
-- Natural variety through accent, gender, personality
-- Much more engaging and differentiated
-
-### Upgrading from Old System
-If you're upgrading from the rate-based system:
-
-1. Download Premium/Enhanced voices via System Settings
-2. Update all agent *.md files (change `speechRate:` to `voiceId:`)
-3. Update stop-hook.ts (change `VOICE_RATES` to `VOICES`)
-4. Update curl commands (change `rate` parameter to `voice_name`)
-5. Restart voice server
 
 ## Security & Privacy
 
-- All voice processing happens locally on your Mac
-- No data sent to external services
-- No API keys or authentication required
-- Zero cost, complete privacy
+- Voice processing happens via ElevenLabs API (cloud service)
+- Audio data sent to ElevenLabs servers for TTS generation
+- API key required (stored in ~/.env)
 - CORS restricted to localhost only
 - Rate limiting enabled (10 requests/minute)
+- Temporary audio files stored in /tmp and cleaned up after playback
+- Keep your ELEVENLABS_API_KEY secure and never commit to public repos
 
 ## System Requirements
 
-- macOS 13.0 or later (for Premium/Enhanced voices)
+- macOS (for afplay audio playback)
 - Claude Code CLI
 - Bun runtime (for voice server)
-- ~2-4GB disk space for premium voices
+- ElevenLabs API key
+- Internet connection (for API calls)
 
 ## Performance
 
-- Voice generation: Near-instant (<100ms)
-- Network latency: Local only (~1-5ms)
-- No external API delays
-- Unlimited usage
-- No rate limits (beyond local rate limiter)
+- Voice generation: ~500ms-2s (API call + network latency)
+- Audio playback: Immediate after generation
+- Monthly quota: 10,000 characters (free tier) or more (paid plans)
+- Rate limits: Per ElevenLabs plan
 
 ## Summary
 
 The PAI Voice System provides:
-- ✅ High-quality neural TTS using macOS Premium/Enhanced voices
+- ✅ High-quality neural TTS using ElevenLabs API
 - ✅ Distinct voices for Kai and each agent
-- ✅ Zero cost (no cloud APIs)
-- ✅ Complete privacy (local processing)
-- ✅ Natural voice variety (accents, genders, personalities)
+- ✅ Professional voice quality
+- ✅ Natural voice variety (via different ElevenLabs voices)
 - ✅ Simple integration via stop-hook
 - ✅ Automatic voice notifications for all completions
+- ⚠️ Requires API key and internet connection
+- ⚠️ Subject to ElevenLabs usage limits and pricing
 
 Voice makes Kai and agents feel more alive and engaging!
+
+## Recent Changes (2025-10-19)
+
+- ✏️ `voice-server/README.md` (modified)
+  - +249 / -245 lines
+- ✏️ `voice-server/voices.json` (modified)
+  - +13 / -6 lines
+
+---
+<!-- Last Updated: 2025-10-19 -->
