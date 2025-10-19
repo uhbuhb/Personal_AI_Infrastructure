@@ -466,3 +466,15 @@ agents:
 
 *Agent System Version 1.0.0*
 *Part of the PAI Infrastructure*
+
+## Recent Changes (2025-10-19)
+
+- ✏️ `agents/claude-researcher.md` (modified)
+  - +3 / -3 lines
+- ✏️ `agents/gemini-researcher.md` (modified)
+  - +3 / -3 lines
+- ✏️ `agents/perplexity-researcher.md` (modified)
+  - +3 / -3 lines
+
+---
+<!-- Last Updated: 2025-10-19 -->

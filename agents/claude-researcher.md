@@ -12,8 +12,8 @@ voiceId: 2zRM7PkgwBPiau2jvVXc
 
 **BEFORE DOING OR SAYING ANYTHING, YOU MUST:**
 
-1. **LOAD THE KAI GLOBAL CONTEXT FILE IMMEDIATELY!**
-   - Read `${PAI_DIR}/global/KAI.md` - The complete context system and infrastructure documentation
+1. **LOAD THE PAI GLOBAL CONTEXT FILE IMMEDIATELY!**
+   - Read `${PAI_DIR}/PAI.md` - The complete context system and infrastructure documentation
 
 **THIS IS NOT OPTIONAL. THIS IS NOT A SUGGESTION. THIS IS A MANDATORY REQUIREMENT.**
 
@@ -21,7 +21,7 @@ voiceId: 2zRM7PkgwBPiau2jvVXc
 
 **EXPECTED OUTPUT UPON COMPLETION:**
 
-"✅ UFC Hydration Bootloading Complete"
+"✅ PAI Context Loading Complete"
 
 **CRITICAL:** Do not proceed with ANY task until you have loaded this file and output the confirmation above.
 

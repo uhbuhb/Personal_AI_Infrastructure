@@ -2,7 +2,9 @@
 
 ## Overview
 
-The Universal Flexible Context (UFC) system is PAI's intelligent context management framework. It provides semantic understanding of user intent and dynamically loads relevant context files and agents, making AI interactions more aware and capable.
+The Universal Flexible Context (UFC) system is PAI's intelligent context management framework. It has evolved from a context-file-based system to a **Skills-based architecture** that provides semantic understanding of user intent and dynamically loads relevant skills and agents.
+
+**Current Architecture:** Skills-based (as of v0.5.0)
 
 ## Core Concepts
 
@@ -10,24 +12,24 @@ The Universal Flexible Context (UFC) system is PAI's intelligent context managem
 
 Unlike traditional keyword matching, UFC understands the **meaning** behind user requests:
 
-- "Help me with my site" → Understands this means website context
+- "Help me with my site" → Understands this means website skill
 - "What's new with AI" → Recognizes research intent
-- "Fix this bug" → Identifies engineering context needed
+- "Fix this bug" → Identifies engineering skill needed
 
-### Dynamic Loading
+### Dynamic Skills Loading
 
-Context and agents are loaded on-demand based on:
+Skills are loaded on-demand based on:
 1. User intent analysis
 2. Current conversation context
 3. Project-specific requirements
 4. Task complexity
 
-## How UFC Works
+## How UFC Works (Skills-Based Architecture)
 
 ### 1. Intent Recognition Pipeline
 
 ```
-User Input → Semantic Analysis → Pattern Matching → Context Selection → Loading
+User Input → Semantic Analysis → Pattern Matching → Skill Selection → Loading
 ```
 
 **Example Flow:**
@@ -36,177 +38,158 @@ User: "I need to update my blog with AI research"
 ↓
 Semantic Analysis: [blog, update, AI, research]
 ↓
-Pattern Match: 
-  - "blog" → Website context
-  - "research" → Research agent
+Pattern Match:
+  - "blog" → website skill
+  - "research" → research skill
 ↓
-Context Load:
-  - ${PAI_DIR}/context/projects/website/CLAUDE.md
-  - Agent: researcher
+Skill Load:
+  - Skill: website
+  - Skill: research
 ```
 
-### 2. Context Loading Rules
+### 2. Skills System Architecture
 
-Context files are loaded based on semantic triggers defined in the hook system:
+Skills are self-contained units in `${PAI_DIR}/skills/` that include:
 
-```javascript
-// Example context rule
-{
-  trigger: {
-    semantic: ["website", "blog", "site", "homepage"],
-    phrases: ["update my site", "fix navigation", "publish article"]
-  },
-  action: {
-    loadContext: ["${PAI_DIR}/context/projects/website/CLAUDE.md"],
-    agent: null
-  }
-}
+**Skill Structure:**
+```
+skills/
+  └── skill-name/
+      ├── skill.md         # Skill description and metadata
+      ├── CLAUDE.md        # Context and instructions
+      ├── commands/        # Skill-specific commands
+      └── resources/       # Supporting files
 ```
 
-## Configuration
-
-### Context File Structure
-
-Context files use Markdown with special directives:
-
-```markdown
-# Context Name
-
-## Purpose
-Brief description of this context
-
-## Knowledge Base
-Domain-specific information...
-
-## Instructions
-Special instructions for the AI...
-
-## Available Commands
-- command1: Description
-- command2: Description
+**Example Skill Declaration (skill.md):**
+```yaml
+---
+name: website
+description: Manage danielmiessler.com VitePress blog and website...
+---
 ```
 
-### Creating Context Files
+### 3. Global Context Loading
 
-1. **Global Context**: `${PAI_DIR}/context/CLAUDE.md`
-   - Loaded for all conversations
-   - Contains system-wide settings
+The system loads global context via `${PAI_DIR}/PAI.md` on every user prompt through the hook system:
 
-2. **Project Context**: `${PAI_DIR}/context/projects/*/CLAUDE.md`
-   - Project-specific knowledge
-   - Loaded based on intent
+**PAI.md contains:**
+- Core identity and personality
+- Global stack preferences
+- General instructions
+- Response format standards
+- Key contacts
 
-3. **Domain Context**: `${PAI_DIR}/context/domains/*/CLAUDE.md`
-   - Specialized domain knowledge
-   - Technical references
+## Skill Categories
 
-## Context Categories
+### 1. Website & Blog Skill
+**Intent Triggers**: website, blog, site, homepage, navigation, publish
+**Skill**: `website`
+**Provides**:
+- Blog post management
+- VitePress configuration
+- Cloudflare deployment
+- Content management
 
-### 1. Website & Blog Context
-**Triggers**: website, blog, site, homepage, navigation
-**Files**: 
-- `${PAI_DIR}/context/projects/website/CLAUDE.md`
-- `${PAI_DIR}/context/projects/website/content/CLAUDE.md`
+### 2. Research Skill
+**Intent Triggers**: research, investigate, find information, latest news
+**Skill**: `research`
+**Provides**:
+- Multi-source research orchestration
+- Perplexity, Claude, Gemini researchers
+- Information synthesis
 
-### 2. Research Context
-**Triggers**: research, investigate, find information, latest news
-**Agent**: researcher
-**Behavior**: Launches research agent for web searches
+### 3. Development Skill
+**Intent Triggers**: build, create, implement, code, feature, application
+**Skill**: `development`
+**Provides**:
+- Spec-driven development workflow
+- Architect and engineer agent coordination
+- Test-driven development
 
-### 3. Security Context
-**Triggers**: security, vulnerabilities, pentesting, audit
-**Agent**: pentester
-**Behavior**: Launches security testing agent
+### 4. Security & Pentesting Skill
+**Intent Triggers**: security, vulnerabilities, pentesting, audit
+**Skill**: Not yet migrated to skills (uses agent directly)
+**Provides**: Security testing via pentester agent
 
-### 4. Engineering Context
-**Triggers**: code, debug, implement, fix bug
-**Agent**: engineer
-**Behavior**: Launches engineering agent
-
-### 5. Financial Context
-**Triggers**: expenses, bills, budget, spending
-**Files**:
-- `${PAI_DIR}/context/life/expenses.md`
-- `${PAI_DIR}/context/life/finances/`
-
-### 6. Health Context
-**Triggers**: health, fitness, medical, wellness
-**Files**: `${HOME}/Projects/Life/Health/CLAUDE.md`
+### 5. Financial Skill
+**Intent Triggers**: expenses, bills, budget, spending
+**Skill**: `finances`
+**Provides**:
+- Expense tracking
+- Budget analysis
+- Financial reporting
 
 ## Agent System Integration
 
-UFC can automatically launch specialized agents:
+UFC automatically launches specialized agents based on intent:
 
 ```yaml
 Available Agents:
 - general-purpose: Default for complex tasks
-- researcher: Web research and information gathering
-- engineer: Software development
+- engineer: Software development (spec-driven)
+- architect: System design and specifications
 - designer: UI/UX and visual design
 - pentester: Security testing
-- architect: System design and specs
-- writer: Content creation
+- perplexity-researcher: Web research via Perplexity
+- claude-researcher: Web research via Claude WebSearch
+- gemini-researcher: Multi-perspective research via Gemini
+- artist: AI image generation
+- browser: Autonomous UI testing
 ```
 
 ### Agent Selection Logic
 
-```python
-def select_agent(intent):
-    if "research" in intent:
-        return "researcher"
-    elif "security" in intent:
-        return "pentester"
-    elif "code" in intent:
-        return "engineer"
-    elif "design" in intent:
-        return "designer"
-    else:
-        return "general-purpose"
-```
+Agents are invoked by:
+1. **Skills**: Skills invoke agents programmatically
+2. **Direct Intent**: User request directly maps to agent
+3. **Task Complexity**: Complex tasks trigger general-purpose agent
 
 ## Dynamic Requirements Loading
 
-The UFC system uses a special hook (`user-prompt-submit-hook`) to load requirements:
+The UFC system uses the `user-prompt-submit-hook` to:
 
-### Loading Process
-
-1. **Hook Activation**: Triggered before prompt processing
+1. **Global Context Load**: Always loads `${PAI_DIR}/PAI.md`
 2. **Intent Analysis**: Semantic understanding of user request
-3. **Context Selection**: Matching against defined patterns
-4. **File Loading**: Reading selected context files
+3. **Skill Selection**: Matching against skill descriptions
+4. **Skill Loading**: Reading skill context files
 5. **Agent Launch**: Starting specialized agents if needed
 
-### Example Hook Implementation
+### Hook Implementation Flow
 
 ```bash
 #!/bin/bash
-# user-prompt-submit-hook
+# user-prompt-submit-hook (simplified)
 
-# Analyze user prompt
+# 1. Always load global context
+load_global_context "${PAI_DIR}/PAI.md"
+
+# 2. Analyze user intent
 INTENT=$(analyze_intent "$USER_PROMPT")
 
-# Load appropriate context
+# 3. Load matching skill
 case "$INTENT" in
   "website")
-    load_context "${PAI_DIR}/context/projects/website/CLAUDE.md"
+    invoke_skill "website"
     ;;
   "research")
-    launch_agent "researcher"
+    invoke_skill "research"
     ;;
-  "security")
-    launch_agent "pentester"
+  "development")
+    invoke_skill "development"
     ;;
 esac
 ```
 
 ## Best Practices
 
-### 1. Context File Guidelines
+### 1. Skill Design Guidelines
 
-- **Keep it focused**: One domain per context file
-- **Use clear headers**: Structure with markdown headers
-- **Include examples**: Provide usage examples
-- **Update regularly**: Keep context current
+- **Keep it focused**: One domain per skill
+- **Clear descriptions**: Enable semantic matching
+- **Self-contained**: Include all necessary context
+- **Command-driven**: Use commands for complex workflows
+- **Update regularly**: Keep skills current
 
 ### 2. Semantic Triggers
 
@@ -217,58 +200,59 @@ esac
 ### 3. Performance Optimization
 
 - **Lazy loading**: Load only what's needed
-- **Cache frequently used**: Store common contexts
-- **Batch operations**: Load related contexts together
+- **Skill descriptions**: Keep descriptions concise for fast matching
+- **Agent reuse**: Share agents across skills when appropriate
 
-## Advanced Features
+## Migration from Context-Based to Skills-Based
 
-### Context Inheritance
-
-Contexts can inherit from others:
-
-```markdown
-# Child Context
-extends: ${PAI_DIR}/context/base/CLAUDE.md
-
-## Additional Knowledge
-...
+**Old System (pre-v0.5.0):**
+```
+context/
+  ├── CLAUDE.md                    # Global context
+  ├── projects/
+  │   ├── website/CLAUDE.md
+  │   └── Alma.md
+  ├── life/
+  │   ├── expenses.md
+  │   └── finances/
+  └── tools/CLAUDE.md
 ```
 
-### Conditional Loading
-
-Load context based on conditions:
-
-```yaml
-condition:
-  - file_exists: "package.json"
-  - directory: "src/"
-then:
-  load: "${PAI_DIR}/context/javascript/CLAUDE.md"
+**New System (v0.5.0+):**
+```
+PAI.md                             # Global context (always loaded)
+skills/
+  ├── website/
+  │   ├── skill.md                # Skill description
+  │   └── CLAUDE.md               # Skill context
+  ├── research/
+  │   ├── skill.md
+  │   └── CLAUDE.md
+  └── development/
+      ├── skill.md
+      └── CLAUDE.md
 ```
 
-### Context Variables
-
-Use variables in context files:
-
-```markdown
-## Project Path
-${PROJECT_PATH}
-
-## Current User
-${USER}
-
-## Date
-${DATE}
-```
+**Key Changes:**
+1. **Global context**: `context/CLAUDE.md` → `PAI.md`
+2. **Project context**: `context/projects/*` → `skills/*`
+3. **Agent context**: Moved to `agents/*.md` with PAI.md reference
+4. **Loading mechanism**: Hook-based remains, but loads skills not context files
 
 ## Troubleshooting
 
-### Context Not Loading
+### Skill Not Loading
 
-1. **Check triggers**: Verify semantic triggers match
-2. **File paths**: Ensure context files exist
+1. **Check skill description**: Verify semantic triggers match
+2. **File paths**: Ensure skill files exist in `${PAI_DIR}/skills/`
 3. **Permissions**: Check file read permissions
 4. **Hook execution**: Verify hooks are running
+
+### Wrong Skill Selected
+
+1. **Review descriptions**: Make skill descriptions more specific
+2. **Add disambiguators**: Include negative examples
+3. **Test variations**: Try different phrasings
 
 ### Debug Mode
 
@@ -278,50 +262,19 @@ Enable debug logging:
 export UFC_DEBUG=true
 ```
 
-View debug output:
+View hook execution:
 ```bash
-tail -f ${HOME}/Library/Logs/ufc-debug.log
+# Check hook output in Claude Code console
 ```
 
 ### Common Issues
 
 | Issue | Solution |
 |-------|----------|
-| Context not found | Check file path in hook |
-| Wrong agent selected | Review semantic triggers |
-| Slow loading | Optimize context file size |
-| Duplicate loading | Check for circular references |
-
-## API Reference
-
-### Context Loading Functions
-
-```javascript
-// Load single context
-loadContext(filePath: string): void
-
-// Load multiple contexts
-loadContexts(filePaths: string[]): void
-
-// Launch agent with context
-launchAgent(agentType: string, context?: string): void
-```
-
-### Hook Interface
-
-```typescript
-interface UFCHook {
-  trigger: {
-    semantic: string[];
-    phrases: string[];
-  };
-  action: {
-    loadContext?: string[];
-    launchAgent?: string;
-    execute?: string;
-  };
-}
-```
+| Skill not found | Check skill.md exists in skills/ directory |
+| Wrong agent selected | Review skill description and agent mapping |
+| Slow loading | Optimize skill CLAUDE.md file size |
+| Duplicate loading | Check for circular skill dependencies |
 
 ## Examples
 
@@ -332,59 +285,59 @@ User: "I need to update my blog with the latest AI news"
 
 UFC Analysis:
 - Triggers: ["blog", "update", "AI", "news"]
-- Contexts: website, research
+- Skills: website, research
 - Actions:
-  1. Load website context
-  2. Launch researcher agent
-  3. Combine results
+  1. Load website skill
+  2. Load research skill
+  3. Coordinate skills to accomplish task
 ```
 
-### Example 2: Security Audit
+### Example 2: Build New Feature
 
 ```bash
-User: "Check my server for vulnerabilities"
+User: "Build a meditation timer application"
 
 UFC Analysis:
-- Triggers: ["check", "server", "vulnerabilities"]
-- Context: security
+- Triggers: ["build", "application"]
+- Skill: development
 - Actions:
-  1. Launch pentester agent
-  2. Load security context
-  3. Execute security scan
+  1. Load development skill
+  2. Invoke architect agent for specs
+  3. Invoke engineer agent for implementation
 ```
 
-### Example 3: Financial Analysis
+### Example 3: Research Task
 
 ```bash
-User: "How much did I spend on utilities last month?"
+User: "Research the latest quantum computing developments"
 
 UFC Analysis:
-- Triggers: ["spend", "utilities", "last month"]
-- Context: financial
+- Triggers: ["research", "latest", "developments"]
+- Skill: research
 - Actions:
-  1. Load expense context
-  2. Parse financial data
-  3. Calculate utilities total
+  1. Load research skill
+  2. Launch parallel research agents
+  3. Synthesize findings
 ```
 
 ## Future Enhancements
 
 ### Planned Features
 
-1. **Machine Learning Integration**: Learn from usage patterns
-2. **Context Versioning**: Track context changes
-3. **Multi-language Support**: Context in multiple languages
-4. **Cloud Sync**: Synchronize contexts across devices
-5. **Plugin System**: Third-party context providers
+1. **Skill Marketplace**: Share and discover community skills
+2. **Skill Versioning**: Track skill changes and dependencies
+3. **Multi-language Support**: Skills in multiple languages
+4. **Cloud Sync**: Synchronize skills across devices
+5. **Skill Analytics**: Track skill usage and effectiveness
 
 ### Experimental Features
 
-- **Auto-context Generation**: Create contexts from documentation
-- **Context Compression**: Optimize large contexts
-- **Predictive Loading**: Pre-load likely contexts
-- **Context Sharing**: Share contexts between users
+- **Auto-skill Generation**: Create skills from documentation
+- **Skill Composition**: Combine multiple skills dynamically
+- **Predictive Loading**: Pre-load likely skills
+- **Skill Inheritance**: Skills extend other skills
 
 ---
 
-*UFC System Version 1.0.0*
-*Last Updated: [Current Date]*
+*UFC Skills-Based Architecture - Version 0.5.0*
+*Updated: 2025-10-18*

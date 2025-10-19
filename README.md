@@ -30,6 +30,17 @@
 > [!TIP]
 > **✨ v0.5.0 NEW:** Skills-based PAI architecture with 92.5% token reduction! Core identity now in skill description, zero hook overhead. [See details below →](#-recent-updates)
 
+
+<details>
+<summary><strong>📅 2025-10-19 - Automated Documentation Update</strong></summary>
+
+- **Agents:** 3 updated
+- **Commands:** 1 updated
+
+*Updated by pre-commit hook: 5 modified*
+
+</details>
+
 <details>
 <summary><strong>Click to see all updates</strong></summary>
 
