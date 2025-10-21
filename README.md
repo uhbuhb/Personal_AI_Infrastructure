@@ -34,122 +34,48 @@
 > - All PAI infrastructure now lives in `.claude/` directory
 > - Repository now properly mirrors your actual `~/.claude/` working system
 > - Fixes major compatibility issues reported by users
-> - Makes repo a true reference implementation
 > - **Action Required:** New installations should copy `.claude/` to `~/.claude/`
 >
-> [See full migration guide below →](#-recent-updates)
-
-> [!TIP]
-> **✨ October 19** Now using the session-start hook to load our PAI skill on system load! Great bootloader for the overall Skills system! This is a better version of what we were doing before with UFC but now utilizing the skills system.
-
-> **✨ October 18** Overall just massive updates to the PAI repo. Fixed tons of missing files, hooks, settings, etc. Thank you all for submitting issues and PRs!
-
-> **✨ v0.5.0:** Skills-based PAI architecture with 92.5% token reduction! Core identity now in skill description, zero hook overhead.
-
+> [See full changelog below →](#-recent-updates)
 
 <details>
-<summary><strong>📅 2025-10-20 - Automated Documentation Update</strong></summary>
+<summary><strong>📅 Click to see all updates</strong></summary>
 
-- **Settings:** 1 updated
+### Recent Manual Updates
+
+- **✨ Oct 19:** Session-start hook now loads PAI skill - improved Skills system bootstrap
+- **✨ Oct 18:** Major repo cleanup - fixed missing files, hooks, settings
+- **✨ v0.5.0:** Skills-based architecture with 92.5% token reduction
+
+### Automated Documentation Updates
+
+<details>
+<summary>📅 2025-10-20 - Settings: 1 updated</summary>
 
 *Updated by pre-commit hook: 1 modified*
-
 </details>
 
-
 <details>
-<summary><strong>📅 2025-10-19 - Automated Documentation Update</strong></summary>
-
-- **Voice:** 2 updated
+<summary>📅 2025-10-19 - Voice: 2 updated</summary>
 
 *Updated by pre-commit hook: 3 modified*
-
 </details>
 
-
 <details>
-<summary><strong>📅 2025-10-19 - Automated Documentation Update</strong></summary>
-
-- **Skills:** 1 updated, 5 removed
+<summary>📅 2025-10-19 - Skills: 1 updated, 5 removed</summary>
 
 *Updated by pre-commit hook: 1 modified, 5 deleted*
-
 </details>
 
-
 <details>
-<summary><strong>📅 2025-10-19 - Automated Documentation Update</strong></summary>
-
-- **Settings:** 1 updated
-
-*Updated by pre-commit hook: 1 modified*
-
-</details>
-
-
-<details>
-<summary><strong>📅 2025-10-19 - Automated Documentation Update</strong></summary>
-
-- **Settings:** 1 updated
-
-*Updated by pre-commit hook: 1 modified*
-
-</details>
-
-
-<details>
-<summary><strong>📅 2025-10-19 - Automated Documentation Update</strong></summary>
-
-- **Settings:** 1 removed
-
-*Updated by pre-commit hook: 1 deleted*
-
-</details>
-
-
-<details>
-<summary><strong>📅 2025-10-19 - Automated Documentation Update</strong></summary>
-
-- **Hooks:** 2 new, 1 removed
-- **Settings:** 1 updated
+<summary>📅 2025-10-19 - Hooks: 2 new, 1 removed, Settings: 1 updated</summary>
 
 *Updated by pre-commit hook: 3 added, 1 modified, 1 deleted*
-
 </details>
 
+---
 
-<details>
-<summary><strong>📅 2025-10-19 - Automated Documentation Update</strong></summary>
-
-- **Skills:** 1 new
-
-*Updated by pre-commit hook: 1 added*
-
-</details>
-
-
-<details>
-<summary><strong>📅 2025-10-19 - Automated Documentation Update</strong></summary>
-
-- **Skills:** 1 new
-
-*Updated by pre-commit hook: 1 added*
-
-</details>
-
-
-<details>
-<summary><strong>📅 2025-10-19 - Automated Documentation Update</strong></summary>
-
-- **Agents:** 3 updated
-- **Commands:** 1 updated
-
-*Updated by pre-commit hook: 5 modified*
-
-</details>
-
-<details>
-<summary><strong>Click to see all updates</strong></summary>
+### Version History
 
 <details>
 <summary><strong>📅 v0.6.0 - Repository Restructure with .claude/ Directory 🔥 MAJOR UPDATE</strong></summary>
