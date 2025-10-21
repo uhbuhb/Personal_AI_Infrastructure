@@ -27,12 +27,24 @@
 
 ## 🚀 **Recent Updates**
 
+> [!IMPORTANT]
+> **🔥 v0.6.0 MAJOR UPGRADE:** Repository completely restructured with `.claude/` directory!
+>
+> **BREAKING CHANGE - Repository Structure Changed:**
+> - All PAI infrastructure now lives in `.claude/` directory
+> - Repository now properly mirrors your actual `~/.claude/` working system
+> - Fixes major compatibility issues reported by users
+> - Makes repo a true reference implementation
+> - **Action Required:** New installations should copy `.claude/` to `~/.claude/`
+>
+> [See full migration guide below →](#-recent-updates)
+
 > [!TIP]
 > **✨ October 19** Now using the session-start hook to load our PAI skill on system load! Great bootloader for the overall Skills system! This is a better version of what we were doing before with UFC but now utilizing the skills system.
 
 > **✨ October 18** Overall just massive updates to the PAI repo. Fixed tons of missing files, hooks, settings, etc. Thank you all for submitting issues and PRs!
 
-> **✨ v0.5.0 NEW:** Skills-based PAI architecture with 92.5% token reduction! Core identity now in skill description, zero hook overhead. [See details below →](#-recent-updates)
+> **✨ v0.5.0:** Skills-based PAI architecture with 92.5% token reduction! Core identity now in skill description, zero hook overhead.
 
 
 <details>
@@ -138,6 +150,68 @@
 
 <details>
 <summary><strong>Click to see all updates</strong></summary>
+
+<details>
+<summary><strong>📅 v0.6.0 - Repository Restructure with .claude/ Directory 🔥 MAJOR UPDATE</strong></summary>
+
+**The Problem:**
+Users reported issues with PAI not working correctly because the repository structure didn't match the actual working system. The real PAI system expects all infrastructure to live in `~/.claude/`, but the repo had everything at root level. This caused confusion and compatibility problems.
+
+**The Solution:**
+Complete repository restructure to mirror the actual working system:
+- Created `.claude/` directory at repository root
+- Moved ALL PAI infrastructure into `.claude/` (agents, commands, documentation, hooks, skills, voice-server, etc.)
+- Kept GitHub infrastructure at root (README, LICENSE, .gitignore, .github, etc.)
+- Repository now serves as a true reference implementation
+
+**What Changed:**
+```
+Before (v0.5.0):
+/PAI/
+├── agents/
+├── commands/
+├── documentation/
+├── hooks/
+├── skills/
+├── voice-server/
+├── settings.json
+├── .mcp.json
+├── setup.sh
+└── README.md
+
+After (v0.6.0):
+/PAI/
+├── .claude/                 # ← NEW: All PAI infrastructure here
+│   ├── agents/
+│   ├── commands/
+│   ├── documentation/
+│   ├── hooks/
+│   ├── skills/
+│   ├── voice-server/
+│   ├── settings.json
+│   ├── .mcp.json
+│   └── setup.sh
+├── README.md               # GitHub infrastructure stays at root
+├── LICENSE
+└── .gitignore
+```
+
+**Why This Matters:**
+1. **Proper Emulation:** Repository now accurately represents how PAI works in production
+2. **Easier Setup:** Users can see exactly how their `~/.claude/` directory should be structured
+3. **Less Confusion:** Clear separation between GitHub files and PAI infrastructure
+4. **Better Documentation:** Structure itself serves as documentation
+5. **Reference Implementation:** Can be copied/referenced directly for setup
+
+**Migration:**
+- No action required for existing installations
+- New users get the correct structure from the start
+- All documentation updated to reflect new paths
+
+**Rationale:**
+The PAI system is designed to live in `~/.claude/` on your system. By organizing the repository to mirror this structure, we make it immediately clear how PAI should be set up. This is especially important for new users who are trying to understand the system architecture and for contributors who need to know where files belong.
+
+</details>
 
 <details>
 <summary><strong>📅 v0.5.0 - Skills-Based PAI Architecture (92.5% Token Reduction)</strong></summary>
@@ -450,7 +524,7 @@ graph TD
 <td width="50%">
 
 ```
-${PAI_DIR}/skills/
+~/.claude/skills/
 ├── prompting/           # Prompt engineering standards
 ├── create-skill/        # Skill creation framework
 ├── ffuf/                # Web fuzzing for pentesting (by @rez0)
@@ -526,10 +600,10 @@ Chrome DevTools • Apify • BrightData • Stripe • Anthropic Content • Da
 
 **Automated Setup:**
 ```bash
-./setup.sh  # Interactive setup script (recommended)
+./.claude/setup.sh  # Interactive setup script (recommended)
 ```
 
-**Or read:** [Getting Started Guide](./documentation/how-to-start.md) | [Quick Reference](./documentation/QUICK-REFERENCE.md)
+**Or read:** [Getting Started Guide](./.claude/documentation/how-to-start.md) | [Quick Reference](./.claude/documentation/QUICK-REFERENCE.md)
 
 > [!NOTE]
 > PAI was originally built with [Claude Code](https://claude.ai/code), but the architecture supports any AI platform (GPT, Gemini, etc.)
@@ -554,11 +628,21 @@ brew install oven-sh/bun/bun
 git clone https://github.com/danielmiessler/Personal_AI_Infrastructure.git
 cd Personal_AI_Infrastructure
 
-# All functional directories are now visible at root
-ls -la  # See agents/, skills/, commands/, etc.
+# All PAI infrastructure is now in .claude/ directory
+ls -la .claude/  # See agents/, skills/, commands/, etc.
 ```
 
-#### **Step 3: Configure PAI Directory Variable** ⚠️ **IMPORTANT**
+#### **Step 3: Copy .claude/ to Your Home Directory**
+
+```bash
+# Copy the .claude directory to your home directory
+cp -r .claude ~/.claude
+
+# OR create a symbolic link if you want to keep it in the repo
+# ln -s ${PAI_DIR}/.claude ~/.claude
+```
+
+#### **Step 4: Configure PAI Directory Variable** ⚠️ **IMPORTANT**
 
 > [!IMPORTANT]
 > **You MUST configure the PAI_DIR variable to point to your PAI installation directory.**
@@ -579,14 +663,14 @@ export PAI_HOME="$HOME"  # Your home directory
 source ~/.zshrc  # or source ~/.bashrc
 ```
 
-#### **Step 4: Configure Environment & API Keys**
+#### **Step 5: Configure Environment & API Keys**
 
 ```bash
 # Copy environment template
-cp ${PAI_DIR}/.env.example ${PAI_DIR}/.env
+cp ~/.claude/.env.example ~/.claude/.env
 
 # Configure your API keys
-vim ${PAI_DIR}/.env
+vim ~/.claude/.env
 ```
 
 > [!IMPORTANT]
@@ -604,17 +688,14 @@ vim ${PAI_DIR}/.env
 > See `.env.example` for complete list and setup instructions.
 > **NEVER commit your `.env` file to version control!**
 
-#### **Step 5: Launch PAI**
+#### **Step 6: Launch PAI**
 
 ```bash
-# Navigate to PAI directory
-cd ${PAI_DIR}
-
 # Optional: Set up voice notifications (macOS only)
 # Download Premium/Enhanced voices from System Settings → Voice (Live Speech)
 # Then start the voice server:
-cd voice-server && bun server.ts &
-# See documentation/VOICE-SETUP-GUIDE.md for detailed setup instructions
+cd ~/.claude/voice-server && bun server.ts &
+# See ~/.claude/documentation/VOICE-SETUP-GUIDE.md for detailed setup instructions
 
 # Open Claude Code and start using PAI!
 # Your personal AI infrastructure is ready 🚀
@@ -658,8 +739,8 @@ DA_COLOR="purple"                       # Display color (purple, blue, green, cy
 | [Quick Start](#-quick-start) | Get up and running | 5 min |
 | [Architecture](#-architecture) | Understand the system | 10 min |
 | [SECURITY.md](./SECURITY.md) | Security guidelines | 5 min |
-| [Voice Server](./voice-server/README.md) | Enable voice interaction | 10 min |
-| [Commands Directory](./commands/) | Browse all commands | 15 min |
+| [Voice Server](./.claude/voice-server/README.md) | Enable voice interaction | 10 min |
+| [Commands Directory](./.claude/commands/) | Browse all commands | 15 min |
 
 </div>
 

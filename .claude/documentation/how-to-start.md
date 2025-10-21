@@ -2,6 +2,13 @@
 
 **Welcome! Let's get your Personal AI Infrastructure up and running.**
 
+> [!NOTE]
+> **📦 v0.6.0 Repository Structure**
+> As of v0.6.0, the PAI repository uses a `.claude/` directory structure to match the actual working system:
+> - Repository structure: `/PAI/.claude/` contains all infrastructure
+> - Your system: `~/.claude/` contains your personal PAI instance
+> - Simply copy or symlink `.claude/` from the repo to `~/.claude/` on your system
+
 ---
 
 ## 👋 Hey there!

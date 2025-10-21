@@ -2,6 +2,12 @@
 
 **Bookmark this page!** This is your quick reference for common PAI commands and tasks.
 
+> [!NOTE]
+> **📦 v0.6.0 Update:** Repository now uses `.claude/` directory structure.
+> - On your system: `~/.claude/` contains your PAI installation
+> - Path references below use `~/.claude/` for installed system
+> - Repository structure: `PAI/.claude/` for development
+
 ---
 
 ## 🚀 Getting Started
