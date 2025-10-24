@@ -96,9 +96,9 @@ ask_input() {
     local response
 
     if [ -n "$default" ]; then
-        echo -n -e "${CYAN}${THINKING} $question [$default]: ${NC}"
+        echo -n -e "${CYAN}${THINKING} $question [$default]: ${NC}" >&2
     else
-        echo -n -e "${CYAN}${THINKING} $question: ${NC}"
+        echo -n -e "${CYAN}${THINKING} $question: ${NC}" >&2
     fi
 
     read -r response
@@ -289,23 +289,23 @@ choice=$(ask_input "Enter your choice (1-4)" "1")
 
 case $choice in
     1)
-        PAI_DIR="$HOME/PAI"
+        INSTALL_DIR="$HOME/PAI"
         ;;
     2)
-        PAI_DIR="$HOME/Projects/PAI"
+        INSTALL_DIR="$HOME/Projects/PAI"
         ;;
     3)
-        PAI_DIR="$HOME/Documents/PAI"
+        INSTALL_DIR="$HOME/Documents/PAI"
         ;;
     4)
-        PAI_DIR=$(ask_input "Enter custom path" "$HOME/PAI")
+        INSTALL_DIR=$(ask_input "Enter custom path" "$HOME/PAI")
         ;;
     *)
-        PAI_DIR="$DEFAULT_DIR"
+        INSTALL_DIR="$DEFAULT_DIR"
         ;;
 esac
 
-print_info "PAI will be installed to: $PAI_DIR"
+print_info "PAI will be installed to: $INSTALL_DIR"
 
 # ============================================
 # Step 4: Download or Update PAI
@@ -313,12 +313,12 @@ print_info "PAI will be installed to: $PAI_DIR"
 
 print_header "Step 4: Getting PAI"
 
-if [ -d "$PAI_DIR/.git" ]; then
-    print_info "PAI is already installed at $PAI_DIR"
+if [ -d "$INSTALL_DIR/.git" ]; then
+    print_info "PAI is already installed at $INSTALL_DIR"
 
     if ask_yes_no "Update to the latest version?"; then
         print_step "Updating PAI..."
-        cd "$PAI_DIR"
+        cd "$INSTALL_DIR"
         git pull
         print_success "PAI updated successfully!"
     else
@@ -328,13 +328,16 @@ else
     print_step "Downloading PAI from GitHub..."
 
     # Create parent directory if it doesn't exist
-    mkdir -p "$(dirname "$PAI_DIR")"
+    mkdir -p "$(dirname "$INSTALL_DIR")"
 
     # Clone the repository
-    git clone https://github.com/danielmiessler/Personal_AI_Infrastructure.git "$PAI_DIR"
+    git clone https://github.com/danielmiessler/Personal_AI_Infrastructure.git "$INSTALL_DIR"
 
     print_success "PAI downloaded successfully!"
 fi
+
+# Set PAI_DIR to the .claude directory (v0.6.0+ structure)
+PAI_DIR="$INSTALL_DIR/.claude"
 
 # ============================================
 # Step 5: Configure Environment Variables
@@ -342,15 +345,19 @@ fi
 
 print_header "Step 5: Configuring Environment"
 
-# Detect shell
-if [ -n "$ZSH_VERSION" ]; then
+# Detect shell using $SHELL variable (user's login shell)
+if [[ "$SHELL" == *"zsh"* ]]; then
     SHELL_CONFIG="$HOME/.zshrc"
     SHELL_NAME="zsh"
-elif [ -n "$BASH_VERSION" ]; then
+elif [[ "$SHELL" == *"bash"* ]]; then
     SHELL_CONFIG="$HOME/.bashrc"
     SHELL_NAME="bash"
+elif [[ "$SHELL" == *"fish"* ]]; then
+    SHELL_CONFIG="$HOME/.config/fish/config.fish"
+    SHELL_NAME="fish"
 else
-    print_warning "Couldn't detect shell type. Defaulting to .zshrc"
+    print_warning "Couldn't detect shell type. Detected: $SHELL"
+    print_info "Defaulting to .zshrc"
     SHELL_CONFIG="$HOME/.zshrc"
     SHELL_NAME="zsh"
 fi
@@ -556,25 +563,55 @@ echo ""
 if ask_yes_no "Are you using Claude Code?"; then
     print_step "Configuring Claude Code integration..."
 
-    # Create Claude directory if it doesn't exist
-    mkdir -p "$HOME/.claude"
-
-    # Check if settings.json already exists
-    if [ -L "$HOME/.claude/settings.json" ]; then
-        print_info "Claude Code settings already linked to PAI"
-    elif [ -f "$HOME/.claude/settings.json" ]; then
-        print_warning "Claude Code settings file already exists"
-
-        if ask_yes_no "Replace it with PAI's settings?"; then
-            mv "$HOME/.claude/settings.json" "$HOME/.claude/settings.json.backup"
-            print_info "Backed up existing settings to settings.json.backup"
-
-            ln -sf "$PAI_DIR/settings.json" "$HOME/.claude/settings.json"
+    # Back up .claude directory if it exists
+    if [ -e "$HOME/.claude" ]; then
+        # Check if it's a symlink or a real directory
+        if [ -L "$HOME/.claude" ]; then
+            print_info "$HOME/.claude is a symlink, removing it..."
+            rm "$HOME/.claude"
+            ln -sf "$PAI_DIR" "$HOME/.claude"
             print_success "Claude Code configured to use PAI!"
+        elif [ -d "$HOME/.claude" ]; then
+            print_info "$HOME/.claude directory already exists..."
+            if ask_yes_no "Replace it with PAI's .claude?"; then
+                # Remove old backup if it exists
+                if [ -e "$HOME/.claude_bak" ]; then
+                    rm -rf "$HOME/.claude_bak"
+                fi
+
+                # Rename (not move into) .claude to .claude_bak
+                mv "$HOME/.claude" "$HOME/.claude_bak"
+                print_info "Renamed existing .claude directory to .claude_bak"
+
+                ln -sf "$PAI_DIR" "$HOME/.claude"
+                print_success "Claude Code configured to use PAI!"
+            fi
         fi
     else
-        ln -sf "$PAI_DIR/settings.json" "$HOME/.claude/settings.json"
+        ln -sf "$PAI_DIR" "$HOME/.claude"
         print_success "Claude Code configured to use PAI!"
+    fi
+
+    # Update settings.json with user's AI name and environment variables
+    if [ -f "$PAI_DIR/settings.json" ]; then
+        print_step "Updating Claude Code settings with your preferences..."
+
+        # Use sed to update the DA name, DA_COLOR, PAI_DIR, and PAI_HOME in settings.json
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            # macOS sed syntax
+            sed -i '' "s|\"DA\": \"[^\"]*\"|\"DA\": \"$AI_NAME\"|g" "$PAI_DIR/settings.json"
+            sed -i '' "s|\"DA_COLOR\": \"[^\"]*\"|\"DA_COLOR\": \"$AI_COLOR\"|g" "$PAI_DIR/settings.json"
+            sed -i '' "s|\"PAI_DIR\": \"[^\"]*\"|\"PAI_DIR\": \"$PAI_DIR\"|g" "$PAI_DIR/settings.json"
+            sed -i '' "s|\"PAI_HOME\": \"[^\"]*\"|\"PAI_HOME\": \"$HOME\"|g" "$PAI_DIR/settings.json"
+        else
+            # Linux sed syntax
+            sed -i "s|\"DA\": \"[^\"]*\"|\"DA\": \"$AI_NAME\"|g" "$PAI_DIR/settings.json"
+            sed -i "s|\"DA_COLOR\": \"[^\"]*\"|\"DA_COLOR\": \"$AI_COLOR\"|g" "$PAI_DIR/settings.json"
+            sed -i "s|\"PAI_DIR\": \"[^\"]*\"|\"PAI_DIR\": \"$PAI_DIR\"|g" "$PAI_DIR/settings.json"
+            sed -i "s|\"PAI_HOME\": \"[^\"]*\"|\"PAI_HOME\": \"$HOME\"|g" "$PAI_DIR/settings.json"
+        fi
+
+        print_success "Settings updated with your AI assistant name: $AI_NAME"
     fi
 
     echo ""
@@ -661,7 +698,8 @@ echo -e "${NC}"
 
 echo ""
 echo "Here's what was set up:"
-echo "  ✅ PAI installed to: $PAI_DIR"
+echo "  ✅ PAI repository: $INSTALL_DIR"
+echo "  ✅ PAI_DIR configured: $PAI_DIR"
 echo "  ✅ Environment variables configured"
 echo "  ✅ Skills and commands ready to use"
 if [ -f "$PAI_DIR/.env" ]; then
@@ -674,14 +712,14 @@ echo ""
 
 print_header "Next Steps"
 
-echo "1. ${CYAN}Restart your terminal${NC} (or run: source $SHELL_CONFIG)"
+echo -e "1. ${CYAN}Restart your terminal${NC} (or run: source $SHELL_CONFIG)"
 echo ""
-echo "2. ${CYAN}Open Claude Code${NC} and try these commands:"
+echo -e "2. ${CYAN}Open Claude Code${NC} and try these commands:"
 echo "   • 'Hey, tell me about yourself'"
 echo "   • 'Research the latest AI developments'"
 echo "   • 'What skills do you have?'"
 echo ""
-echo "3. ${CYAN}Customize PAI for you:${NC}"
+echo -e "3. ${CYAN}Customize PAI for you:${NC}"
 echo "   • Edit: $PAI_DIR/skills/PAI/SKILL.md"
 echo "   • Add API keys: $PAI_DIR/.env"
 echo "   • Read the docs: $PAI_DIR/documentation/how-to-start.md"
@@ -691,11 +729,11 @@ print_header "Quick Reference"
 
 echo "Essential commands to remember:"
 echo ""
-echo "  ${CYAN}cd \$PAI_DIR${NC}                    # Go to PAI directory"
-echo "  ${CYAN}cd \$PAI_DIR && git pull${NC}       # Update PAI to latest version"
-echo "  ${CYAN}open -e \$PAI_DIR/.env${NC}         # Edit API keys"
-echo "  ${CYAN}ls \$PAI_DIR/skills${NC}            # See available skills"
-echo "  ${CYAN}source ~/.zshrc${NC}                # Reload environment"
+echo -e "  ${CYAN}cd \$PAI_DIR${NC}                    # Go to PAI directory"
+echo -e "  ${CYAN}cd $INSTALL_DIR && git pull${NC}    # Update PAI to latest version"
+echo -e "  ${CYAN}open -e \$PAI_DIR/.env${NC}         # Edit API keys"
+echo -e "  ${CYAN}ls \$PAI_DIR/skills${NC}            # See available skills"
+echo -e "  ${CYAN}source $SHELL_CONFIG${NC}           # Reload environment"
 echo ""
 
 print_header "Resources"
