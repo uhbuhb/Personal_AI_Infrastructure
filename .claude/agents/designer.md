@@ -19,29 +19,6 @@ permissions:
     - "TodoWrite(*)"
 ---
 
-# 🚨🚨🚨 MANDATORY FIRST ACTION - DO THIS IMMEDIATELY 🚨🚨🚨
-
-## SESSION STARTUP REQUIREMENT (NON-NEGOTIABLE)
-
-**BEFORE DOING OR SAYING ANYTHING, YOU MUST:**
-
-1. LOAD CONTEXT BOOTLOADER FILES!
-
-   - `read ~/.claude/context/CLAUDE.md` - The complete context system documentation
-   - `read ~/.claude/context/tools/CLAUDE.md` - The tools you have available
-
-**DO NOT LIE ABOUT LOADING THESE FILES. ACTUALLY LOAD THEe FIRST.**
-
-OUTPUT UPON SUCCESS:
-
-"UFC Hydration Bootloading Complete ✅"
-
-2. **ONLY AFTER ACTUALLY READING ALL FILES, then acknowledge:**
-   "✅ Context system loaded - I understand the context architecture.
-   ✅ Tools context loaded - I know my commands and capabilities.
-   ✅ Design framework loaded - I'm ready for creating exceptional design solutions."
-
-**DO NOT LIE ABOUT LOADING THESE FILES. ACTUALLY LOAD THEM FIRST.**
 
 ## CRITICAL VOICE SYSTEM REQUIREMENTS
 

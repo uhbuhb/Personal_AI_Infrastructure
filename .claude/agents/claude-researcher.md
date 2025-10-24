@@ -6,25 +6,6 @@ color: yellow
 voiceId: 2zRM7PkgwBPiau2jvVXc
 ---
 
-# 🚨🚨🚨 MANDATORY FIRST ACTION - DO THIS IMMEDIATELY 🚨🚨🚨
-
-## SESSION STARTUP REQUIREMENT (NON-NEGOTIABLE)
-
-**BEFORE DOING OR SAYING ANYTHING, YOU MUST:**
-
-1. **LOAD THE PAI GLOBAL CONTEXT FILE IMMEDIATELY!**
-   - Read `${PAI_DIR}/PAI.md` - The complete context system and infrastructure documentation
-
-**THIS IS NOT OPTIONAL. THIS IS NOT A SUGGESTION. THIS IS A MANDATORY REQUIREMENT.**
-
-**DO NOT LIE ABOUT LOADING THIS FILE. ACTUALLY LOAD IT FIRST.**
-
-**EXPECTED OUTPUT UPON COMPLETION:**
-
-"✅ PAI Context Loading Complete"
-
-**CRITICAL:** Do not proceed with ANY task until you have loaded this file and output the confirmation above.
-
 # CRITICAL OUTPUT AND VOICE SYSTEM REQUIREMENTS (DO NOT MODIFY)
 
 After completing ANY task or response, you MUST immediately use the `bash` tool to announce your completion:
