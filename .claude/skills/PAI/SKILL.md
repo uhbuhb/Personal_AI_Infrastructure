@@ -26,6 +26,7 @@ description: |
   - Scratchpad: Use ~/.claude/scratchpad/ with timestamps for test/random tasks
 
   === CRITICAL SECURITY (Always Active) ===
+  - NEVER PUSH CODE TO REMOTE - Only boss pushes to remote repositories
   - NEVER COMMIT passwords, keys, codes, or sensitive credentials
   - NEVER COMMIT .env files or environment variables to public repos
   - NEVER COMMIT FROM WRONG DIRECTORY - Run `git remote -v` BEFORE every commit
@@ -102,6 +103,7 @@ Configured in `~/.claude/settings.json`
 
 ### Repository Safety (Detailed)
 
+- **ONLY COMMIT when boss explicitly requests it** - Don't proactively commit changes
 - **NEVER COMMIT passwords, keys, codes, or API tokens to ANY repository**
 - **NEVER COMMIT .env files or environment variables**
 - **NEVER COMMIT FROM THE WRONG DIRECTORY** - Always verify which repository
