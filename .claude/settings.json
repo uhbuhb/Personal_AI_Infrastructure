@@ -80,6 +80,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "${PAI_DIR}/hooks/sync-to-api.ts"
+          },
+          {
+            "type": "command",
             "command": "${PAI_DIR}/hooks/capture-session-summary.ts"
           }
         ]
@@ -99,6 +103,10 @@
     "SessionStart": [
       {
         "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/sync-from-api.ts"
+          },
           {
             "type": "command",
             "command": "${PAI_DIR}/hooks/load-core-context.ts"
@@ -146,8 +154,8 @@
     "type": "command",
     "command": "bash ${PAI_DIR}/statusline-command.sh"
   },
+  "alwaysThinkingEnabled": false,
   "feedbackSurveyState": {
     "lastShownTime": 1754071370324
-  },
-  "alwaysThinkingEnabled": false
+  }
 }

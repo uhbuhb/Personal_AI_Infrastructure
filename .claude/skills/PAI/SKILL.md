@@ -19,12 +19,15 @@ description: |
   Full contact list in SKILL.md extended section below
 
   === TODOS ===
-  File: ~/.claude/skills/PAI/TODOS.md
+  File: ~/.claude/skills/PAI/TODOS.md (synced from Railway API)
+  API: https://web-production-3c90d.up.railway.app/api/todos
   Triggers: "remind me", "add to todos", "what's on my plate", "I should [do X]"
   Update on: Boss mentions items to revisit/follow-up/remember
+  Note: Changes sync to Railway on session start
 
   === FOLLOW UPS ===
-  File: ~/.claude/skills/PAI/FOLLOW_UPS.md
+  File: ~/.claude/skills/PAI/FOLLOW_UPS.md (synced from Railway API)
+  API: https://web-production-3c90d.up.railway.app/api/followups
   AI-suggested tasks pending verification - check at session start, ask if done
   Add when: I suggest action boss doesn't confirm/deny
   Remove when: Boss confirms done or explicitly dismisses
