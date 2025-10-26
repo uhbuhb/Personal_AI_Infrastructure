@@ -23,6 +23,12 @@ description: |
   Triggers: "remind me", "add to todos", "what's on my plate", "I should [do X]"
   Update on: Boss mentions items to revisit/follow-up/remember
 
+  === FOLLOW UPS ===
+  File: ~/.claude/skills/PAI/FOLLOW_UPS.md
+  AI-suggested tasks pending verification - check at session start, ask if done
+  Add when: I suggest action boss doesn't confirm/deny
+  Remove when: Boss confirms done or explicitly dismisses
+
   === CORE STACK PREFERENCES (Always Active) ===
   - Backend: Python with uv package manager
   - Frontend: JavaScript/TypeScript with Next.js framework
