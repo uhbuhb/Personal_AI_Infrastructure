@@ -18,6 +18,11 @@ description: |
   - Tal (Wife): tal.nimrodi@gmail.com
   Full contact list in SKILL.md extended section below
 
+  === TODOS ===
+  File: ~/.claude/skills/PAI/TODOS.md
+  Triggers: "remind me", "add to todos", "what's on my plate", "I should [do X]"
+  Update on: Boss mentions items to revisit/follow-up/remember
+
   === CORE STACK PREFERENCES (Always Active) ===
   - Backend: Python with uv package manager
   - Frontend: JavaScript/TypeScript with Next.js framework
