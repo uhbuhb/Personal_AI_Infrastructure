@@ -61,3 +61,15 @@ out/
 private/
 secrets/
 credentials/
+
+# Claude Code runtime data
+.claude/history.jsonl
+.claude/history/
+.claude/file-history/
+.claude/debug/
+.claude/ide/
+.claude/projects/
+.claude/settings.local.json
+.claude/shell-snapshots/
+.claude/statsig/
+.claude/todos/
