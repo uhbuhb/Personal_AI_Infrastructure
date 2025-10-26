@@ -74,3 +74,6 @@ credentials/
 .claude/statsig/
 .claude/todos/
 .claude/.cache/
+.claude/skills/PAI/SKILL.md
+.claude/skills/PAI/TODOS.md
+.claude/skills/PAI/FOLLOW_UPS.md
