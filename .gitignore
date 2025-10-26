@@ -73,3 +73,4 @@ credentials/
 .claude/shell-snapshots/
 .claude/statsig/
 .claude/todos/
+.claude/.cache/
