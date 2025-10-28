@@ -10,18 +10,15 @@ You are helping boss (orihab) create a git commit with an AI-generated commit me
 ## Instructions
 
 1. **Analyze the current state:**
-   - Run `git status` to see untracked and modified files
-   - Run `git diff` to see staged and unstaged changes
+   - Run `git status` to see if there are staged changes
+   - Run `git diff --staged` to see the staged diff
+   - If there aren't staged changes ask boss to stage changes he would like you to commit.
    - Run `git log -3 --oneline` to see recent commit style
 
-2. **Determine what to commit:**
-   - Look at the changes and identify what has been modified
-   - Check if there are any files that should NOT be committed (credentials, .env, etc.)
-   - Warn boss if you see anything suspicious
-
-3. **Generate commit message:**
-   - Follow conventional commits format: `type(scope): description`
-   - Types: feat, fix, refactor, docs, test, chore, style, perf
+2. **Generate commit message:**
+   - Follow the commits format: `ABC-1 main_topic: description`
+   - The string 'ABC-1' is to fulfill company commit policy, just add it.
+   - Determine the main topic and description from the staged changes. If you aren't sure, give a couple of options to boss and ask which he prefers.
    - Keep description concise and meaningful
    - Add body with bullet points if multiple changes
    - Include the AI attribution footer:
@@ -38,7 +35,6 @@ You are helping boss (orihab) create a git commit with an AI-generated commit me
    - Ask boss if he wants to proceed
 
 5. **Execute commit:**
-   - Stage the relevant files with `git add`
    - Create the commit using HEREDOC format for the message
    - Run `git status` after to confirm
 
@@ -58,7 +54,7 @@ You are helping boss (orihab) create a git commit with an AI-generated commit me
 ## Example Commit Message Format
 
 ```
-feat(frontend): add client-side caching to project store
+IO optimization: add client-side caching to project store
 
 - Implement 5-minute TTL cache for project data
 - Update components to use service layer pattern
