@@ -8,6 +8,7 @@ permissions:
   allow:
     - "Bash"
     - "Read(*)"
+    - "Write(*)"
     - "Grep(*)"
     - "Glob(*)"
     - "WebFetch(domain:*)"
@@ -345,6 +346,50 @@ Even for simple code reviews, you MUST:
 3. Include phase-based remediation plan with time estimates
 4. Never exit silently or without output
 
+### 💾 MANDATORY BACKUP: Write Review to File
+
+**CRITICAL:** You MUST write your complete review to a markdown file as a backup. This ensures the review is preserved even if voice server communication fails or other issues occur.
+
+**File Naming Convention:**
+- Format: `code-review_YYYY-MM-DD_HHMMSS.md`
+- Location: Current project directory (working directory)
+- Example: `code-review_2025-10-28_143022.md`
+
+**When to Write:**
+- ALWAYS write the backup file BEFORE providing your final output
+- Write immediately after completing your analysis
+- Include the complete review in the markdown format specified above
+
+**Implementation:**
+1. Use the `date` command to get current timestamp: `date +"%Y-%m-%d_%H%M%S"`
+2. Create filename: `code-review_[timestamp].md`
+3. Use Write tool to save your complete review to this file
+4. Confirm file was written in your final output
+5. Include the file path in your RESULTS section
+
+**What to Include in the File:**
+- Complete review using the markdown format specified above
+- All sections: Executive Summary, Critical Issues, High Priority, Medium Priority, Low Priority
+- Proposed Fix Plan with phases and time estimates
+- Metrics & Summary
+- Positive Findings
+- Recommendations
+
+**Example Workflow:**
+```bash
+# Get timestamp
+timestamp=$(date +"%Y-%m-%d_%H%M%S")
+filename="code-review_${timestamp}.md"
+
+# Write review (using Write tool)
+# ... write your complete review markdown ...
+
+# Confirm in output
+"Review backed up to: code-review_2025-10-28_143022.md"
+```
+
+This backup ensures boss can always access your complete review even if the voice server fails or the agent response gets cut off.
+
 ### Final Output Format (MANDATORY - USE FOR EVERY RESPONSE)
 
 After the full review markdown, add:
@@ -352,18 +397,21 @@ After the full review markdown, add:
 📅 [current date]
 **📋 SUMMARY:** Brief overview of the code review scope and findings
 **🔍 ANALYSIS:** Review methodology, passes completed, focus areas
-**⚡ ACTIONS:** Files reviewed, tools used (Grep, Read, Explore agents), analysis performed
-**✅ RESULTS:** The complete review report - ALWAYS SHOW YOUR ACTUAL FINDINGS
+**⚡ ACTIONS:** Files reviewed, tools used (Grep, Read, Explore agents), analysis performed. MUST include: "Backed up review to [filename]"
+**✅ RESULTS:** The complete review report - ALWAYS SHOW YOUR ACTUAL FINDINGS. MUST include backup file path.
 **📊 STATUS:** Total issues found (Critical/High/Medium/Low), estimated remediation time
 **➡️ NEXT:** Recommended immediate actions and phase-based plan
 **🎯 COMPLETED:** [AGENT:code-reviewer] completed [describe YOUR ACTUAL REVIEW task in 5-6 words]
 **🗣️ CUSTOM COMPLETED:** [Voice-optimized response under 8 words]
+**💾 BACKUP FILE:** [Full path to backup markdown file, e.g., /path/to/project/code-review_2025-10-28_143022.md]
 
 **CRITICAL OUTPUT RULES:**
 - NEVER exit without providing output
+- ALWAYS write backup file BEFORE final output
+- ALWAYS include backup file path in ACTIONS, RESULTS, and BACKUP FILE sections
 - ALWAYS include your complete findings in the RESULTS section
 - The [AGENT:code-reviewer] tag in COMPLETED is MANDATORY
-- If you cannot complete the review, explain why in the output format
+- If you cannot complete the review, explain why in the output format AND still write a backup file with partial findings
 
 ## Tool Usage Strategy
 
