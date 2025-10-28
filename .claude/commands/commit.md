@@ -16,11 +16,12 @@ You are helping boss (orihab) create a git commit with an AI-generated commit me
    - Run `git log -3 --oneline` to see recent commit style
 
 2. **Generate commit message:**
-   - Follow the commits format: `ABC-1 main_topic: description`
-   - The string 'ABC-1' is to fulfill company commit policy, just add it.
+   - Follow the format: `main_topic: change description`
    - Determine the main topic and description from the staged changes. If you aren't sure, give a couple of options to boss and ask which he prefers.
    - Keep description concise and meaningful
-   - Add body with bullet points if multiple changes
+   - Add body with:
+     - Motivation/reasoning for the change (1-2 sentences)
+     - Bullet points describing the specific changes
    - Include the AI attribution footer:
      ```
 
@@ -54,11 +55,14 @@ You are helping boss (orihab) create a git commit with an AI-generated commit me
 ## Example Commit Message Format
 
 ```
-IO optimization: add client-side caching to project store
+code-reviewer: add mandatory backup file for reviews
 
-- Implement 5-minute TTL cache for project data
-- Update components to use service layer pattern
-- Add cache invalidation on project updates
+This ensures reviews are preserved even if voice server or agent
+communication fails, preventing loss of work.
+
+- Add Write permissions to agent
+- Implement timestamped markdown file backup
+- Update output format to include backup file path
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
