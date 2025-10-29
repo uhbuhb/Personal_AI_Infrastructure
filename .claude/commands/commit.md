@@ -11,6 +11,10 @@ You are helping boss (orihab) create a git commit with an AI-generated commit me
 
 1. **Analyze the current state:**
    - Run `git status` to see if there are staged changes
+   - **CRITICAL: If in the middle of a rebase (git status shows "interactive rebase in progress"):**
+     - NEVER use `git commit --amend`
+     - ALWAYS create a new commit with `git commit`
+     - Do NOT run `git rebase --continue` - let boss finish the rebase himself
    - Run `git diff --staged` to see the staged diff
    - If there aren't staged changes ask boss to stage changes he would like you to commit.
    - Run `git log -3 --oneline` to see recent commit style
