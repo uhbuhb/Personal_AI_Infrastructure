@@ -15,9 +15,19 @@ You are helping boss (orihab) create a git commit with an AI-generated commit me
      - NEVER use `git commit --amend`
      - ALWAYS create a new commit with `git commit`
      - Do NOT run `git rebase --continue` - let boss finish the rebase himself
+   - **If nothing is staged:**
+     - Run `git status` and `git diff` to see all changes
+     - Make an intelligent decision about what should be staged:
+       - Include modified files that are clearly part of the current work
+       - Exclude untracked files unless they're obviously related
+       - Exclude unrelated changes (e.g., TODO.md, README.md unless they're the main change)
+     - Stage the relevant files using `git add <files>`
+     - Confirm with boss about any files being excluded, explaining why
+     - Wait for boss approval before proceeding
    - Run `git diff --staged` to see the staged diff
-   - If there aren't staged changes ask boss to stage changes he would like you to commit.
    - Run `git log -3 --oneline` to see recent commit style
+   - **DO NOT ask about:**
+     - Detached HEAD state - boss manages branches himself
 
 2. **Generate commit message:**
    - Follow the format: `main_topic: change description`
