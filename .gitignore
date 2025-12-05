@@ -75,6 +75,13 @@ credentials/
 .claude/todos/
 .claude/.cache/
 .claude/skills/PAI/SKILL.md
+.claude/skills/PAI/SKILL.md.backup
+.claude/skills/PAI/PERSONAL.md
+.claude/skills/PAI/PERSONAL.md.backup
+.claude/skills/PAI/CONTACTS.md
+.claude/skills/PAI/CONTACTS.md.backup
 .claude/skills/PAI/TODOS.md
+.claude/skills/PAI/TODOS.md.backup
 .claude/skills/PAI/FOLLOW_UPS.md
+.claude/skills/PAI/FOLLOW_UPS.md.backup
 .claude/scratchpad/

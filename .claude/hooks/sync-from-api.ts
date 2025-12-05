@@ -5,7 +5,7 @@
  */
 
 import { createHash } from "crypto";
-import { mkdirSync, existsSync } from "fs";
+import { mkdirSync, existsSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 
 const API_BASE = "https://web-production-3c90d.up.railway.app";
@@ -15,6 +15,8 @@ const CACHE_DIR = join(PAI_DIR, ".cache");
 
 const FILES = [
   { name: "SKILL.md", endpoint: "/api/skill", path: `${PAI_DIR}/skills/PAI/SKILL.md` },
+  { name: "PERSONAL.md", endpoint: "/api/personal", path: `${PAI_DIR}/skills/PAI/PERSONAL.md` },
+  { name: "CONTACTS.md", endpoint: "/api/contacts", path: `${PAI_DIR}/skills/PAI/CONTACTS.md` },
   { name: "TODOS.md", endpoint: "/api/todos", path: `${PAI_DIR}/skills/PAI/TODOS.md` },
   { name: "FOLLOW_UPS.md", endpoint: "/api/followups", path: `${PAI_DIR}/skills/PAI/FOLLOW_UPS.md` },
 ];
@@ -48,6 +50,20 @@ async function syncFile(name: string, endpoint: string, localPath: string): Prom
     }
 
     const content = await response.text();
+
+    // Safety check: Don't overwrite with empty content
+    if (!content || content.trim().length === 0) {
+      console.warn(`⚠️  API returned empty content for ${name}, skipping sync to preserve local file`);
+      return false;
+    }
+
+    // Create local backup before overwrite (if file exists)
+    if (existsSync(localPath)) {
+      const backupPath = `${localPath}.backup`;
+      const existingContent = readFileSync(localPath, "utf-8");
+      writeFileSync(backupPath, existingContent);
+      console.log(`💾 Created backup: ${backupPath}`);
+    }
 
     // Write to local file
     await Bun.write(localPath, content);

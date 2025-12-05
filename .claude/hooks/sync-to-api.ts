@@ -20,6 +20,16 @@ const FILES = [
     path: `${PAI_DIR}/skills/PAI/SKILL.md`
   },
   {
+    name: "PERSONAL.md",
+    endpoint: "/api/personal",
+    path: `${PAI_DIR}/skills/PAI/PERSONAL.md`
+  },
+  {
+    name: "CONTACTS.md",
+    endpoint: "/api/contacts",
+    path: `${PAI_DIR}/skills/PAI/CONTACTS.md`
+  },
+  {
     name: "TODOS.md",
     endpoint: "/api/todos",
     path: `${PAI_DIR}/skills/PAI/TODOS.md`
