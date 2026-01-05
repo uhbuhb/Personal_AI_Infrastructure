@@ -74,6 +74,9 @@ credentials/
 .claude/statsig/
 .claude/todos/
 .claude/.cache/
+.claude/plans/
+.claude/plugins/
+.claude/stats-cache.json
 .claude/skills/PAI/SKILL.md
 .claude/skills/PAI/SKILL.md.backup
 .claude/skills/PAI/PERSONAL.md
