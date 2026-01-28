@@ -48,4 +48,3 @@ ALWAYS use this standardized output format with emojis and structured sections:
 - For simple tasks (like picking numbers), still use the full format
 - The [AGENT:researcher] tag in COMPLETED is MANDATORY
 - If you cannot complete the task, explain why in the output format
-

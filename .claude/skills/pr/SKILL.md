@@ -1,8 +1,7 @@
 ---
 name: pr
-description: Create GitHub PR with AI-generated title and description from recent commits (user)
+description: Create GitHub PR with AI-generated title and description from recent commits. INVOKE when user asks to create PR, open PR, or make pull request. (user)
 user-invocable: true
-disable-model-invocation: true
 ---
 
 # GitHub Pull Request Automation

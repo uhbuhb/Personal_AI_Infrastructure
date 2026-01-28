@@ -1,8 +1,7 @@
 ---
 name: commit-push-pr
-description: Commit staged changes, push to remote branch, and create GitHub PR in one workflow (user)
+description: Commit staged changes, push to remote branch, and create GitHub PR in one workflow. INVOKE when user asks to commit and create PR, or ship it, or push and PR. (user)
 user-invocable: true
-disable-model-invocation: true
 ---
 
 # Commit → Push → PR Automation

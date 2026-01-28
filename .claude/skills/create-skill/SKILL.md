@@ -1,6 +1,6 @@
 ---
 name: create-skill
-description: Guide for creating new skills. Supports TWO types - PAI skills (user-level, cross-project) and Project skills (project-specific). Use when user wants to create, update, or structure a skill. Ask "PAI skill or project skill?" if unclear from context.
+description: Guide for creating new skills. Supports TWO types - PAI skills (user-level, cross-project) and Project skills (project-specific). Use when user wants to create, update, or structure a skill. Ask "PAI skill or project skill?" if unclear from context. (user)
 user-invocable: true
 ---
 

@@ -1,8 +1,7 @@
 ---
 name: cr
-description: Comprehensive code review using code-reviewer agent (user)
+description: Comprehensive code review using code-reviewer agent. INVOKE when user asks for code review, review my code, check this code, or review changes. (user)
 user-invocable: true
-disable-model-invocation: true
 ---
 
 # Code Review Automation
