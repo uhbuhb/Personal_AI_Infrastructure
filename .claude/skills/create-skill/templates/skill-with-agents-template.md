@@ -1,6 +1,7 @@
 ---
 name: skill-name
-description: Capability using specialized agents. Supports parallel execution of up to 10 agents. USE WHEN user requests [domain] work, [capability], or says 'trigger phrase'.
+description: Capability using specialized agents. Supports parallel execution of up to 10 agents. USE WHEN user requests [domain] work, [capability], or says 'trigger phrase'. (user)
+user-invocable: true
 ---
 
 # Skill Name - Agent-Powered Capability

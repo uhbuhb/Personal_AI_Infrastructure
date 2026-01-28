@@ -1,6 +1,7 @@
 ---
 name: research
-description: Multi-source comprehensive research using perplexity-researcher, claude-researcher, and gemini-researcher agents. Launches up to 10 parallel research agents for fast results. USE WHEN user says 'do research', 'research X', 'find information about', 'investigate', 'analyze trends', 'current events', or any research-related request.
+description: Multi-source comprehensive research using perplexity-researcher, claude-researcher, and gemini-researcher agents. Launches up to 10 parallel research agents for fast results. USE WHEN user says 'do research', 'research X', 'find information about', 'investigate', 'analyze trends', 'current events', or any research-related request. (user)
+user-invocable: true
 ---
 
 # Research Skill

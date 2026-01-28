@@ -1,7 +1,7 @@
 ---
 name: commit
-description: Automated git commit with AI-generated message following conventional commit standards
-disable-model-invocation: true
+description: Automated git commit with AI-generated message following conventional commit standards (user)
+user-invocable: true
 ---
 
 # Git Commit Automation

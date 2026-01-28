@@ -1,6 +1,7 @@
 ---
 name: create-skill
-description: Guide for creating new skills in Kai's personal AI infrastructure. Use when user wants to create, update, or structure a new skill that extends capabilities with specialized knowledge, workflows, or tool integrations. Follows both Anthropic skill standards and PAI-specific patterns.
+description: Guide for creating new skills. Supports TWO types - PAI skills (user-level, cross-project) and Project skills (project-specific). Use when user wants to create, update, or structure a skill. Ask "PAI skill or project skill?" if unclear from context.
+user-invocable: true
 ---
 
 # Create Skill - Skill Creation Framework
@@ -9,45 +10,63 @@ description: Guide for creating new skills in Kai's personal AI infrastructure. 
 - "Create a new skill for X"
 - "Build a skill that does Y"
 - "Add a skill for Z"
+- "Create a project skill"
 - "Update/improve existing skill"
-- "Structure a skill properly"
-- User wants to extend Kai's capabilities
+- User wants to extend capabilities
 
-## Core Skill Creation Workflow
+## Step 1: PAI Skill vs Project Skill
 
-### Step 1: Understand the Purpose
-Ask these questions:
-- **What does this skill do?** (Clear, specific purpose)
-- **When should it activate?** (Trigger conditions)
-- **What tools/commands does it use?** (Dependencies)
-- **Is it simple or complex?** (Determines structure)
+**CRITICAL: Determine skill scope FIRST**
 
-### Step 2: Choose Skill Type
+| Aspect | PAI Skill | Project Skill |
+|--------|-----------|---------------|
+| **Location** | `~/.claude/skills/` (symlinked to `~/PAI/.claude/skills/`) | `<project>/.claude/skills/` |
+| **Scope** | Cross-project, personal | Single project only |
+| **Use When** | Personal workflows, tools used everywhere | Project-specific config, patterns, integrations |
+| **Examples** | `commit`, `research`, `prompting` | `sentry`, `database-access`, `sse-streaming` |
+| **Visibility** | All sessions | Only when in that project |
+
+### Decision Guide
+
+**Create PAI Skill when:**
+- Skill applies across multiple projects
+- Personal workflow/preference (commit style, research method)
+- General-purpose tool integration
+- User says "I always want this"
+
+**Create Project Skill when:**
+- User says "project skill" or "for this project"
+- Project-specific configuration (API keys, endpoints, org IDs)
+- Codebase-specific patterns (architecture, conventions)
+- Team/repo-specific integrations (Sentry, Grafana configs)
+- Context only relevant to one codebase
+
+**If unclear, ASK:** "Should this be a PAI skill (available everywhere) or a project skill (only for this repo)?"
+
+## Step 2: Choose Complexity
 
 **Simple Skill** (SKILL.md only):
 - Single focused capability
-- Minimal dependencies
 - Quick reference suffices
-- Examples: fabric-patterns, youtube-extraction
+- Examples: sentry config, commit patterns
 
 **Complex Skill** (SKILL.md + CLAUDE.md + supporting files):
 - Multi-step workflows
 - Extensive context needed
-- Multiple sub-components
-- Examples: development, website, consulting
+- Examples: development guides, architecture docs
 
-### Step 3: Create Directory Structure
+## Step 3: Create Directory Structure
 
 ```bash
-# Simple skill
-${PAI_DIR}/skills/[skill-name]/
-└── SKILL.md
+# PAI Skill (user-level) - ~/.claude symlinks to ~/PAI/.claude
+~/.claude/skills/[skill-name]/
+├── SKILL.md           # Required
+└── CLAUDE.md          # Optional (if complex)
 
-# Complex skill
-${PAI_DIR}/skills/[skill-name]/
-├── SKILL.md           # Quick reference
-├── CLAUDE.md          # Full context
-└── [subdirectories]/  # Supporting resources
+# Project Skill (project-level)
+<project-root>/.claude/skills/[skill-name]/
+├── SKILL.md           # Required
+└── CLAUDE.md          # Optional (if complex)
 ```
 
 ### Step 4: Write SKILL.md (Required)
@@ -86,9 +105,13 @@ Include:
 - Integration instructions
 - Troubleshooting guides
 
-### Step 6: Add to Global Context
+### Step 6: Verify Discovery
 
-Update `${PAI_DIR}/global/KAI.md` available_skills section to include the new skill so it shows up in the system prompt.
+**No registration needed** - Claude Code auto-discovers skills from:
+- `~/.claude/skills/` (PAI/personal skills)
+- `<project>/.claude/skills/` (project skills)
+
+Verify with: "What skills are available?"
 
 ### Step 7: Test the Skill
 

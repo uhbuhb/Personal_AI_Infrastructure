@@ -1,6 +1,7 @@
 ---
 name: cr
-description: Comprehensive code review using code-reviewer agent (project, gitignored)
+description: Comprehensive code review using code-reviewer agent (user)
+user-invocable: true
 disable-model-invocation: true
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: pr
-description: Create GitHub PR with AI-generated title and description from recent commits
+description: Create GitHub PR with AI-generated title and description from recent commits (user)
+user-invocable: true
 disable-model-invocation: true
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: skill-name
-description: Comprehensive description. Mention key methods and tools. USE WHEN user says 'trigger phrase 1', 'trigger phrase 2', or requests related capabilities.
+description: Comprehensive description. Mention key methods and tools. USE WHEN user says 'trigger phrase 1', 'trigger phrase 2', or requests related capabilities. (user)
+user-invocable: true
 ---
 
 # Skill Name

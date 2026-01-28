@@ -1,6 +1,7 @@
 ---
 name: commit-push-pr
-description: Commit staged changes, push to remote branch, and create GitHub PR in one workflow
+description: Commit staged changes, push to remote branch, and create GitHub PR in one workflow (user)
+user-invocable: true
 disable-model-invocation: true
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: skill-name
-description: Clear description of what skill does and when to use. USE WHEN user says 'trigger phrase', 'another phrase', or requests this capability.
+description: Clear description of what skill does and when to use. USE WHEN user says 'trigger phrase', 'another phrase', or requests this capability. (user)
+user-invocable: true
 ---
 
 # Skill Name
