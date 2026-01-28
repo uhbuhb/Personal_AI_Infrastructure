@@ -41,23 +41,20 @@ You are helping boss (orihab) create a GitHub pull request with an AI-generated 
 
 5. **Generate PR title and description:**
    - Title: Concise summary of the overall change (50-70 chars)
-   - Description format:
+   - Description format (CRITICAL: Why/Benefit must be first):
      ```markdown
-     ## Summary
-     <2-4 bullet points describing the changes>
+     **Why:** <One sentence explaining the motivation/problem being solved>
+     **Benefit:** <One sentence explaining the value/improvement this brings>
 
      ## Changes
-     - **Category 1**: Description
-     - **Category 2**: Description
+     - <Bullet points describing the changes>
 
-     ## Files Changed
-     <Key files and what changed>
-
-     ## Impact
-     <What this affects, performance considerations, breaking changes, etc.>
+     ## Test plan
+     - [ ] <Verification steps>
 
      🤖 Generated with [Claude Code](https://claude.com/claude-code)
      ```
+   - Keep descriptions concise - avoid verbose sections like "Files Changed" or "Impact" unless truly needed
 
 6. **Present for approval (MUST GET EXPLICIT CONFIRMATION):**
    - Show the PR title

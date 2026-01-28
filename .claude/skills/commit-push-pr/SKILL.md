@@ -68,16 +68,16 @@ You are helping boss (orihab) commit, push, and create a PR in one streamlined w
 
 7. **Generate PR title and description:**
    - Title: Concise summary (50-70 chars)
-   - Description:
+   - Description (CRITICAL: Why/Benefit must be first):
      ```markdown
-     ## Summary
-     <2-4 bullet points>
+     **Why:** <One sentence explaining the motivation/problem being solved>
+     **Benefit:** <One sentence explaining the value/improvement this brings>
 
      ## Changes
-     - **Category**: Description
+     - <Bullet points describing the changes>
 
-     ## Files Changed
-     <Key files and changes>
+     ## Test plan
+     - [ ] <Verification steps>
 
      🤖 Generated with [Claude Code](https://claude.com/claude-code)
      ```
