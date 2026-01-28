@@ -65,10 +65,22 @@
   "hooks": {
     "PreToolUse": [],
     "PostToolUse": [],
-    "SessionEnd": [],
+    "SessionEnd": [
+      {
+        "hooks": [
+          { "type": "command", "command": "${PAI_DIR}/hooks/sync-to-api.ts" }
+        ]
+      }
+    ],
     "Notification": [],
     "UserPromptSubmit": [],
-    "SessionStart": [],
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "${PAI_DIR}/hooks/sync-from-api.ts" }
+        ]
+      }
+    ],
     "Stop": [],
     "SubagentStop": [],
     "PreCompact": []

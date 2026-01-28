@@ -61,7 +61,31 @@ function getCachedHash(fileName: string): string {
   }
 }
 
-async function pushFile(endpoint: string, filePath: string): Promise<boolean> {
+function saveCachedHash(fileName: string, hash: string): void {
+  try {
+    if (!existsSync(CACHE_DIR)) {
+      mkdirSync(CACHE_DIR, { recursive: true });
+    }
+    const hashFile = join(CACHE_DIR, `${fileName}.hash`);
+    writeFileSync(hashFile, hash);
+  } catch (error) {
+    console.error(`Error saving hash for ${fileName}:`, error);
+  }
+}
+
+function saveCachedHash(fileName: string, hash: string): void {
+  try {
+    if (!existsSync(CACHE_DIR)) {
+      mkdirSync(CACHE_DIR, { recursive: true });
+    }
+    const hashFile = join(CACHE_DIR, `${fileName}.hash`);
+    writeFileSync(hashFile, hash);
+  } catch (error) {
+    console.error(`Error saving hash for ${fileName}:`, error);
+  }
+}
+
+async function pushFile(endpoint: string, filePath: string, fileName: string): Promise<boolean> {
   try {
     const content = readFileSync(filePath, "utf-8");
 
@@ -79,6 +103,10 @@ async function pushFile(endpoint: string, filePath: string): Promise<boolean> {
       console.error(`Failed to push ${endpoint}: ${response.status} - ${error}`);
       return false;
     }
+
+    // Update cached hash from the exact content we pushed
+    const pushedHash = createHash("sha256").update(content).digest("hex");
+    saveCachedHash(fileName, pushedHash);
 
     return true;
   } catch (error) {
@@ -106,7 +134,7 @@ async function main() {
       console.log(`📤 Detected changes in ${file.name}, pushing to API...`);
       changedFiles++;
 
-      const success = await pushFile(file.endpoint, file.path);
+      const success = await pushFile(file.endpoint, file.path, file.name);
       if (success) {
         console.log(`✅ Successfully synced ${file.name} to Railway`);
         syncedFiles++;
