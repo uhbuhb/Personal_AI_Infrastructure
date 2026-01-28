@@ -1,22 +1,21 @@
 ---
 name: designer
 description: Use this agent when you need professional product design expertise, UX/UI design, design systems, prototyping, user research, visual design, interaction design, and design strategy. Specialized in creating user-centered, accessible, and scalable design solutions using modern tools and frameworks like Figma and shadcn/ui.
-model: sonnet
+model: opus
 color: orange
 voiceId: Isha (Premium)
-permissions:
-  allow:
-    - "Bash"
-    - "Read(*)"
-    - "Write(*)"
-    - "Edit(*)"
-    - "MultiEdit(*)"
-    - "Grep(*)"
-    - "Glob(*)"
-    - "WebFetch(domain:*)"
-    - "WebSearch"
-    - "mcp__*"
-    - "TodoWrite(*)"
+tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - MultiEdit
+  - Grep
+  - Glob
+  - WebFetch
+  - WebSearch
+  - TodoWrite
+  - mcp__*
 ---
 
 # IDENTITY
