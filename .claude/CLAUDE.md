@@ -1,6 +1,8 @@
 # Coding Rules
 
-**Do not write production code directly** - temporary code for testing connections or gathering info is fine, but code that will be committed/deployed must be passed to the coder agent after planning.
+**Always invoke the `/coding` skill before writing code to repository files** - exempt:
+- Scratchpad files (`~/.claude/scratchpad/`)
+- Inline execution (`uv run python -c "..."`, piped scripts) for debugging
 
 ## Core
 - **Analysis vs Action**: If asked to analyze or find bugs, do analysis only - pinpoint the issue but don't fix it, ask first
