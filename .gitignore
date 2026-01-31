@@ -63,6 +63,12 @@ secrets/
 credentials/
 
 # Claude Code runtime data
+.claude/context.md
+.claude/tasks/
+.claude/cache/
+.claude/paste-cache/
+.claude/memories/session/
+.claude/session-env/
 .claude/history.jsonl
 .claude/history/
 .claude/file-history/
