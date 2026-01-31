@@ -68,7 +68,10 @@
     "SessionEnd": [
       {
         "hooks": [
-          { "type": "command", "command": "${PAI_DIR}/hooks/sync-to-api.ts" }
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/sync-to-api.ts"
+          }
         ]
       }
     ],
@@ -77,12 +80,18 @@
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "${PAI_DIR}/hooks/sync-from-api.ts" }
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/sync-from-api.ts"
+          }
         ]
       },
       {
         "hooks": [
-          { "type": "command", "command": "bash ~/.claude/hooks/load-context.sh" }
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/load-context.sh"
+          }
         ]
       }
     ],
@@ -91,7 +100,10 @@
     "PreCompact": [
       {
         "hooks": [
-          { "type": "command", "command": "bash ~/.claude/hooks/save-context.sh" }
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/save-context.sh"
+          }
         ]
       }
     ]
@@ -99,6 +111,10 @@
   "statusLine": {
     "type": "command",
     "command": "bash ${PAI_DIR}/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "code-review@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {

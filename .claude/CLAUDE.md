@@ -7,6 +7,9 @@
 ## Core
 - **Analysis vs Action**: If asked to analyze or find bugs, do analysis only - pinpoint the issue but don't fix it, ask first
 - **Bug certainty**: Don't claim you found a bug until 100% certain. If unsure, raise hypotheses with suggestions to pinpoint the cause (add logging, check specific conditions, etc.)
+- **Investigate before claiming**: Never speculate about code you haven't read. Open and inspect files before explaining or proposing fixes
+- **Keep it simple**: Avoid over-engineering. Only make changes directly requested or clearly necessary. Don't add features, abstractions, or "improvements" beyond what was asked
+- **Parallel tools**: When calling multiple tools with no dependencies, make all independent calls in parallel
 
 ## Always
 - `uv run python` (never bare python)
@@ -30,6 +33,22 @@ Save ALL temporary files to `~/.claude/scratchpad/YYYY-MM-DD-HHMMSS_description/
 - Commit secrets or `.env` files
 - Push to remote
 - Kill/start processes or services - if something is down, ask user to restart it
+
+## Memory Protocol
+
+**Check memory summary at session start** (shown automatically via hook)
+
+### Rules:
+1. **Before complex tasks**: Check relevant memories first
+2. **After debugging**: Save patterns to `~/.claude/memories/learnings/`
+3. **Just-in-time**: Load full content only when needed
+4. **Session state**: Keep current task in `~/.claude/memories/session/`
+5. **Persistent findings**: Save to `learnings/` or `reviews/`
+
+### Quick Reference:
+- View: `read ~/.claude/memories/[category]/[file].md`
+- Create: Write to `~/.claude/memories/[category]/[name].md`
+- List: `ls ~/.claude/memories/[category]/`
 
 ## Session Context
 

@@ -314,6 +314,150 @@ Don't use "might", "could", "should consider" - be direct.
 ❌ **Example Overload**
 Don't provide 10 examples when 2 would suffice.
 
+❌ **Aggressive Prompting (Claude 4.x)**
+Don't use "CRITICAL", "YOU MUST", "ALWAYS" excessively - Claude 4.5 follows normal language well.
+
+## Claude 4.x Specific Patterns
+
+### Be Explicit for "Above and Beyond" Behavior
+
+Claude 4.x models follow instructions precisely. Request enhanced output explicitly:
+
+**Less effective:**
+```text
+Create an analytics dashboard
+```
+
+**More effective:**
+```text
+Create an analytics dashboard. Include as many relevant features and interactions as possible. Go beyond the basics to create a fully-featured implementation.
+```
+
+### Explain WHY, Not Just What
+
+Providing context helps Claude generalize correctly:
+
+**Less effective:**
+```text
+NEVER use ellipses
+```
+
+**More effective:**
+```text
+Your response will be read aloud by a text-to-speech engine, so never use ellipses since the text-to-speech engine will not know how to pronounce them.
+```
+
+### Tool Usage Patterns
+
+Claude 4.x is precise about action vs suggestion. Be explicit:
+
+**For suggestions only:**
+```text
+Can you suggest some changes to improve this function?
+```
+
+**For implementation:**
+```text
+Make these changes to improve this function.
+```
+
+**Default to action prompt:**
+```xml
+<default_to_action>
+By default, implement changes rather than only suggesting them. If the user's intent is unclear, infer the most useful likely action and proceed.
+</default_to_action>
+```
+
+**Conservative action prompt:**
+```xml
+<do_not_act_before_instructions>
+Do not jump into implementation unless clearly instructed. Default to providing information and recommendations rather than taking action.
+</do_not_act_before_instructions>
+```
+
+### Parallel Tool Calling
+
+Claude 4.x excels at parallel execution:
+
+```xml
+<use_parallel_tool_calls>
+If you intend to call multiple tools and there are no dependencies between the calls, make all independent calls in parallel. Maximize parallel tool calls where possible. However, if calls depend on previous results, call them sequentially. Never use placeholders or guess missing parameters.
+</use_parallel_tool_calls>
+```
+
+### Reduce Prompt Intensity
+
+Claude 4.5 responds well to normal language. Dial back aggressive prompting:
+
+**Before (overtriggering risk):**
+```text
+CRITICAL: You MUST use this tool when...
+```
+
+**After:**
+```text
+Use this tool when...
+```
+
+### Code Exploration
+
+Prevent hallucinations by requiring code inspection:
+
+```xml
+<investigate_before_answering>
+Never speculate about code you have not opened. If the user references a specific file, read it before answering. Give grounded, hallucination-free answers.
+</investigate_before_answering>
+```
+
+### Thinking Word Sensitivity
+
+When extended thinking is disabled, avoid "think" and variants:
+- Use: "consider", "believe", "evaluate", "reflect"
+- Avoid: "think about", "think through", "thinking"
+
+### Multi-Context Window Workflows
+
+For long-running tasks spanning multiple context windows:
+
+1. **First window**: Set up framework (tests, setup scripts)
+2. **Track state**: Use `tests.json`, `progress.txt`, git commits
+3. **Quality tools**: Create `init.sh` for consistent restarts
+4. **Verify correctness**: Use tools (Playwright, etc.) for autonomous verification
+
+**State tracking example:**
+```json
+// tests.json
+{
+  "tests": [
+    {"id": 1, "name": "auth_flow", "status": "passing"},
+    {"id": 2, "name": "user_mgmt", "status": "failing"}
+  ]
+}
+```
+
+```text
+// progress.txt
+Session 3:
+- Fixed token validation
+- Next: investigate test #2 failures
+```
+
+### Subagent Orchestration
+
+Claude 4.5 naturally delegates to subagents. Don't over-instruct - just ensure subagent tools are well-defined.
+
+### Minimize Overengineering
+
+Claude 4.5 can overengineer. Add explicit constraints:
+
+```text
+Avoid over-engineering. Only make changes directly requested or clearly necessary. Keep solutions simple and focused.
+
+Don't add features, refactor code, or make "improvements" beyond what was asked.
+Don't create helpers or abstractions for one-time operations.
+Don't design for hypothetical future requirements.
+```
+
 ## Evolution and Refinement
 
 Context engineering is an ongoing process:

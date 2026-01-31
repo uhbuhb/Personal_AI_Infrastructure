@@ -1,6 +1,6 @@
 ---
 name: prompting
-description: Prompt engineering standards and context engineering principles for AI agents based on Anthropic best practices. Covers clarity, structure, progressive discovery, and optimization for signal-to-noise ratio. (user)
+description: Prompt engineering, context engineering, and skill creation. Covers clarity, structure, Claude 4.x patterns, and creating new skills. INVOKE for prompt help, agent design, or creating skills.
 user-invocable: true
 ---
 
@@ -13,6 +13,7 @@ user-invocable: true
 - Prompt structure help
 - Best practices for LLM prompts
 - Agent configuration
+- Creating new skills
 
 ## Core Philosophy
 **Context engineering** = Curating optimal set of tokens during LLM inference
@@ -86,8 +87,74 @@ Delegate subtasks to specialized agents with minimal context
 ❌ Premature information loading
 ❌ Vague instructions ("might", "could", "should")
 
+## Claude 4.x Specific
+
+### Be More Explicit
+Claude 4.x follows instructions precisely. For "above and beyond" behavior, request it explicitly:
+- ❌ "Create an analytics dashboard"
+- ✅ "Create an analytics dashboard. Include as many relevant features as possible. Go beyond the basics."
+
+### Explain WHY, Not Just What
+Claude generalizes from motivation:
+- ❌ "NEVER use ellipses"
+- ✅ "Never use ellipses because text-to-speech engines can't pronounce them"
+
+### Soften Aggressive Language
+Claude 4.5 responds well to normal language - dial back intensity:
+- ❌ "CRITICAL: You MUST use this tool when..."
+- ✅ "Use this tool when..."
+
+### Tool Action Patterns
+Be explicit about action vs suggestion:
+- "Can you suggest changes?" → Claude suggests only
+- "Make these changes" → Claude implements
+
+### Parallel Tool Calls
+Claude 4.x excels at parallel execution. Encourage it:
+```
+If multiple tool calls have no dependencies, make them in parallel.
+```
+
+### Thinking Word Sensitivity
+When extended thinking is disabled, replace "think" with alternatives:
+- Use: "consider", "believe", "evaluate"
+- Avoid: "think about", "think through"
+
+## Creating Skills
+
+### Structure
+```
+~/.claude/skills/[skill-name]/     # PAI (cross-project)
+<project>/.claude/skills/[name]/   # Project-specific
+
+├── SKILL.md      # Required - quick reference
+└── CLAUDE.md     # Optional - detailed docs
+```
+
+### SKILL.md Format
+```markdown
+---
+name: skill-name
+description: What it does. INVOKE when [triggers].
+user-invocable: true
+---
+
+# Skill Name
+
+## When to Activate
+- Trigger phrases
+
+## [Main Content]
+- Core workflow, commands, examples
+```
+
+### Naming
+- Lowercase with hyphens: `web-scraping`, `code-review`
+- Action or domain focused, not generic
+
 ## Supplementary Resources
 For full standards: `read ${PAI_DIR}/skills/prompting/CLAUDE.md`
 
 ## Based On
-Anthropic's "Effective Context Engineering for AI Agents"
+- Anthropic's "Effective Context Engineering for AI Agents"
+- Claude 4.x Best Practices (platform.claude.com)
