@@ -79,11 +79,22 @@
         "hooks": [
           { "type": "command", "command": "${PAI_DIR}/hooks/sync-from-api.ts" }
         ]
+      },
+      {
+        "hooks": [
+          { "type": "command", "command": "bash ~/.claude/hooks/load-context.sh" }
+        ]
       }
     ],
     "Stop": [],
     "SubagentStop": [],
-    "PreCompact": []
+    "PreCompact": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bash ~/.claude/hooks/save-context.sh" }
+        ]
+      }
+    ]
   },
   "statusLine": {
     "type": "command",

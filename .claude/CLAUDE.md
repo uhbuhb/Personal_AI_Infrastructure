@@ -31,6 +31,16 @@ Save ALL temporary files to `~/.claude/scratchpad/YYYY-MM-DD-HHMMSS_description/
 - Push to remote
 - Kill/start processes or services - if something is down, ask user to restart it
 
+## Session Context
+
+When completing significant work or before ending a session:
+- Update `.claude/context.md` with current state:
+  - Current task and status
+  - Key decisions made
+  - Blockers or next steps
+- Keep it concise (under 50 lines)
+- This file is gitignored and per-developer
+
 ## Response Format
 
 Use this structured format:
