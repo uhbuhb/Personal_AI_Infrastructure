@@ -19,6 +19,10 @@ CACHE_FILE="/tmp/.claude_ccusage_cache"
 LOCK_FILE="/tmp/.claude_ccusage.lock"
 CACHE_AGE=30   # 30 seconds for more real-time updates
 
+# Rippling cache (check less frequently - every 5 minutes)
+RIPPLING_CACHE="/tmp/.claude_rippling_cache"
+RIPPLING_CACHE_AGE=300
+
 # Count items from specified directories
 claude_dir="${PAI_DIR:-$HOME/.claude}"
 commands_count=0
@@ -131,6 +135,39 @@ if [ "$cache_needs_update" = true ]; then
     fi
 fi
 
+# Get Rippling status (cached)
+rippling_status=""
+rippling_needs_update=false
+
+if [ ! -f "$RIPPLING_CACHE" ]; then
+    rippling_needs_update=true
+elif [ -f "$RIPPLING_CACHE" ]; then
+    rippling_age=$(($(date +%s) - $(stat -f%m "$RIPPLING_CACHE" 2>/dev/null || echo 0)))
+    if [ $rippling_age -ge $RIPPLING_CACHE_AGE ]; then
+        rippling_needs_update=true
+    fi
+fi
+
+if [ "$rippling_needs_update" = true ]; then
+    # Run rippling CLI and cache result
+    rippling_output=$(cd ~/personal-repos/rippling_cli && uv run python rippling_cli.py status 2>/dev/null)
+    # Extract break minutes from "Break time: Xm" and hours from "Worked: X.XXh"
+    break_mins=$(echo "$rippling_output" | grep "Break time:" | sed 's/.*: //' | sed 's/m//')
+    hours=$(echo "$rippling_output" | grep "Worked:" | sed 's/.*: //' | sed 's/h.*//')
+    if echo "$rippling_output" | grep -q "Not clocked in"; then
+        rippling_status="not_clocked:0:0"
+    elif echo "$rippling_output" | grep -q "On break"; then
+        rippling_status="on_break:${hours:-0}:${break_mins:-0}"
+    elif echo "$rippling_output" | grep -q "Clocked in"; then
+        rippling_status="clocked_in:${hours:-0}:${break_mins:-0}"
+    else
+        rippling_status="unknown:0:0"
+    fi
+    echo "$rippling_status" > "$RIPPLING_CACHE"
+else
+    rippling_status=$(cat "$RIPPLING_CACHE" 2>/dev/null)
+fi
+
 # Tokyo Night Storm Color Scheme
 BACKGROUND='\033[48;2;36;40;59m'
 BRIGHT_PURPLE='\033[38;2;187;154;247m'
@@ -204,7 +241,19 @@ for mcp in $mcp_names_raw; do
     fi
 done
 
-# Output the full 3-line statusline
+# Parse rippling status (format: status:hours:break_mins)
+rippling_type=$(echo "$rippling_status" | cut -d: -f1)
+rippling_hours=$(echo "$rippling_status" | cut -d: -f2)
+rippling_break_mins=$(echo "$rippling_status" | cut -d: -f3)
+
+# Output the statusline
+# ALERT LINE - Only show if not clocked in or on break
+if [ "$rippling_type" = "not_clocked" ]; then
+    printf "${BRIGHT_RED}⚠️  ALERT: You are NOT clocked in!${RESET}\n"
+elif [ "$rippling_type" = "on_break" ]; then
+    printf "${BRIGHT_RED}⚠️  ALERT: You are on break${RESET}\n"
+fi
+
 # LINE 1 - PURPLE theme with all counts
 printf "${DA_DISPLAY_COLOR}${DA_NAME}${RESET}${LINE1_PRIMARY} here, running on ${MODEL_PURPLE}🧠 ${model_name}${RESET}${LINE1_PRIMARY} in ${DIR_COLOR}📁 ${dir_name}${RESET}${LINE1_PRIMARY}, wielding: ${RESET}${LINE1_PRIMARY}🔧 ${fobs_count} Services${RESET}${LINE1_PRIMARY}, ${RESET}${LINE1_PRIMARY}⚙️ ${commands_count} Commands${RESET}${LINE1_PRIMARY}, ${RESET}${LINE1_PRIMARY}🔌 ${mcps_count} MCPs${RESET}${LINE1_PRIMARY}, and ${RESET}${LINE1_PRIMARY}📚 ${fabric_count} Patterns${RESET}\n"
 
@@ -218,4 +267,20 @@ cost_display="${daily_cost:-N/A}"
 if [ -z "$daily_tokens" ]; then tokens_display="N/A"; fi
 if [ -z "$daily_cost" ]; then cost_display="N/A"; fi
 
-printf "${LINE3_PRIMARY}💎 Total Tokens${RESET}${LINE3_PRIMARY}${SEPARATOR_COLOR}: ${RESET}${LINE3_ACCENT}${tokens_display}${RESET}${LINE3_PRIMARY}  Total Cost${RESET}${LINE3_PRIMARY}${SEPARATOR_COLOR}: ${RESET}${COST_COLOR}${cost_display}${RESET}\n"
+# Format Rippling status for display
+case "$rippling_type" in
+    "not_clocked")
+        rippling_display="${BRIGHT_RED}⚠️ Not clocked in${RESET}"
+        ;;
+    "on_break")
+        rippling_display="${BRIGHT_YELLOW}☕ ${rippling_hours}h ${SEPARATOR_COLOR}|${RESET} ${BRIGHT_CYAN}${rippling_break_mins}m break${RESET}"
+        ;;
+    "clocked_in")
+        rippling_display="${BRIGHT_GREEN}🕐 ${rippling_hours}h ${SEPARATOR_COLOR}|${RESET} ${BRIGHT_CYAN}${rippling_break_mins}m break${RESET}"
+        ;;
+    *)
+        rippling_display="${LINE3_PRIMARY}🕐 --${RESET}"
+        ;;
+esac
+
+printf "${LINE3_PRIMARY}💎 Total Tokens${RESET}${LINE3_PRIMARY}${SEPARATOR_COLOR}: ${RESET}${LINE3_ACCENT}${tokens_display}${RESET}${LINE3_PRIMARY}  Total Cost${RESET}${LINE3_PRIMARY}${SEPARATOR_COLOR}: ${RESET}${COST_COLOR}${cost_display}${RESET}${LINE3_PRIMARY}  Rippling${RESET}${SEPARATOR_COLOR}: ${RESET}${rippling_display}\n"
