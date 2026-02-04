@@ -172,6 +172,7 @@ uv run alembic upgrade head
 - **Needless Complexity** - over-engineering
 - **Needless Repetition** - DRY violation
 - **Conditionals in Function Names** - indicates function doing two things
+- **Catch-all Exception Handling** - swallowing exceptions hides bugs and prevents error monitoring
 
 ```python
 # Bad - conditional in name
@@ -182,6 +183,20 @@ async def generate_title_if_first_message(context):
 # Good - caller handles conditional
 if context.is_first_message:
     await generate_title(context)
+```
+
+```python
+# Bad - catch-all hides real errors
+try:
+    result = await do_something()
+except Exception:
+    return {"error": "Something went wrong"}
+
+# Good - catch specific exceptions, let the rest propagate
+try:
+    result = await do_something()
+except ValueError as e:
+    return {"error": str(e)}
 ```
 
 ---
@@ -196,7 +211,7 @@ Before completing any implementation:
 - [ ] Connection pools, not direct connections
 - [ ] Transactions wrap multi-step DB operations
 - [ ] Imports at top of file
-- [ ] Error handling with informative messages
+- [ ] No catch-all `except Exception` — catch specific exceptions only
 - [ ] No hardcoded secrets or credentials
 
 ---
