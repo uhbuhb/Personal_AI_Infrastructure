@@ -11,6 +11,37 @@
 - **Keep it simple**: Avoid over-engineering. Only make changes directly requested or clearly necessary. Don't add features, abstractions, or "improvements" beyond what was asked
 - **Parallel tools**: When calling multiple tools with no dependencies, make all independent calls in parallel
 
+## Pre-Task Assessment
+
+Before non-trivial work, evaluate thinking approaches (justify exclusion):
+
+| Approach | Include When |
+|----------|--------------|
+| **Multi-perspective** | Multiple valid approaches exist, design tradeoffs |
+| **Adversarial** | Security implications, claims need stress-testing |
+| **First Principles** | Assumptions need examining, "why" > "how" |
+| **Experimental** | Iterative hypothesis-test cycles needed |
+| **Creative** | Divergent thinking, novel solutions required |
+
+### Quick Format (optional, for complex tasks)
+```
+Assessment:
+- Multi-perspective: EXCLUDE — single clear path
+- Adversarial: INCLUDE — security change
+- First Principles: EXCLUDE — requirements explicit
+```
+
+### Invalid Reasons to Exclude
+- "Too simple" — hidden assumptions exist
+- "Already know answer" — confidence ≠ verification
+- "Takes too long" — correctness > speed
+
+### When to Apply
+- 3+ files touched
+- Architectural decisions
+- Security-related work
+- Unclear root cause
+
 ## Always
 - `uv run python` (never bare python)
 - `uv add/remove/sync` (never pip)
