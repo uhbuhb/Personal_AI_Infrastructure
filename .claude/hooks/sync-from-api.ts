@@ -75,6 +75,7 @@ async function syncFile(name: string, endpoint: string, localPath: string): Prom
       headers: {
         Authorization: `Bearer ${API_TOKEN}`,
       },
+      signal: AbortSignal.timeout(5000),
     });
 
     if (!response.ok) {
