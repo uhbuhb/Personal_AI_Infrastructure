@@ -70,14 +70,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/hooks/save-memory.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
             "command": "${PAI_DIR}/hooks/sync-to-api.ts"
           }
         ]
@@ -111,14 +103,6 @@
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/save-context.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/save-memory.sh"
           }
         ]
       }

@@ -65,22 +65,6 @@ Save ALL temporary files to `~/.claude/scratchpad/YYYY-MM-DD-HHMMSS_description/
 - Push to remote
 - Kill/start processes or services - if something is down, ask user to restart it
 
-## Memory Protocol
-
-**Check memory summary at session start** (shown automatically via hook)
-
-### Rules:
-1. **Before complex tasks**: Check relevant memories first
-2. **After debugging**: Save patterns to `~/.claude/memories/learnings/`
-3. **Just-in-time**: Load full content only when needed
-4. **Session state**: Keep current task in `~/.claude/memories/session/`
-5. **Persistent findings**: Save to `learnings/` or `reviews/`
-
-### Quick Reference:
-- View: `read ~/.claude/memories/[category]/[file].md`
-- Create: Write to `~/.claude/memories/[category]/[name].md`
-- List: `ls ~/.claude/memories/[category]/`
-
 ## Session Context
 
 When completing significant work or before ending a session:
