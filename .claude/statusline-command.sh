@@ -151,9 +151,9 @@ fi
 if [ "$rippling_needs_update" = true ]; then
     # Run rippling CLI and cache result
     rippling_output=$(cd ~/personal-repos/rippling_cli && uv run python rippling_cli.py status 2>/dev/null)
-    # Extract break minutes from "Break time: Xm" and hours from "Worked: X.XXh"
-    break_mins=$(echo "$rippling_output" | grep "Break time:" | sed 's/.*: //' | sed 's/m//')
+    # Extract hours from "Worked: X.XXh" and break minutes from "Break time: Xm"
     hours=$(echo "$rippling_output" | grep "Worked:" | sed 's/.*: //' | sed 's/h.*//')
+    break_mins=$(echo "$rippling_output" | grep "Break time:" | sed 's/.*: //' | sed 's/m//')
     if echo "$rippling_output" | grep -q "Not clocked in"; then
         rippling_status="not_clocked:0:0"
     elif echo "$rippling_output" | grep -q "On break"; then
