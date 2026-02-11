@@ -4,6 +4,16 @@
 - Scratchpad files (`~/.claude/scratchpad/`)
 - Inline execution (`uv run python -c "..."`, piped scripts) for debugging
 
+## Learned
+<!--
+  CRITICAL: This section captures user preferences learned from corrections and mistakes.
+  When the user corrects you or says "don't do X" / "always do Y", ADD IT HERE immediately.
+  These are hard-won lessons — violating them repeats past mistakes. Treat as rules.
+  Applies globally across all projects.
+-->
+- **PR merges**: Always use `--rebase` (not `--squash`)
+- **Never commit LANGSMITH_API_KEY or PAI_API_TOKEN** or any API keys — even in config defaults
+
 ## Core
 - **Analysis vs Action**: If asked to analyze or find bugs, do analysis only - pinpoint the issue but don't fix it, ask first
 - **Bug certainty**: Don't claim you found a bug until 100% certain. If unsure, raise hypotheses with suggestions to pinpoint the cause (add logging, check specific conditions, etc.)
