@@ -7,11 +7,14 @@ CLI location: `~/personal-repos/rippling_cli/rippling_cli.py`
 | status (or empty) | `status` |
 | in | `clockin` |
 | out | `clockout` |
-| break [mins] | `startbreak [mins]` - optional duration auto-ends break |
+| break | `break` - start break (manual end) |
+| break [mins] | `break [mins]` - timed break, auto-ends |
 | back | `endbreak` |
 
 Examples:
 - `/rippling` or `/rippling status` - check status
+- `/rippling in` - clock in
+- `/rippling out` - clock out now
 - `/rippling break` - start break (manual end)
 - `/rippling break 5` - start 5-minute break (auto-ends)
 - `/rippling back` - end break
