@@ -154,10 +154,12 @@ if [ "$rippling_needs_update" = true ]; then
     # Extract hours from "Worked: X.XXh" and break minutes from "Break time: Xm"
     hours=$(echo "$rippling_output" | grep "Worked:" | sed 's/.*: //' | sed 's/h.*//')
     break_mins=$(echo "$rippling_output" | grep "Break time:" | sed 's/.*: //' | sed 's/m//')
-    if echo "$rippling_output" | grep -q "Not clocked in"; then
+    if echo "$rippling_output" | grep -qi "NOT CLOCKED IN"; then
         rippling_status="not_clocked:0:0"
     elif echo "$rippling_output" | grep -q "On break"; then
         rippling_status="on_break:${hours:-0}:${break_mins:-0}"
+    elif echo "$rippling_output" | grep -q "Clocked out"; then
+        rippling_status="clocked_out:${hours:-0}:${break_mins:-0}"
     elif echo "$rippling_output" | grep -q "Clocked in"; then
         rippling_status="clocked_in:${hours:-0}:${break_mins:-0}"
     else
@@ -247,11 +249,13 @@ rippling_hours=$(echo "$rippling_status" | cut -d: -f2)
 rippling_break_mins=$(echo "$rippling_status" | cut -d: -f3)
 
 # Output the statusline
-# ALERT LINE - Only show if not clocked in or on break
+# ALERT LINE - Show if not clocked in, clocked out, or on break
 if [ "$rippling_type" = "not_clocked" ]; then
     printf "${BRIGHT_RED}⚠️  ALERT: You are NOT clocked in!${RESET}\n"
+elif [ "$rippling_type" = "clocked_out" ]; then
+    printf "${BRIGHT_RED}⚠️  ALERT: You are clocked out!${RESET}\n"
 elif [ "$rippling_type" = "on_break" ]; then
-    printf "${BRIGHT_RED}⚠️  ALERT: You are on break${RESET}\n"
+    printf "${BRIGHT_YELLOW}⚠️  ALERT: You are on break${RESET}\n"
 fi
 
 # LINE 1 - PURPLE theme with all counts
@@ -271,6 +275,9 @@ if [ -z "$daily_cost" ]; then cost_display="N/A"; fi
 case "$rippling_type" in
     "not_clocked")
         rippling_display="${BRIGHT_RED}⚠️ Not clocked in${RESET}"
+        ;;
+    "clocked_out")
+        rippling_display="${BRIGHT_RED}⚠️ Clocked out (${rippling_hours}h)${RESET}"
         ;;
     "on_break")
         rippling_display="${BRIGHT_YELLOW}☕ ${rippling_hours}h ${SEPARATOR_COLOR}|${RESET} ${BRIGHT_CYAN}${rippling_break_mins}m break${RESET}"
