@@ -88,7 +88,16 @@
         ]
       }
     ],
-    "Stop": [],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${PAI_DIR}/hooks/auto-cr-stop.sh"
+          }
+        ]
+      }
+    ],
     "SubagentStop": [],
     "PreCompact": []
   },
