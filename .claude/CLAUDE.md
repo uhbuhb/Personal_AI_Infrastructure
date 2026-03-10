@@ -52,6 +52,24 @@ Assessment:
 - Security-related work
 - Unclear root cause
 
+## Plan Review
+
+Before calling `ExitPlanMode`, spawn a **plan-reviewer subagent** to review the plan file. Pass it **only the plan file contents** — no conversation history, no background on the task.
+
+The plan-reviewer agent (defined in `.claude/agents/plan-reviewer.md`) evaluates definition quality, approach quality, and technology fitness with fresh eyes and zero context.
+
+After receiving the review, revise the plan to address every flagged item. Include a **"Review Notes"** section at the bottom of the plan with the format below. These notes will be passed to the code-reviewer agent after implementation, so each point must be self-contained and detailed enough for a reviewer with no prior context to verify.
+
+```
+## Review Notes
+
+### [Reviewer Point Title]
+- **Raised**: [Full description of what the reviewer flagged — the concern, the specific part of the plan it refers to, and why it matters]
+- **Resolution**: [What was changed in the plan, or why it was left as-is. Include specific file/function/logic references]
+- **Verify**: [What the code reviewer should check in the implementation to confirm this was handled correctly]
+────────────────────────────────────────
+```
+
 ## Always
 - `uv run python` (never bare python)
 - `uv add/remove/sync` (never pip)
