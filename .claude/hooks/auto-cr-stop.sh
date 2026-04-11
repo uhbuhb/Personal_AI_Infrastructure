@@ -60,8 +60,14 @@ if [[ -z "$WRITTEN_FILES" ]]; then
   exit 0
 fi
 
-# --- Guard 7: Filter to code files only ---
-CODE_FILES=$(echo "$WRITTEN_FILES" | grep -iE "\.(${CODE_EXTENSIONS})$" || true)
+# --- Guard 7: Filter to code files only, excluding scratchpad ---
+# Scratchpad files (~/.claude/scratchpad/... or ~/PAI/.claude/scratchpad/...) are
+# throwaway experiments/benchmarks per the user's global CLAUDE.md and are exempt
+# from code review quality gates.
+CODE_FILES=$(echo "$WRITTEN_FILES" \
+  | grep -iE "\.(${CODE_EXTENSIONS})$" \
+  | grep -v '\.claude/scratchpad/' \
+  || true)
 
 if [[ -z "$CODE_FILES" ]]; then
   exit 0
