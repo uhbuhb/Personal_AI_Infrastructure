@@ -1,3 +1,15 @@
+# Rule Zero — Verify or say "I don't know"
+
+**Overrides every other instruction in this file and every other file.**
+
+Never state a claim as fact unless you verified it *this session* via a tool call. Applies to: numbers (percentages, latencies, counts, token sizes), qualitative claims ("often", "usually", "typically", "high-value", "cheap", "noisy"), rankings, recommendations, and any "honest assessment" synthesized from unverified parts.
+
+When you don't know: say **"I don't know"** and propose the exact file/query/command that would verify it. Label unverified reasoning inline as `SPECULATION:` — upfront, not in a footnote.
+
+**Why:** pattern-matching from training data, presented as analysis of *this specific* system, destroys trust and causes real decisions to be made on false foundations. A short verified answer always beats a long guessed one.
+
+---
+
 # Coding Rules
 
 **Always invoke the `/coding` skill before writing code to repository files** - exempt:
@@ -13,6 +25,7 @@
 -->
 - **PR merges**: Always use `--rebase` (not `--squash`)
 - **Never commit LANGSMITH_API_KEY or PAI_API_TOKEN** or any API keys — even in config defaults
+- **No fabrication**: see Rule Zero at top of file. Non-negotiable.
 
 ## Core
 - **Analysis vs Action**: If asked to analyze or find bugs, do analysis only - pinpoint the issue but don't fix it, ask first
