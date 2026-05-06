@@ -96,3 +96,6 @@ credentials/
 .claude/scratchpad/
 .claude/telemetry/
 .claude/image-cache/
+.claude/backups/
+.claude/sessions/
+.claude/mcp-needs-auth-cache.json
