@@ -60,7 +60,6 @@
       "Bash(> /dev/sda)"
     ]
   },
-  "model": "opus",
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [],
   "hooks": {
@@ -84,6 +83,16 @@
           {
             "type": "command",
             "command": "${PAI_DIR}/hooks/sync-from-api.ts"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f .git ]; then MAIN_REPO=$(git worktree list --porcelain | head -1 | sed 's/^worktree //'); MAIN_HEAD=$(git -C \"$MAIN_REPO\" rev-parse HEAD); CURRENT_HEAD=$(git rev-parse HEAD); if [ \"$MAIN_HEAD\" != \"$CURRENT_HEAD\" ]; then git checkout \"$MAIN_HEAD\" 2>/dev/null; echo \"{\\\"systemMessage\\\": \\\"Synced worktree to main repo HEAD: ${MAIN_HEAD:0:8}\\\"}\"; fi; fi",
+            "timeout": 10,
+            "statusMessage": "Syncing worktree to main repo HEAD..."
           }
         ]
       }
@@ -111,7 +120,13 @@
     "swift-lsp@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
+  "skipDangerousModePermissionPrompt": true,
+  "voiceEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754071370324
-  }
+  },
+  "mcpServers": {},
+  "preferredNotifChannel": "terminal_bell",
+  "remoteControlAtStartup": true
 }
