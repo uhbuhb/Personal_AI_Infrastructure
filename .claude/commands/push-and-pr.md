@@ -19,9 +19,10 @@ Push current HEAD to a remote branch and create a PR targeting `dev-agentic-os`.
 ### Phase 1: Pre-flight
 
 1. **Check state:**
+   - Run `git fetch origin dev-agentic-os` to ensure remote ref is up to date
    - Run `git status` — warn if uncommitted changes exist
    - Run `git log -3 --oneline` to see what's being pushed
-   - Run `git diff dev-agentic-os...HEAD --stat` to see scope of changes
+   - Run `git diff origin/dev-agentic-os...HEAD --stat` to see scope of changes
 
 ### Phase 1.5: Resolve branch name
 
@@ -45,7 +46,7 @@ Push current HEAD to a remote branch and create a PR targeting `dev-agentic-os`.
    - If a PR already exists, show its URL and stop — no need to create a duplicate
 
 5. **Generate PR title and description:**
-   - Run `git log dev-agentic-os...HEAD --oneline` to see all commits
+   - Run `git log origin/dev-agentic-os...HEAD --oneline` to see all commits
    - Title: Concise summary (50-70 chars)
    - Description:
      ```markdown
