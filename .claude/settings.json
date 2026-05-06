@@ -128,5 +128,6 @@
   },
   "mcpServers": {},
   "preferredNotifChannel": "terminal_bell",
-  "remoteControlAtStartup": true
+  "remoteControlAtStartup": true,
+  "theme": "light"
 }
