@@ -97,13 +97,11 @@ Save ALL temporary files to `~/.claude/scratchpad/YYYY-MM-DD-HHMMSS_description/
 ## Ask First
 - Committing from `~/.claude/`
 - Infrastructure changes
-- Pushing to remote
 - Fixing bugs (analyze and pinpoint the specific bug first)
 - Production DB operations
 
 ## Never
 - Commit secrets or `.env` files
-- Push to remote
 - Kill/start processes or services - if something is down, ask user to restart it
 
 ## Session Context
