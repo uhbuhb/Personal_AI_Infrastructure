@@ -10,6 +10,18 @@ When you don't know: say **"I don't know"** and propose the exact file/query/com
 
 ---
 
+# Edit cleanly — no change-trails
+
+When you change, resolve, or remove something, leave the artifact reading as if it had **always** been in its final state. Excise cleanly — don't replace removed content with a note that it's gone, and don't annotate the edit in place: no "(answered above)", `// was X, now Y`, "no longer needed", "moved to…", "previously…". Any rationale for the change goes in the change-tracking layer — the chat reply, commit message, or PR description — never inside the artifact itself.
+
+Applies to all artifacts: code, comments, Slack messages/drafts, docs, plans.
+
+**Keep-vs-cut test:** does the text describe the *current* state or a live constraint (keep — e.g. a `NOT X because Y` guardrail), or does it narrate the prior version / my edit (cut)?
+
+**Why:** an artifact that narrates its own history is written for the reader who saw the last version; the reader who only sees the current state doesn't need it and it reads as clutter. History lives in git / edit history / the conversation.
+
+---
+
 # Coding Rules
 
 **Always invoke the `/coding` skill before writing code to repository files** - exempt:
