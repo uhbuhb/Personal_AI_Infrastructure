@@ -12,13 +12,17 @@ When you don't know: say **"I don't know"** and propose the exact file/query/com
 
 # Edit cleanly — no change-trails
 
-When you change, resolve, or remove something, leave the artifact reading as if it had **always** been in its final state. Excise cleanly — don't replace removed content with a note that it's gone, and don't annotate the edit in place: no "(answered above)", `// was X, now Y`, "no longer needed", "moved to…", "previously…". Any rationale for the change goes in the change-tracking layer — the chat reply, commit message, or PR description — never inside the artifact itself.
+When you change, resolve, or remove something, leave the artifact reading as if it had **always** been in its final state. Excise cleanly — don't replace removed content with a note that it's gone, and don't annotate the edit in place: no "(answered above)", `// was X, now Y`, "no longer needed", "moved to…", "previously…".
+
+**Never let a wrong thing — or the autopsy of one — survive in the artifact.** When you fix an error, the wrong value/claim disappears *and* so does any narration of it: no "was mislabeled X", "we thought Y", "turns out Z", "now corrected". The file says only what the correct state *is*. Future-you should never have to load a dead mistake into their head to read the current one.
+
+The place for the *why* — including why a previous approach was wrong, when saying so helps future-us avoid repeating it — is the **change-tracking layer**: the commit message, PR description, or chat reply. That is allowed and often valuable there. It is never useful inside the artifact.
 
 Applies to all artifacts: code, comments, Slack messages/drafts, docs, plans.
 
-**Keep-vs-cut test:** does the text describe the *current* state or a live constraint (keep — e.g. a `NOT X because Y` guardrail), or does it narrate the prior version / my edit (cut)?
+**Keep-vs-cut test:** does the text describe the *current* state or a live constraint (keep — e.g. a `NOT X because Y` guardrail that still binds), or does it narrate the prior version, my edit, or a past mistake (cut)?
 
-**Why:** an artifact that narrates its own history is written for the reader who saw the last version; the reader who only sees the current state doesn't need it and it reads as clutter. History lives in git / edit history / the conversation.
+**Why:** an artifact that narrates its own history is written for the reader who saw the last version; the reader who only sees the current state doesn't need it, and a fixed mistake re-told inside the file is confusing clutter. History and the why-we-changed live in git, the commit message, and the conversation — not the file.
 
 ---
 
