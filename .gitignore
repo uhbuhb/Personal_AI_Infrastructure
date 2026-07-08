@@ -99,3 +99,5 @@ credentials/
 .claude/backups/
 .claude/sessions/
 .claude/mcp-needs-auth-cache.json
+.claude/parked.md
+.claude/parked-sessions/

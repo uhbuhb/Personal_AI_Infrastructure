@@ -17,6 +17,14 @@ context. Parked sessions are stored globally in `~/.claude/parked.md` so they sp
 every repo, are curated (only what you deliberately mark), and carry a one-line
 breadcrumb of what to do on reopen.
 
+Claude Code auto-deletes session transcripts once they're older than
+`cleanupPeriodDays` (default 30) — the sweep runs at startup and only looks inside
+`~/.claude/projects/`. So a session you parked but didn't reopen for a month is
+silently gone. To prevent that, PARK **archives** the transcript to
+`~/.claude/parked-sessions/` (outside the swept tree) and the resume command
+restores it if the live copy was cleaned. Parked sessions therefore survive
+indefinitely, while unparked ones keep the normal cleanup.
+
 This supersedes the old "write a summary" behavior. For genuine handoff to another
 person or machine (where a local session can't be resumed), write a prose summary
 manually instead — `park` is for resuming *your own* sessions.
@@ -45,12 +53,14 @@ Always read these from the environment / session file — never guess:
   fail with "No conversation found with session ID".
 
   Get the correct launch directory by reading the first `cwd` recorded in the
-  session's own jsonl:
+  session's own jsonl. The same snippet also captures the transcript path (`F`) and
+  its parent projects dir (`PROJDIR`), both needed for archiving:
   ```bash
   SID="$CLAUDE_CODE_SESSION_ID"
   F=$(find "$HOME/.claude/projects" -name "${SID}.jsonl" 2>/dev/null | head -1)
+  PROJDIR=$(dirname "$F")
   LAUNCH_DIR=$(grep -m1 -o '"cwd":"[^"]*"' "$F" | sed 's/.*"cwd":"//;s/"$//')
-  echo "uuid=$SID"; echo "launch_dir=$LAUNCH_DIR"
+  echo "uuid=$SID"; echo "launch_dir=$LAUNCH_DIR"; echo "transcript=$F"
   ```
 - **Repo name:** the basename of `LAUNCH_DIR`.
 
@@ -70,19 +80,34 @@ broken bookmark.
    next action on reopen. One sentence.
 4. Compute a **short id**: the first 4 characters of the session UUID.
 5. Read `~/.claude/parked.md` (create it from the header template below if missing).
-6. **Dedup by UUID:** if an entry with the same session UUID already exists, replace
+6. **Archive the transcript** so cleanup can't delete it. Copy the live transcript
+   into `~/.claude/parked-sessions/` (overwriting any prior archive of the same
+   session, so re-parking captures the latest state):
+   ```bash
+   mkdir -p "$HOME/.claude/parked-sessions"
+   cp -f "$F" "$HOME/.claude/parked-sessions/${SID}.jsonl"
+   ```
+   If `$F` is empty (transcript not found), you already stopped in the identity step.
+7. **Dedup by UUID:** if an entry with the same session UUID already exists, replace
    it in place (refreshing title, breadcrumb, and timestamp). Otherwise append a new
    entry.
-7. Confirm to the user: the short id, title, and the reminder line (below).
+8. Confirm to the user: the short id, title, and the reminder line (below).
 
 ### Entry format
+
+The resume command restores the archived transcript **only if the live copy was
+already cleaned** (`cp -n` won't clobber a newer live transcript), then resumes:
 
 ```markdown
 ## [<shortid>] <Title>
 **Repo:** <repo-name> · **Parked:** <YYYYMMDD-HHMM>
 **Next:** <one-line breadcrumb>
-`cd <LAUNCH_DIR> && claude --resume <full-uuid>`
+`mkdir -p <PROJDIR> && cp -n ~/.claude/parked-sessions/<full-uuid>.jsonl <PROJDIR>/ 2>/dev/null; cd <LAUNCH_DIR> && claude --resume <full-uuid>`
 ```
+
+Write the concrete absolute `<PROJDIR>` and `<LAUNCH_DIR>` values into the entry —
+never leave placeholders. Leave `~` literal in the `parked-sessions` path so it
+expands in whatever shell runs it.
 
 ---
 
@@ -91,8 +116,13 @@ broken bookmark.
 1. Read `~/.claude/parked.md`. If missing or empty, tell the user there are no
    parked sessions and stop.
 2. Print every entry: short id, title, repo, parked timestamp, breadcrumb, and the
-   `cd ... && claude --resume ...` command.
+   resume command.
 3. End with the reminder line (below).
+
+Because PARK archives every transcript, listed sessions are resumable even if the
+live copy has aged out — the resume command restores from the archive. You don't
+need to check file existence. (If a user reports a resume still failing, the archive
+under `~/.claude/parked-sessions/<uuid>.jsonl` is the thing to verify.)
 
 ---
 
@@ -105,7 +135,9 @@ Run this **inside a resumed session** to clear its own bookmark.
    matches the current session UUID.
 3. If no matching entry exists, tell the user this session wasn't parked (nothing to
    remove) and stop.
-4. Confirm which entry was removed.
+4. Delete the archived transcript: `rm -f "$HOME/.claude/parked-sessions/${SID}.jsonl"`
+   (the live transcript stays under `~/.claude/projects/` and follows normal cleanup).
+5. Confirm which entry was removed.
 
 ---
 
@@ -114,7 +146,9 @@ Run this **inside a resumed session** to clear its own bookmark.
 1. Read `~/.claude/parked.md`.
 2. Remove the entry whose short id matches `<id>` (the `[<shortid>]` in the heading).
 3. If no match, say so and list the available short ids.
-4. Confirm which entry was removed.
+4. Delete that session's archived transcript. Recover its full UUID from the entry's
+   resume command, then `rm -f "$HOME/.claude/parked-sessions/<full-uuid>.jsonl"`.
+5. Confirm which entry was removed.
 
 ---
 
@@ -147,4 +181,7 @@ After PARK and LIST, always end with:
 - Keep entries minimal: title, repo, timestamp, one-line breadcrumb, resume command.
 - The resume command must `cd` to the session's launch dir (absolute path) so it
   resolves from any terminal.
+- PARK always archives the transcript to `~/.claude/parked-sessions/<uuid>.jsonl`;
+  DONE/REMOVE always delete that archive. Keep the archive and the `parked.md` entry
+  in lockstep — never leave an orphaned archive or an entry without one.
 - Preserve all other entries on every edit — only touch the targeted entry.
