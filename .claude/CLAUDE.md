@@ -26,6 +26,22 @@ Applies to all artifacts: code, comments, Slack messages/drafts, docs, plans.
 
 ---
 
+# Documentation is code — DRY it, then cut it
+
+**Repeated documentation rots exactly like repeated code.** N copies of a fact are N places to keep in sync, and the copy that drifts is the one someone reads. So: **one fact, one home.** Before writing prose, find where the fact already lives and either reference it or say nothing. A rule that is in CLAUDE.md does not get restated in a module docstring, an inline comment, a test docstring, and a design doc.
+
+**Write only what the reader cannot re-derive from the code in front of them.** That is: a live constraint, a non-obvious *why*, a landmine. Cut anything that restates what the code plainly says, re-argues a settled decision, or enumerates alternatives nobody proposed.
+
+**Design docs and ADRs are scaffolding.** They earn their keep while a decision is being *made*. Once it is built, promote the parts that are still live constraints into the guide a fresh session actually loads (CLAUDE.md), then **delete the doc**. Git keeps the reasoning for whoever wants the archaeology.
+
+**Volume is a smell, not a virtue.** A prose change that adds more lines than the code it explains is over-written. A doc section with six bullets where three carry information is padding. When in doubt, cut — a short true doc beats a long one nobody trusts.
+
+Same keep-vs-cut test as above, one clause wider: does this text state the current state or a live constraint the reader can't see (keep), or does it narrate history, restate the code, or duplicate another file (cut)?
+
+**Why:** the reader's budget is finite and spent on the first thing they open. Padding costs attention on every read, and every duplicate is a future lie.
+
+---
+
 # Coding Rules
 
 **Always invoke the `/coding` skill before writing code to repository files** - exempt:
