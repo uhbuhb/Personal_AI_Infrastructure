@@ -10,6 +10,9 @@
 import { createHash } from "crypto";
 import { mkdirSync, existsSync, readFileSync } from "fs";
 import { join } from "path";
+import { loadDotEnv } from "./lib/env";
+
+loadDotEnv();
 
 const API_BASE = "https://web-production-3c90d.up.railway.app";
 const API_TOKEN = process.env.PAI_API_TOKEN || "";
