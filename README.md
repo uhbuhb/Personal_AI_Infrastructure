@@ -1,11 +1,5 @@
 <div align="center">
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./pai-logo.png">
-  <source media="(prefers-color-scheme: light)" srcset="./pai-logo.png">
-  <img alt="PAI Logo" src="./pai-logo.png" width="1200">
-</picture>
-
 # **Personal AI Infrastructure** (PAI)
 
 ### **Open-source personal AI infrastructure for orchestrating your life and work**
