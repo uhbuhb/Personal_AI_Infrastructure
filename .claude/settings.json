@@ -64,7 +64,24 @@
   "enabledMcpjsonServers": [],
   "hooks": {
     "PreToolUse": [],
-    "PostToolUse": [],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/ComplexityRatchet.hook.ts"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/LoopDetector.hook.ts"
+          }
+        ]
+      }
+    ],
     "SessionEnd": [
       {
         "hooks": [
@@ -105,10 +122,28 @@
             "command": "bash ${PAI_DIR}/hooks/auto-cr-stop.sh"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/VerificationGate.hook.ts"
+          }
+        ]
       }
     ],
     "SubagentStop": [],
-    "PreCompact": []
+    "PreCompact": [],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/LoopDetector.hook.ts"
+          }
+        ]
+      }
+    ]
   },
   "statusLine": {
     "type": "command",

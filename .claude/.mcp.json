@@ -1,10 +1,11 @@
 {
   "mcpServers": {
     "langsmith": {
-      "command": "/Users/uri.haberman/.local/bin/uvx",
-      "args": ["langsmith-mcp-server"],
-      "env": {
-      },
+      "command": "/bin/sh",
+      "args": [
+        "-c",
+        "set -a; . \"${PAI_DIR:-/Users/uri.haberman/PAI/.claude}/.env\"; set +a; exec /Users/uri.haberman/.local/bin/uvx langsmith-mcp-server"
+      ],
       "description": "LangSmith observability - trace analysis, runs, prompts, datasets"
     }
   }
