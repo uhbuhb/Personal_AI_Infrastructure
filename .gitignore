@@ -101,3 +101,4 @@ credentials/
 .claude/mcp-needs-auth-cache.json
 .claude/parked.md
 .claude/parked-sessions/
+.claude/state/
