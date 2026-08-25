@@ -102,3 +102,13 @@ credentials/
 .claude/parked.md
 .claude/parked-sessions/
 .claude/state/
+.claude/.last-cleanup
+.claude/.last-update-result.json
+.claude/chrome/
+.claude/daemon/
+.claude/daemon-auth-cooldown
+.claude/daemon-auth-status.json
+.claude/gh-pr-status-cache.json
+.claude/jobs/
+.claude/policy-limits.json
+.claude/remote-settings.json
